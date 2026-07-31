@@ -38,3 +38,7 @@ class ReportService:
     async def get_report_by_id(self, report_id: str) -> Optional[dict]:
         """ดึงรายงานเดี่ยวด้วย ID"""
         return await self.repo.get_report_by_id(report_id)
+
+    async def delete_report(self, report_id: str) -> bool:
+        """ลบรายงานออกจากฐานข้อมูลถาวร"""
+        return await self.repo.delete_report(report_id)

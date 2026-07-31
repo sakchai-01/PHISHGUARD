@@ -78,3 +78,13 @@ class ReportRepository:
             return result.modified_count > 0
         except Exception:
             return False
+
+    async def delete_report(self, report_id: str) -> bool:
+        """ลบรายงานออกจากฐานข้อมูลแบบถาวร"""
+        db = self._db()
+        try:
+            result = await db.user_reports.delete_one({"_id": ObjectId(report_id)})
+            return result.deleted_count > 0
+        except Exception:
+            return False
+

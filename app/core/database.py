@@ -469,3 +469,12 @@ async def get_report_by_id(report_id: str) -> Optional[dict]:
         return doc
     except Exception:
         return None
+
+async def delete_report(report_id: str) -> bool:
+    db = get_database()
+    try:
+        res = await db.user_reports.delete_one({"_id": ObjectId(report_id)})
+        return res.deleted_count > 0
+    except Exception:
+        return False
+

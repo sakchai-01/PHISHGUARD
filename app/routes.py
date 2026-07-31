@@ -12,7 +12,8 @@ from app.core.database import (
     get_db_connection, save_user_report, add_phishing_url, 
     search_url_in_all, get_admin_by_email, verify_password,
     get_recent_reports, list_admins, add_admin, delete_admin,
-    update_report_status, get_report_by_id, add_fake_url, add_safe_url
+    update_report_status, get_report_by_id, add_fake_url, add_safe_url,
+    delete_report
 )
 from app.domain_checker import analyze_domain
 from app.brain import get_ai_response, extract_json
@@ -332,9 +333,9 @@ async def admin_review(request: Request):
             # pyrefly: ignore [bad-argument-type]
             await add_fake_url(url, domain, description="Approved suspect", source=f"admin:{admin['username']}")
         
-        await update_report_status(report_id, "resolved", reviewer_note="Approved and added to blacklist")
     else:
-        await update_report_status(report_id, "rejected", reviewer_note=note)
+        # Delete report completely from database on Reject
+        await delete_report(report_id)
 
     return {"status": "ok"}
 

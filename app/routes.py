@@ -270,8 +270,6 @@ async def admin_dashboard(request: Request):
         return RedirectResponse(url="/admin/login")
 
     reports = await get_recent_reports(limit=50)
-    # Only pending (new) reports first for the UI? Or all? Let's filter in the helper or here.
-    pending = [r for r in reports if r['status'] == 'new']
     
     admins = []
     if admin['role'] == 'super_admin':
@@ -279,7 +277,7 @@ async def admin_dashboard(request: Request):
 
     response = templates.TemplateResponse(request=request, name="admin_dashboard.html", context={
         "admin": admin,
-        "reports": pending,
+        "reports": reports,
         "admins": admins
     })
     # Security: Prevent browser caching to avoid back-button access after logout

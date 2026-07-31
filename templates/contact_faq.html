@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block title %}FAQ | Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto pt-20 pb-20 px-4">
+    <!-- Back Button -->
+    <div class="mb-12 animate__animated animate__fadeIn">
+        <a href="/contact" class="inline-flex items-center gap-2 text-slate-500 hover:text-rose-400 transition-colors group">
+            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+            <span class="text-xs font-black uppercase tracking-widest">Back to Support Hub</span>
+        </a>
+    </div>
+
+    <!-- Header Section -->
+    <div class="mb-24 animate__animated animate__fadeIn">
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+            <i class="fa-solid fa-circle-question animate-pulse"></i> KNOWLEDGE_BASE_UPLINK
+        </div>
+        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);">
+            FAQ <span class="text-gradient">DECRYPTED.</span>
+        </h1>
+        <p class="text-slate-500 max-w-4xl font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);">
+            คำถามที่พบบ่อยเกี่ยวกับการใช้งานระบบ และแนวทางการป้องกันตัวเองเบื้องต้นจากภัยคุกคาม
+        </p>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="space-y-6">
+        <!-- Q1 -->
+        <div class="cyber-card p-1 border-slate-200">
+            <details class="group">
+                <summary class="list-none p-8 flex items-center justify-between cursor-pointer">
+                    <h3 class="text-xl font-black  group-hover:text-rose-400 transition-colors font-['Kanit']">
+                        <span class="text-rose-500 mr-4 font-mono">01.</span> PhishGuard คืออะไร?
+                    </h3>
+                    <i class="fa-solid fa-plus text-slate-700 group-open:rotate-45 group-hover:text-rose-500 transition-all"></i>
+                </summary>
+                <div class="px-8 pb-8 animate__animated animate__fadeIn">
+                    <p class="text-slate-400 font-['Kanit'] leading-relaxed border-l-2 border-rose-500/20 pl-6">
+                        PhishGuard (หรือ Janis AI Ecosystem) คือระบบตรวจจับภัยคุกคามทางไซเบอร์ที่มุ่งเน้นไปที่การตรวจสอบเว็บไซต์ปลอมและการแอบอ้างแบรนด์ 
+                        โดยใช้ระบบประมวลผลภาษาธรรมชาติและ Machine Learning เพื่อคัดกรองความปลอดภัยให้ผู้ใช้งานแบบ Real-time
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q2 -->
+        <div class="cyber-card p-1 border-slate-200">
+            <details class="group">
+                <summary class="list-none p-8 flex items-center justify-between cursor-pointer">
+                    <h3 class="text-xl font-black  group-hover:text-rose-400 transition-colors font-['Kanit']">
+                        <span class="text-rose-500 mr-4 font-mono">02.</span> ระบบมีความแม่นยำเพียงใด?
+                    </h3>
+                    <i class="fa-solid fa-plus text-slate-700 group-open:rotate-45 group-hover:text-rose-500 transition-all"></i>
+                </summary>
+                <div class="px-8 pb-8 animate__animated animate__fadeIn">
+                    <p class="text-slate-400 font-['Kanit'] leading-relaxed border-l-2 border-rose-500/20 pl-6">
+                        อัลกอริทึมของเราทำงานสอดประสานกับฐานข้อมูล Blacklist ระดับโลกและมีการวิเคราะห์พฤติกรรมหน้าเว็บ (Heuristic Analysis) 
+                        ซึ่งผลการตรวจสอบมีความแม่นยำสูง อย่างไรก็ตาม เราแนะนำให้ผู้ใช้งานตรวจสอบความน่าเชื่อถือจากช่องทางเป็นทางการควบคู่ไปด้วยเสมอ
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q3 -->
+        <div class="cyber-card p-1 border-slate-200">
+            <details class="group">
+                <summary class="list-none p-8 flex items-center justify-between cursor-pointer">
+                    <h3 class="text-xl font-black  group-hover:text-rose-400 transition-colors font-['Kanit']">
+                        <span class="text-rose-500 mr-4 font-mono">03.</span> การสแกนข้อมูลมีความปลอดภัยหรือไม่?
+                    </h3>
+                    <i class="fa-solid fa-plus text-slate-700 group-open:rotate-45 group-hover:text-rose-500 transition-all"></i>
+                </summary>
+                <div class="px-8 pb-8 animate__animated animate__fadeIn">
+                    <p class="text-slate-400 font-['Kanit'] leading-relaxed border-l-2 border-rose-500/20 pl-6">
+                        ทุกการส่งคำขอรับการสแกนจะถูกเข้ารหัสผ่านโปรโตคอลความปลอดภัยระดับสูง ข้อมูลที่ส่งมาจะใช้เพื่อการวิเคราะห์ทางเทคนิคเท่านั้น 
+                        และไม่มีการเปิดเผยข้อมูลส่วนตัวของผู้ใช้งานสู่ภายนอก
+                    </p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- Still Need Help? -->
+    <div class="mt-20 text-center">
+        <p class="text-slate-500 mb-6 font-['Kanit']">ไม่พบคำตอบที่คุณมองหา?</p>
+        <a href="/contact/qa" class="inline-flex items-center gap-2 text-rose-500 font-black uppercase tracking-widest text-xs hover: transition-colors">
+            Ask a Question <i class="fa-solid fa-comment-dots"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      width: 320px;
+      padding: 0;
+      margin: 0;
+      background: #020617;
+      color: white;
+      font-family: 'Kanit', sans-serif;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: 2px;
+      color: white;
+    }
+    .status-card {
+      padding: 24px;
+      text-align: center;
+    }
+    .status-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      color: #10b981;
+    }
+    .status-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-label {
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    .btn {
+      display: block;
+      width: calc(100% - 40px);
+      margin: 20px auto;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: #7c3aed;
+    }
+    .footer {
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      text-align: center;
+      font-size: 10px;
+      color: #475569;
+      font-family: monospace;
+    }
+    .danger { color: #ef4444; }
+    .safe { color: #10b981; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="icons/icon48.png" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 8px;">
+    <h1 style="display: inline-block; vertical-align: middle;">JANIS <span style="color: #22d3ee;">AI</span></h1>
+  </div>
+  
+  <div class="status-card">
+    <div id="status-icon" class="status-icon safe">
+      <i class="fa-solid fa-shield-check"></i>
+    </div>
+    <div class="status-text">สถานะการป้องกัน</div>
+    <div id="status-label" class="status-label safe">SECURE</div>
+    
+    <div id="threat-info" style="margin-top: 15px; font-size: 12px; color: #94a3b8; display: none;">
+      ตรวจพบ: <span id="threat-type" class="danger">ฟิชชิ่ง</span>
+    </div>
+  </div>
+
+  <button id="scan-now" class="btn">
+    <i class="fa-solid fa-bolt-lightning mr-2"></i> ตรวจสอบทันที
+  </button>
+  
+  <a href="http://localhost:5000/chat" target="_blank" class="btn">
+    <i class="fa-solid fa-headset mr-2"></i> ปรึกษา JANIS AI
+  </a>
+
+  <div class="footer">
+    PROTOCOL_V1.0.0 // NODE_BKK_GLOBAL
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+

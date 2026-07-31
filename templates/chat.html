@@ -1,0 +1,394 @@
+{% extends "layout.html" %}
+
+{% block title %}Janis AI | Cyber Intelligence Hub{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes float-janis {
+        0%, 100% { transform: translateY(0px) rotate(0deg); filter: drop-shadow(0 0 10px rgba(58, 237, 82, 0.3)); }
+        50% { transform: translateY(-15px) rotate(1deg); filter: drop-shadow(0 15px 25px rgba(58, 237, 82, 0.5)); }
+    }
+
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(58, 237, 82, 0.2); }
+        50% { box-shadow: 0 0 40px rgba(58, 237, 58, 0.5); }
+    }
+
+    .janis-mascot-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        animation: float-janis 6s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .janis-mascot-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Circular crop to hide rectangular backgrounds */
+        border-radius: 50%;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .janis-mascot-container {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
+        min-height: 60px !important;
+        max-height: 60px !important;
+        background: white;
+        border: 2px solid #40ed3a;
+        border-radius: 50%;
+        padding: 0px;
+        position: relative;
+        overflow: hidden;
+        animation: pulse-glow 3s linear infinite;
+        flex-shrink: 0 !important;
+    }
+
+    /* Prevent the global mascot FAB from intercepting clicks on the chat page */
+    #global-mascot-fab {
+        pointer-events: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto pt-16 px-4 pb-20">
+    <!-- AI Header: Premium Branding / Command Center Stats -->
+    <div class="flex flex-col lg:flex-row items-center justify-between mb-12 gap-8 animate__animated animate__fadeIn">
+        <div class="flex items-center gap-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-3xl flex items-center justify-center  shadow-[0_0_40px_rgba(139,92,246,0.3)] relative group overflow-hidden">
+                <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fa-solid fa-brain text-4xl animate__animated animate__pulse animate__infinite"></i>
+                <span class="absolute top-2 right-2 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#020617] shadow-[0_0_10px_#10b981]"></span>
+            </div>
+            <div>
+                <h1 class="font-black text-slate-900 tracking-tighter uppercase font-['Orbitron'] leading-none" style="font-size: var(--fs-2xl);" data-i18n="hdr_chat_title">JANIS <span class="text-gradient">AI</span></h1>
+                <div class="flex items-center gap-4 mt-4">
+                    <span class="text-[10px] text-emerald-600 font-black tracking-widest font-mono uppercase bg-emerald-50 px-3 py-1.5 rounded border border-emerald-200 shadow-sm" data-i18n="hdr_chat_badge">CORE_ACTIVE</span>
+                    <span class="text-[10px] text-slate-500 font-mono tracking-widest uppercase" data-i18n="chat_encryption">Encryption: AES-4096-ECC</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Stats Ticker -->
+        <div class="flex gap-8 px-8 py-4 bg-white/80 border border-slate-200 rounded-2xl backdrop-blur-xl shadow-sm">
+            <div class="text-center">
+                <p class="text-[8px] text-slate-500 font-black uppercase tracking-widest mb-1" data-i18n="chat_latency">Latency</p>
+                <p class="text-xs font-mono text-cyan-600">12ms</p>
+            </div>
+            <div class="w-[1px] h-8 bg-slate-200 self-center"></div>
+            <div class="text-center">
+                <p class="text-[8px] text-slate-500 font-black uppercase tracking-widest mb-1" data-i18n="chat_neural_load">Neural_Load</p>
+                <p class="text-xs font-mono text-violet-600">4.2%</p>
+            </div>
+            <div class="w-[1px] h-8 bg-slate-200 self-center"></div>
+            <button onclick="clearChat()" class="text-gray-500 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-broom text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Chat Shell -->
+    <div class="relative max-w-5xl mx-auto">
+        <!-- Floating Terminal Decoration -->
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-violet-600/5 blur-[60px] pointer-events-none"></div>
+        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-600/5 blur-[60px] pointer-events-none"></div>
+
+        <div class="cyber-card flex flex-col h-[500px] md:h-[750px] border border-slate-200 bg-white/90 shadow-[0_0_50px_rgba(0,0,0,0.05)] rounded-3xl overflow-hidden backdrop-blur-xl">
+            <!-- Messages Area: Tactical Feed -->
+            <div id="chat-box" class="flex-1 overflow-y-auto p-10 space-y-10 scrollbar-thin scrollbar-thumb-violet-200 scrollbar-track-transparent">
+                <!-- System Greeting -->
+                <div class="flex items-start gap-5 animate__animated animate__fadeIn">
+                    <div class="janis-mascot-container shadow-lg shrink-0" style="width:60px !important; height:60px !important; min-width:60px !important; flex-shrink:0 !important; border-radius:12px !important; overflow:hidden !important; background:white !important; border:2px solid #7c3aed !important;">
+                        <div class="janis-mascot-wrapper" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; animation: float-janis 6s ease-in-out infinite;">
+                            <img src="/static/images/janis/profile.png" alt="Janis AI" 
+                                 onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"
+                                 class="chat-bubble-avatar-img" style="width:60px !important; height:60px !important; object-fit:cover; border-radius:8px !important;">
+                        </div>
+                    </div>
+                    <div class="max-w-[80%] bg-slate-50 border border-slate-200 shadow-sm p-6 rounded-3xl rounded-tl-none">
+                        <p class="text-[15px] text-slate-700 leading-relaxed font-['Kanit']" data-i18n="chat_greeting">
+                            ระบบ <b class="text-violet-600">Janis AI</b> พร้อมสแตนด์บายค่ะ ดิฉันพร้อมช่วยวิเคราะห์ข้อมูล ปรึกษาเรื่องความปลอดภัยไซเบอร์ หรือตรวจสอบเบาะแสที่น่าสงสัยได้ทันทีค่ะ
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-slate-200 flex gap-4">
+                            <span class="text-[8px] text-violet-600 font-black tracking-widest uppercase" data-i18n="chat_intel_node">Intelligence_node: BK-01</span>
+                            <span class="text-[8px] text-slate-500 font-black tracking-widest uppercase" data-i18n="chat_ver">Ver: 2.5.8-STABLE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Input Cluster -->
+            <div class="p-8 border-t border-slate-200 bg-white/80 backdrop-blur-3xl relative">
+                <!-- Typing Indication Overlay -->
+                <div id="typing-indicator" class="hidden absolute top-[-40px] left-8 px-6 py-2 bg-violet-100 border border-violet-200 rounded-full text-[9px] text-violet-600 font-black tracking-[0.2em] animate__animated animate__fadeInUp shadow-sm">
+                    <i class="fa-solid fa-microchip mr-2 animate-spin"></i> <span data-i18n="chat_syncing">SYNCING NEURAL PATHWAYS...</span>
+                </div>
+
+                <div class="flex items-stretch gap-5">
+                    <div class="flex-1 relative group">
+                        <div class="absolute inset-y-0 left-4 md:left-6 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-terminal text-slate-400 group-focus-within:text-violet-500 transition-colors"></i>
+                        </div>
+                        <input type="text" id="userInput" 
+                            class="w-full bg-white border border-slate-200 rounded-2xl pl-12 pr-12 py-4 md:px-16 md:py-6 outline-none text-slate-800 focus:border-violet-400 focus:ring-4 focus:ring-violet-500/10 transition-all font-['Kanit'] text-base md:text-lg placeholder:text-slate-400 shadow-sm"
+                            data-i18n-placeholder="chat_placeholder"
+                            placeholder="TRANSMIT MESSAGE OR PASTE DATA FOR ANALYSIS..."
+                            onkeypress="handleEnter(event)"
+                            autocomplete="off">
+                        <div class="absolute inset-y-0 right-3 md:right-6 flex items-center gap-2 md:gap-3">
+                             <kbd class="hidden md:block px-2 py-1 bg-slate-100 border border-slate-200 rounded text-[9px] text-slate-500 font-mono tracking-widest">ENTER ↵</kbd>
+                        </div>
+                    </div>
+                    <button onclick="sendMessage()" class="cyber-btn h-full aspect-square p-0 flex items-center justify-center text-2xl group overflow-hidden rounded-2xl">
+                         <i class="fa-solid fa-bolt-lightning group-hover:scale-125 transition-transform duration-500"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Intel: UX Clarification -->
+    <div class="mt-32 max-w-5xl mx-auto border-t border-slate-200 pt-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm">
+                <h4 class="text-xs font-black text-violet-600 uppercase tracking-widest mb-4" data-i18n="chat_neural_limits">NEURAL_LIMITS</h4>
+                <p class="text-slate-600 font-['Kanit'] text-xs leading-relaxed font-light" data-i18n="chat_neural_limits_desc">Janis AI เป็นโมเดลภาษาขนาดใหญ่ที่ถูกปรับแต่งโปรไฟล์เพื่อความปลอดภัยไซเบอร์ ข้อมูลบางอย่างอาจมีความคลาดเคลื่อน โปรดตรวจสอบซ้ำกับแหล่งข้อมูลทางการ</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm">
+                <h4 class="text-xs font-black text-cyan-600 uppercase tracking-widest mb-4" data-i18n="chat_data_privacy">DATA_PRIVACY</h4>
+                <p class="text-slate-600 font-['Kanit'] text-xs leading-relaxed font-light" data-i18n="chat_data_privacy_desc">บทสนทนาจะถูกนำไปใช้เพื่อปรับปรุงการตรวจจับภัยคุกคามโดยไม่ระบุตัวตน (Anonymized) ข้อมูลส่วนบุคคลของคุณจะยังคงเป็นความลับ</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm">
+                <h4 class="text-xs font-black text-rose-600 uppercase tracking-widest mb-4" data-i18n="chat_global_intel">GLOBAL_INTEL</h4>
+                <p class="text-slate-600 font-['Kanit'] text-xs leading-relaxed font-light" data-i18n="chat_global_intel_desc">Janis เชื่อมต่อกับระบบ Global Threat Feed เพื่ออัปเดตข้อมูลมิจฉาชีพแบบ Real-time ทำให้สามารถแจ้งเตือนภัยใหม่ๆ ได้ทันที</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('userInput');
+    const typingIndicator = document.getElementById('typing-indicator');
+    
+    // We update the Global Mascot on the layout
+    function getLatestMascot() {
+        return document.getElementById('global-mascot-img');
+    }
+
+    const emotions = {
+        idle: '/static/images/janis/default.png',
+        thinking: '/static/images/janis/thinking.png',
+        stop: '/static/images/janis/stop.png',
+        command: '/static/images/janis/command.png',
+        formal: '/static/images/janis/formal.png',
+        error: '/static/images/janis/error.png',
+        safe: '/static/images/janis/safe.png',
+        shock: '/static/images/janis/shock.png',
+        danger: '/static/images/janis/danger.png',
+        away: '/static/images/janis/away.png'
+    };
+
+    let idleTimer;
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        const mascot = getLatestMascot();
+        // If we were in 'away' state, return to 'idle'
+        if (mascot && mascot.src.includes('away.png')) updateJanisEmotion('idle');
+        
+        idleTimer = setTimeout(() => {
+            updateJanisEmotion('away');
+        }, 3 * 60 * 1000); // 3 minutes
+    }
+
+    function updateJanisEmotion(type) {
+        const mascot = getLatestMascot();
+        if (mascot && emotions[type]) {
+            mascot.classList.add('animate__animated', 'animate__pulse');
+            const newSrc = emotions[type];
+            setTimeout(() => {
+                mascot.src = newSrc;
+                mascot.classList.remove('animate__pulse');
+            }, 300);
+        }
+    }
+
+    // Initialize idle timer
+    resetIdleTimer();
+
+    function handleEnter(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    async function sendMessage() {
+        const msg = userInput.value.trim();
+        if (!msg) return;
+
+        resetIdleTimer();
+        addMessage('USER_UNLINKED', msg, 'right');
+        userInput.value = '';
+        typingIndicator.classList.remove('hidden');
+        updateJanisEmotion('thinking');
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `message=${encodeURIComponent(msg)}`
+            });
+            const data = await res.json();
+            typingIndicator.classList.add('hidden');
+
+            if (data.error) {
+                updateJanisEmotion('error');
+                let errorMsg = "ขออภัยค่ะ ระบบการเชื่อมต่อเครือข่ายของเจนิสขัดข้องชั่วคราว ข้อมูลรหัสข้อผิดพลาด: " + data.error;
+                const errorText = JSON.stringify(data).toLowerCase();
+                if (errorText.includes('429') || errorText.includes('quota exceeded')) {
+                    errorMsg = "⚠️ ระบบแจ้งเตือน: ขออภัยค่ะ ขณะนี้ระบบประมวลผลสมองกล (AI Core) ของเจนิสถูกใช้งานจนเต็มโควตาสำหรับวันนี้แล้ว (Error 429) กรุณารอสักพักหรือทดสอบใหม่อีกครั้งในภายหลังนะคะ 🙇‍♀️";
+                }
+                addMessage('SYSTEM_FAIL', errorMsg, 'left', true);
+            } else {
+                if (data.response) {
+                    addMessage('JANIS_AI', data.response, 'left');
+                }
+                if (data.analysis_result) {
+                    renderAIAnalysis(data.analysis_result);
+                    const score = data.analysis_result.risk_score;
+                    if (score >= 90) updateJanisEmotion('shock');
+                    else if (score >= 70) updateJanisEmotion('danger');
+                    else if (score >= 40) updateJanisEmotion('stop');
+                    else updateJanisEmotion('safe');
+                } else if (data.response) {
+                    // Heuristic Emotion Analysis based on AI text
+                    const text = data.response.toLowerCase();
+                    if (text.includes('อันตราย') || text.includes('หลอกลวง') || text.includes('มิจฉาชีพ') || text.includes('เสี่ยง')) {
+                        updateJanisEmotion('danger');
+                    } else if (text.includes('ระวัง') || text.includes('หยุด') || text.includes('อย่าคลิก')) {
+                        updateJanisEmotion('stop');
+                    } else if (text.includes('ตรวจสอบแล้ว') || text.includes('ปลอดภัย') || text.includes('ไม่มีความเสี่ยง') || text.includes('ปกติ')) {
+                        updateJanisEmotion('safe');
+                    } else if (text.includes('แนะนำว่า') || text.includes('ทำตามนี้') || text.includes('ขั้นตอน') || text.includes('แก้ไข')) {
+                        updateJanisEmotion('command');
+                    } else if (data.response.length > 250) {
+                        updateJanisEmotion('formal');
+                    } else {
+                        updateJanisEmotion('idle');
+                    }
+                }
+                resetIdleTimer();
+            }
+        } catch (e) {
+            typingIndicator.classList.add('hidden');
+            updateJanisEmotion('error');
+            addMessage('CONN_FAULT', 'NEURAL CORE DISCONNECTED: RESETTING HANDSHAKE_SEQUENCE', 'left', true);
+        }
+    }
+
+    function renderAIAnalysis(result) {
+        const { risk_score, category, detected_flags, recommendation } = result;
+        let themeColor = "border-cyan-200 text-cyan-700 bg-cyan-50";
+        let icon = "fa-shield-halved text-cyan-500";
+        let glow = "shadow-sm";
+
+        if (risk_score >= 80) {
+            themeColor = "border-red-200 text-red-700 bg-red-50";
+            icon = "fa-radiation text-red-500";
+            glow = "shadow-md";
+        } else if (risk_score >= 40) {
+            themeColor = "border-orange-200 text-orange-700 bg-orange-50";
+            icon = "fa-circle-exclamation text-orange-500";
+            glow = "shadow-sm";
+        }
+
+        const div = document.createElement('div');
+        div.className = "flex items-start gap-5 animate__animated animate__fadeInUp"; // Changed to items-start gap-5
+        div.innerHTML = `
+            <div class="janis-mascot-container shadow-lg" style="width:60px !important; height:60px !important; min-width:60px !important; flex-shrink:0 !important; border-radius:12px !important; overflow:hidden !important; background:white !important; border:2px solid #7c3aed !important;">
+                <div class="janis-mascot-wrapper" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; animation: float-janis 6s ease-in-out infinite;">
+                    <img src="/static/images/janis/profile.png" alt="Janis AI" 
+                         onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"
+                         class="chat-bubble-avatar-img" style="width:60px !important; height:60px !important; object-fit:cover; border-radius:8px !important;">
+                </div>
+            </div>
+            <div class="flex-1 space-y-3">
+                <span class="text-[9px] text-slate-500 font-black tracking-widest uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-microscope text-[8px]"></i> ${translations[currentLang]['chat_label_analysis']}
+                </span>
+                <div class="max-w-[95%] border-l-4 ${themeColor} p-8 rounded-3xl rounded-bl-3xl rounded-tl-none backdrop-blur-2xl ${glow}">
+                    <div class="flex items-center gap-6 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-4xl">
+                            <i class="fa-solid ${icon}"></i>
+                        </div>
+                        <div>
+                            <div class="font-black text-2xl tracking-tight uppercase">${category}</div>
+                            <div class="text-[10px] opacity-60 font-mono tracking-widest">COEFFICIENT: ${risk_score}%</div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="text-sm border-t border-slate-200/50 pt-4">
+                            <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-2">${translations[currentLang]['chat_indicator_breakdown']}</p>
+                            <div class="flex flex-wrap gap-2">
+                                 ${detected_flags.map(f => `<span class="px-2 py-1 bg-white border border-slate-200 shadow-sm rounded text-[10px] font-mono text-slate-600">${f}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="p-5 bg-white rounded-2xl border border-slate-200 text-[15px] italic font-['Kanit'] leading-relaxed shadow-sm text-slate-700">
+                            <i class="fa-solid fa-lightbulb text-yellow-500 mr-3"></i> ${recommendation}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function addMessage(sender, text, align, isError = false) {
+        const div = document.createElement('div');
+        div.className = `flex gap-5 animate__animated animate__fadeInUp ${align === 'right' ? 'flex-col items-end' : 'items-start'}`; // Changed to horizontal for AI
+        
+        const bubbleStyle = align === 'right' ? 
+            'bg-cyan-50 border border-cyan-100 rounded-tr-none text-slate-800' : 
+            'bg-white border border-slate-100 shadow-sm rounded-tl-none text-slate-700';
+
+        const labelColor = align === 'right' ? 'text-cyan-600' : 'text-violet-600';
+
+        let mascotHtml = '';
+        if (align !== 'right') {
+            mascotHtml = `
+                <div class="janis-mascot-container shadow-lg" style="width:60px !important; height:60px !important; min-width:60px !important; flex-shrink:0 !important; border-radius:12px !important; overflow:hidden !important; background:white !important; border:2px solid #7c3aed !important;">
+                    <div class="janis-mascot-wrapper" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; animation: float-janis 6s ease-in-out infinite;">
+                        <img src="/static/images/janis/profile.png" alt="Janis AI" 
+                             onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134346.png'"
+                             class="chat-bubble-avatar-img" style="width:60px !important; height:60px !important; object-fit:cover; border-radius:8px !important;">
+                    </div>
+                </div>
+            `;
+        }
+
+        div.innerHTML = `
+            ${mascotHtml}
+            <div class="flex-1 flex flex-col gap-3 ${align === 'right' ? 'items-end' : 'items-start'}">
+                <span class="text-[9px] font-black tracking-[0.3em] ${labelColor} uppercase">${sender}</span>
+                <div class="max-w-[85%] ${bubbleStyle} p-6 rounded-[2rem] shadow-sm backdrop-blur-md ${isError ? 'text-red-700 border-red-200 bg-red-50' : ''}">
+                    <p class="text-[15px] leading-relaxed font-['Kanit'] font-light">${text}</p>
+                </div>
+            </div>
+        `;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function clearChat() {
+        chatBox.innerHTML = '';
+        addMessage('SYSTEM_PROC', translations[currentLang]['chat_history_purged'], 'left');
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block title %}Analysis | Scammer Behavior Intelligence{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative">
+    <!-- Breadcrumb -->
+    <div class="mb-16 animate__animated animate__fadeIn">
+        <a href="/news" class="inline-flex items-center gap-4 text-slate-500 hover:text-purple-400 transition-all group font-black uppercase tracking-[0.2em] text-[10px]">
+            <i class="fa-solid fa-chevron-left group-hover:-translate-x-2 transition-transform"></i>
+            RETURN_TO_INTELLIGENCE_FEED
+        </a>
+    </div>
+
+    <!-- Article Header: Premium Tactical Header -->
+    <header class="mb-24 animate__animated animate__fadeInUp">
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-slate-500/30 bg-slate-500/10 text-slate-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_30px_rgba(100,116,139,0.2)]">
+            <i class="fa-solid fa-user-secret animate-pulse"></i> ADVERSARY_PROFILE_DATA
+        </div>
+        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);">
+            SCAMMER <span class="text-gradient">PSYCHOLOGY.</span>
+        </h1>
+        <p class="text-slate-500 max-w-4xl font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);">
+            เจาะลึกลักษณะพฤติกรรม และจิตวิทยาที่มิจฉาชีพใช้เพื่อควบคุมเหยื่อ แลกเปลี่ยนข้อมูลเพื่อการเตรียมพร้อมรับมือ
+        </p>
+    </header>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 py-10 border-y border-slate-200 mt-16">
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">TRANSMISSION_DATE</p>
+                <p class=" font-mono text-sm tracking-tight italic">05_FEB_2026</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">INTEL_SOURCE</p>
+                <p class="text-purple-400 font-mono text-sm tracking-tight italic">BEHAVIOR_INTELLIGENCE_JANIS</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">READ_TIME</p>
+                <p class=" font-mono text-sm tracking-tight italic">06:00_MIN</p>
+            </div>
+            <div class="space-y-2 text-right">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">THREAT_LEVEL</p>
+                <span class="px-3 py-1 bg-purple-500/20 text-purple-400 border border-purple-400/30 text-[10px] font-black rounded uppercase tracking-widest animate-pulse">Medium</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Visual Artifact -->
+    <div class="cyber-card p-4 border-slate-200 mb-24 overflow-hidden animate__animated animate__fadeInUp bg-white backdrop-blur-3xl shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+        <div class="aspect-video bg-slate-900 rounded-[2.5rem] relative flex items-center justify-center overflow-hidden border border-slate-200">
+            <div class="absolute inset-0 bg-purple-600/5 mix-blend-overlay"></div>
+            <i class="fa-solid fa-user-secret text-[18rem] text-slate-800 opacity-20 rotate-12 transition-all"></i>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+            <div class="absolute bottom-16 left-16 p-10 border-l-4 border-purple-600 bg-white backdrop-blur-md rounded-r-3xl">
+                <p class=" text-3xl font-black uppercase italic tracking-tighter mb-2 font-['Orbitron']">PSYCHOLOGICAL_WARFARE_VECTOR</p>
+                <p class="text-purple-500 text-[10px] font-black tracking-[0.5em] uppercase opacity-60">Sub-ID: Social_Manipulation_Report</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="prose prose-invert max-w-none text-slate-400 font-['Kanit'] leading-relaxed text-xl animate__animated animate__fadeInUp font-light">
+        <p class="text-2xl  font-bold mb-12 border-b border-slate-200 pb-12 italic">
+            เจาะลึกจิตวิทยาการหลอกลวง! <b class="text-purple-400">Scammers</b> มักใช้ความโหยหา ความสงสาร และความกลัวในการควบคุมเหยื่ออย่างเป็นระบบ
+        </p>
+
+        <p class="mb-12">
+            มิจฉาชีพสร้าง <b class="">"โพรไฟล์ที่สมบูรณ์แบบ"</b> (Romance Scam) หรือสวมรอยเป็นผู้มีอำนาจเพื่อใช้ความเกรงใจในการข่มขู่ การเข้าใจรูปแบบพฤติกรรมจะช่วยให้คุณมีสติและไม่ถูกครอบงำด้วยอารมณ์ชั่ววูบ
+        </p>
+
+        <!-- Red Flags -->
+        <div class="cyber-card p-12 md:p-20 border-purple-500/10 bg-purple-500/[0.03] my-24 relative overflow-hidden backdrop-blur-3xl shadow-inner">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 blur-[120px] pointer-events-none"></div>
+            <h3 class="text-purple-500 font-black uppercase tracking-[0.5em] text-xs mb-12 flex items-center gap-4 font-['Orbitron']">
+                <i class="fa-solid fa-brain animate-pulse"></i> IDENTIFIED_RED_FLAGS
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                 <div class="flex gap-8 group">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-600/10 border border-purple-500/30 flex items-center justify-center text-purple-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-purple-600 group-hover: transition-all">01</div>
+                    <div>
+                        <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">RAPID_INTIMACY</b>
+                        <p class="text-base text-slate-500 font-light leading-relaxed">การเร่งสร้างความสัมพันธ์หรือความสนิทสนมในช่วงเวลาสั้นๆ เพื่อให้เหยื่อเปิดเผยข้อมูลส่วนบุคคลหรือความลับทางการเงิน</p>
+                    </div>
+                </div>
+                 <div class="flex gap-8 group">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-600/10 border border-purple-500/30 flex items-center justify-center text-purple-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-purple-600 group-hover: transition-all">02</div>
+                    <div>
+                        <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">AUTHORITY_PRESSURE</b>
+                        <p class="text-base text-slate-500 font-light leading-relaxed">การอ้างอิงกฎหมายหรือมาตรการลงโทษเพื่อสร้างความตื่นตระหนก และบังคับให้โอนเงินเพื่อ "ตรวจสอบ" เป็นกรณีพิเศษ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-4xl font-black  italic uppercase tracking-tighter mt-32 mb-10 font-['Orbitron']">Tactical <span class="text-purple-500">Neutralization</span></h2>
+        <p class="mb-12">
+            หัวใจสำัญคือการ <b class="text-purple-400">"เว้นระยะห่าง"</b> และปรึกษาบุคคลที่สามทันทีเมื่อมีการพูดถึงการทำธุรกรรมทางการเงินหรือโปรเจกต์การลงทุนที่ให้ผลตอบแทนสูงเกินจริง
+        </p>
+
+        <div class="p-12 bg-white border border-slate-200 rounded-[3rem] mt-24 shadow-2xl relative overflow-hidden backdrop-blur-3xl">
+            <p class="font-black text-purple-500 uppercase tracking-[0.5em] text-xs mb-6 font-['Orbitron']">COMMAND_SUMMARY:</p>
+            <p class=" font-['Kanit'] italic text-xl leading-relaxed font-light relative z-10">
+                "มิจฉาชีพไม่ได้หลอกแค่ข้อมูล แต่หลอกอารมณ์ของคุณด้วย จงรักษาสติให้มั่นคงและอย่าโอนเงินให้คนที่คุณยังไม่เคยเห็นตัวจริง"
+            </p>
+        </div>
+    </article>
+</div>
+{% endblock %}

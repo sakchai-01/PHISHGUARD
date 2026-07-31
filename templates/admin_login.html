@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Entry | Neural Command Access{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<div class="max-w-md mx-auto pt-40 pb-40 px-4">
+    <div class="text-center mb-16 animate__animated animate__fadeIn">
+        <div data-i18n="admin_login_badge" class="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[9px] font-black uppercase tracking-[0.4em] mb-8 shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+            <i class="fa-solid fa-user-gear"></i> ADMIN_ACCESS_PROTOCOL
+        </div>
+        <h1 data-i18n="admin_login_title" class="text-4xl font-black  tracking-tighter uppercase italic font-['Orbitron']">
+            NEURAL <span class="text-gradient">CORE.</span>
+        </h1>
+    </div>
+
+    <div class="cyber-card p-10 relative group bg-white backdrop-blur-3xl border-slate-200 shadow-[0_0_100px_rgba(0,0,0,0.9)]">
+        <!-- Accent Glow -->
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-25 transition duration-1000"></div>
+        
+        <form id="adminLoginForm" class="relative z-10 space-y-8">
+            <!-- Google Auth Step -->
+            <div class="space-y-4">
+                <label data-i18n="admin_step_1" class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">STEP_01: IDENTITY_VERIFY</label>
+                <div id="g_id_onload"
+                    data-client_id="{{ google_client_id }}"
+                    data-callback="handleAdminCredential"
+                    data-auto_prompt="false"
+                    data-itp_support="true"
+                    data-use_fedcm_for_prompt="true"
+                    data-prompt="select_account consent">
+                </div>
+                <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="signin_with" data-size="large" data-width="100%"></div>
+                <div id="idStatus" data-i18n="admin_waiting_token" class="text-[10px] text-center font-mono italic text-slate-600">WAITING_FOR_TOKEN...</div>
+            </div>
+
+            <!-- Password Step -->
+            <div class="space-y-4">
+                <label data-i18n="admin_step_2" class="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">STEP_02: CRYPTO_KEY</label>
+                <div class="relative">
+                    <i class="fa-solid fa-key absolute left-6 top-1/2 -translate-y-1/2 text-slate-700"></i>
+                    <input type="password" id="password" name="password" 
+                        class="w-full bg-white border border-slate-200 p-5 pl-16 rounded-2xl  outline-none focus:border-cyan-500/50 transition font-mono text-sm" 
+                        data-i18n-placeholder="admin_enter_secret" placeholder="ENTER_ADMIN_SECRET" required>
+                </div>
+            </div>
+
+            <input type="hidden" id="google_token" name="google_token">
+
+            <button type="submit" id="loginBtn" class="cyber-btn w-full py-6 text-sm font-black group overflow-hidden">
+                <span data-i18n="admin_login_btn" class="relative z-10 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-shield-halved group-hover:rotate-12 transition-transform"></i>
+                    INITIALIZE_LOGIN_SEQUENCE
+                </span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let googleToken = "";
+
+    window.handleAdminCredential = function(response) {
+        googleToken = response.credential;
+        document.getElementById('google_token').value = googleToken;
+        
+        const statusEl = document.getElementById('idStatus');
+        statusEl.textContent = t('admin_msg_identity_locked') + JSON.parse(atob(googleToken.split('.')[1])).email;
+        statusEl.classList.remove('text-slate-600');
+        statusEl.classList.add('text-emerald-500');
+        
+        Swal.fire({
+            icon: 'success',
+            title: t('admin_msg_token_accepted'),
+            text: t('admin_msg_provide_key'),
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            background: '#020617',
+            color: '#fff'
+        });
+    };
+
+    document.getElementById('adminLoginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!googleToken) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'IDENTITY_REQUIRED',
+                text: t('report_verify_before'),
+                background: '#020617',
+                color: '#fff'
+            });
+        }
+
+        const password = document.getElementById('password').value;
+        
+        try {
+            const res = await fetch('/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ google_token: googleToken, password: password })
+            });
+            const data = await res.json();
+            
+            if (res.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: t('admin_msg_access_granted'),
+                    text: t('admin_msg_sync_core'),
+                    background: '#020617',
+                    color: '#fff',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    window.location.replace('/admin/dashboard');
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: t('admin_msg_access_denied'),
+                    text: data.error || t('admin_msg_reach_failed'),
+                    background: '#020617',
+                    color: '#fff'
+                });
+            }
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: t('admin_msg_comms_failure'),
+                text: t('admin_msg_reach_failed'),
+                background: '#020617',
+                color: '#fff'
+            });
+        }
+    };
+</script>
+{% endblock %}

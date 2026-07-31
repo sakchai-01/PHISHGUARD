@@ -1,0 +1,205 @@
+{% extends "layout.html" %}
+
+{% block title %}Report Threat | Intelligence Transmission{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<div class="max-w-4xl mx-auto pt-32 pb-32 px-4 relative">
+    <!-- Header Section -->
+    <div class="text-center mb-24 animate__animated animate__fadeIn">
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 mx-auto shadow-[0_0_30px_rgba(244,63,94,0.2)]">
+            <i class="fa-solid fa-satellite-dish animate-pulse"></i> <span data-i18n="hdr_report_badge">SECURE_INTEL_UPLINK_ESTABLISHED</span>
+        </div>
+        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);" data-i18n="hdr_report_title">
+            REPORT <span class="text-gradient">CENTER.</span>
+        </h1>
+        <p class="text-slate-500 max-w-4xl mx-auto font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);" data-i18n="report_header_desc">
+            ช่องทางสื่อสารระดับสูงเพื่อส่งข้อมูลเบาะแสมิจฉาชีพสู่ฐานข้อมูลกลาง ทุกรายการจะถูกตรวจสอบโดย AI และทีมวิเคราะห์ความปลอดภัย
+        </p>
+    </div>
+
+    <!-- Report Form: Tactical Command Interface -->
+    <div class="relative group animate__animated animate__fadeInUp">
+        <div class="absolute -inset-2 bg-gradient-to-r from-rose-700 to-red-600 rounded-[3rem] blur-xl opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+        <div class="relative cyber-card p-10 md:p-16 border-slate-200 bg-white shadow-[0_0_80px_rgba(0,0,0,0.8)] backdrop-blur-3xl">
+            
+            <form id="reportForm" action="/report" method="POST" class="space-y-12 relative z-10">
+                <!-- Identity Authentication Block -->
+                <div class="p-8 bg-white border border-slate-200 rounded-[2.5rem] flex flex-col lg:flex-row items-center justify-between gap-10 hover:border-rose-500/30 transition-all duration-500 shadow-inner mobile-stack">
+                    <div class="text-center lg:text-left">
+                        <h3 class=" text-xl font-black uppercase tracking-tight mb-2" data-i18n="report_id_auth">Identity Authentication</h3>
+                        <p class="text-xs text-slate-500 font-['Kanit']" data-i18n="report_id_auth_desc">ยืนยันตัวตนผู้รายงานด้วย Google เพื่อคัดกรองข่าวปลอม (SPAM Filter)</p>
+                    </div>
+                    <div id="g_id_onload"
+                        data-client_id="{{ google_client_id }}"
+                        data-callback="handleCredentialResponse"
+                        data-auto_prompt="false"
+                        data-prompt="select_account consent">
+                    </div>
+                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="continue_with" data-size="large"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mobile-stack">
+                    <!-- Email Status -->
+                    <div class="space-y-4">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1" data-i18n="report_submitter_id">SUBMITTER_ID</label>
+                        <div class="relative group">
+                            <i class="fa-solid fa-user-shield absolute left-6 top-1/2 -translate-y-1/2 text-slate-700"></i>
+                            <input type="email" name="email" id="verifiedEmail" 
+                                class="w-full bg-white border border-slate-200 p-6 pl-16 rounded-2xl text-slate-600 font-mono text-sm outline-none transition-all shadow-inner italic mobile-full" 
+                                readonly data-i18n-placeholder="report_waiting_auth" placeholder="WAITING_FOR_AUTH..." required>
+                        </div>
+                    </div>
+
+                    <!-- Category Selector -->
+                    <div class="space-y-4">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1" data-i18n="report_threat_vector">THREAT_VECTOR</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-layer-group absolute left-6 top-1/2 -translate-y-1/2 text-rose-500/50"></i>
+                            <select name="type" id="type" 
+                                class="w-full bg-white border border-slate-200 p-6 pl-16 rounded-2xl  outline-none focus:border-rose-500/50 transition shadow-inner font-['Kanit'] appearance-none mobile-full">
+                                <option value="fake_web" data-i18n="report_fake_web">PHISHING_SITE (หน้าเว็บปลอม)</option>
+                                <option value="sms" data-i18n="report_sms">SMISHING_SMS (SMS หลอกลวง)</option>
+                                <option value="email" data-i18n="report_email">EMAIL_SPOOF (อีเมลมิจฉาชีพ)</option>
+                                <option value="other" data-i18n="report_other">UNSPECIFIED_BREACH (ภัยคุกคามอื่นๆ)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-slate-700 pointer-events-none text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Data -->
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1" data-i18n="report_target_data">TARGET_DATA_STRING (URL / PHONE / ID)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-crosshairs absolute left-6 top-1/2 -translate-y-1/2 text-rose-600"></i>
+                        <input type="text" name="url" id="url" 
+                            class="w-full bg-white border border-slate-200 p-6 pl-16 rounded-2xl  outline-none focus:border-rose-500/50 transition shadow-inner font-mono text-lg" 
+                            placeholder="https://target-to-neutralize.com" required>
+                    </div>
+                </div>
+
+                <!-- Observations -->
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-1" data-i18n="report_tactical_obs">TACTICAL_OBSERVATIONS</label>
+                    <textarea name="description" id="description" 
+                        class="w-full bg-white border border-slate-200 p-8 rounded-[2rem]  h-48 outline-none focus:border-rose-500/50 transition shadow-inner font-['Kanit']"
+                        data-i18n-placeholder="report_tactical_obs_placeholder"
+                        placeholder="กรุณาระบุรายละเอียดการหลอกลวงที่พบ..."></textarea>
+                </div>
+
+                <!-- Transmission Trigger -->
+                <button type="submit" id="submitBtn" disabled class="w-full py-8 bg-slate-900 text-slate-700 rounded-3xl font-black uppercase tracking-[0.4em] text-xl transition-all cursor-not-allowed opacity-50 border border-slate-200 shadow-2xl overflow-hidden group relative">
+                    <span class="relative z-10 flex items-center justify-center gap-4">
+                        <i class="fa-solid fa-lock text-sm opacity-50"></i>
+                        <span data-i18n="report_verify_before">VERIFY_IDENTITY_BEFORE_TRANSMIT</span>
+                    </span>
+                    <div id="btnGlow" class="absolute inset-0 bg-gradient-to-r from-red-600 to-rose-600 opacity-0 transition-opacity duration-1000"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Intel Features Grid -->
+    <div class="mt-32 grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="cyber-card p-10 bg-white shadow-sm border-slate-200 hover:border-red-500/20 transition-all">
+            <div class="w-12 h-12 rounded-xl bg-red-600/10 flex items-center justify-center text-red-500 mb-6 text-2xl">
+                <i class="fa-solid fa-mask"></i>
+            </div>
+            <h4 class=" font-black uppercase tracking-tight mb-3" data-i18n="report_secure_id">SECURE_ID</h4>
+            <p class="text-[13px] text-slate-500 font-['Kanit'] leading-relaxed" data-i18n="report_secure_id_desc">ข้อมูลผู้แจ้งเบาะแสจะถูกเข้ารหัสและรักษาเป็นความลับสูงสุดตามมาตรฐานสากล</p>
+        </div>
+        <div class="cyber-card p-10 bg-white shadow-sm border-slate-200 hover:border-blue-500/20 transition-all">
+            <div class="w-12 h-12 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-500 mb-6 text-2xl">
+                <i class="fa-solid fa-microchip"></i>
+            </div>
+            <h4 class=" font-black uppercase tracking-tight mb-3" data-i18n="report_ai_sync">AI_SYNC</h4>
+            <p class="text-[13px] text-slate-500 font-['Kanit'] leading-relaxed" data-i18n="report_ai_sync_desc">ชุดข้อมูลจะถูกประมวลผลทันทีโดย Janis AI เพื่อยกระดับการป้องกันให้ผู้ใช้รายอื่น</p>
+        </div>
+        <div class="cyber-card p-10 bg-white shadow-sm border-slate-200 hover:border-emerald-500/20 transition-all">
+            <div class="w-12 h-12 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-500 mb-6 text-2xl">
+                <i class="fa-solid fa-network-wired"></i>
+            </div>
+            <h4 class=" font-black uppercase tracking-tight mb-3" data-i18n="report_global_feed">GLOBAL_FEED</h4>
+            <p class="text-[13px] text-slate-500 font-['Kanit'] leading-relaxed" data-i18n="report_global_feed_desc">เบาะแสที่ผ่านการยืนยันจะถูกอัปเดตเข้าสู่ฐานข้อมูลความปลอดภัยในพริบตา</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function decodeJwtResponse(token) {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    window.handleCredentialResponse = function(response) {
+        const payload = decodeJwtResponse(response.credential);
+        console.log("Auth Success:", payload.email);
+        const emailInput = document.getElementById('verifiedEmail');
+        if (emailInput) {
+            emailInput.value = payload.email;
+            emailInput.classList.remove('text-slate-600', 'italic');
+            emailInput.classList.add('text-rose-400', 'font-bold', 'border-rose-500/40', 'bg-rose-500/10');
+        }
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const btnGlow = document.getElementById('btnGlow');
+        
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('text-slate-700', 'cursor-not-allowed', 'opacity-50');
+        submitBtn.classList.add('', 'shadow-[0_0_40px_rgba(225,29,72,0.3)]', 'border-rose-500/50');
+        btnGlow.style.opacity = '1';
+        submitBtn.innerHTML = `
+            <span class="relative z-10 flex items-center justify-center gap-4">
+                <i class="fa-solid fa-paper-plane animate-bounce"></i>
+                ${translations[currentLang]['report_transmit_btn']}
+            </span>
+        `;
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'IDENTITY_SYNCHRONIZED',
+            text: currentLang === 'th' ? `บัญชี ${payload.email} ได้รับการยืนยันเพื่อความปลอดภัยแล้ว` : `Credentials for ${payload.email} have been authenticated for secure transmission.`,
+            background: '#020617',
+            color: '#fff',
+            customClass: { popup: 'cyber-card border-rose-500/20' }
+        });
+    }
+
+    document.getElementById('reportForm').onsubmit = function(e) {
+        const email = document.getElementById('verifiedEmail').value;
+        if (!email || email.includes("WAITING")) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'AUTHENTICATION_FAILURE',
+                text: currentLang === 'th' ? 'กรุณายืนยันตัวตนผ่านระบบ Google ก่อนส่งข้อมูลเข้าสู่ศูนย์ปฏิบัติการครับ' : 'Please authenticate via Google before transmitting data to the command center.',
+                background: '#020617',
+                color: '#fff',
+                customClass: { popup: 'cyber-card border-red-500/20' }
+            });
+        }
+    };
+</script>
+
+{% if success %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'TRANSMISSION_SUCCESSFUL',
+            text: '{{ success }}',
+            background: '#020617',
+            color: '#fff',
+            customClass: { popup: 'cyber-card border-emerald-500/20' }
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

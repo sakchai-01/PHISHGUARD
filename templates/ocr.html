@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block title %}Vision | Omni-Channel OCR Intelligence{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative">
+    <!-- Header Section -->
+    <div class="text-center mb-24 animate__animated animate__fadeIn">
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 mx-auto shadow-[0_0_30px_rgba(0,240,255,0.2)]">
+            <i class="fa-solid fa-eye animate-pulse"></i> <span data-i18n="hdr_ocr_badge">NEURAL_VISION_ACTIVE</span>
+        </div>
+        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);" data-i18n="hdr_ocr_title">
+            OCR <span class="text-gradient">VISION.</span>
+        </h1>
+        <p class="text-slate-500 max-w-4xl mx-auto font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);" data-i18n="ocr_header_desc">
+            เทคโนโลยีสกัดข้อความจากภาพด้วย AI ขั้นสูง เพื่อวิเคราะห์ลิงก์และเนื้อหาแฝงในภาพหลักฐาน
+        </p>
+    </div>
+
+    <!-- Upload Zone: High-Tech Array -->
+    <div class="relative group max-w-4xl mx-auto animate__animated animate__fadeInUp">
+        <div class="absolute -inset-2 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-[3rem] blur-xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
+        <div class="relative cyber-card p-16 md:p-24 text-center border-slate-200 hover:border-cyan-500/50 transition-all cursor-pointer bg-white shadow-[0_0_80px_rgba(0,0,0,0.8)] backdrop-blur-3xl overflow-hidden" onclick="document.getElementById('file-upload').click()">
+            
+            <!-- Dynamic Background Glow -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 blur-[100px] pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-[100px] pointer-events-none"></div>
+
+            <div class="relative z-10">
+                <div class="mb-10">
+                    <i class="fa-solid fa-cloud-arrow-up text-8xl text-slate-700 group-hover:text-cyan-400 group-hover:scale-110 transition-all duration-700"></i>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-black  uppercase tracking-widest mb-6 font-['Orbitron']" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
+                <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-12 border-t border-b border-slate-200 py-4 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP</p>
+
+                <form action="#" method="POST" enctype="multipart/form-data" id="ocr-form" onsubmit="return false;">
+                    <input type="file" id="file-upload" class="hidden" accept="image/*">
+                    <div class="cyber-btn px-6 py-4 md:px-16 md:py-6 text-xs md:text-sm font-black tracking-[0.2em] md:tracking-[0.4em] inline-block mobile-full" data-i18n="ocr_select_source">
+                        SELECT_DATA_SOURCE
+                    </div>
+                </form>
+            </div>
+
+            <!-- Animated Scan Line -->
+            <div id="scan-line" class="absolute left-0 right-0 h-[2px] bg-cyan-500 shadow-[0_0_30px_#06b6d4] opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+        </div>
+    </div>
+
+    <!-- Processing State -->
+    <div id="processing-state" class="mt-20 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
+        <div class="cyber-card p-10 bg-white border-cyan-500/30 backdrop-blur-3xl">
+            <div class="flex items-center gap-10">
+                <div class="relative">
+                    <div class="w-20 h-20 rounded-full border-4 border-cyan-500/10 border-t-cyan-500 animate-spin"></div>
+                    <i class="fa-solid fa-dna absolute inset-0 flex items-center justify-center text-cyan-500 text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <p class="text-cyan-500 font-black uppercase tracking-[0.5em] text-[10px] mb-3" data-i18n="ocr_neural_decoder">NEURAL_DECODER_ACTIVE</p>
+                    <p class=" font-['Orbitron'] text-xl tracking-tight leading-relaxed" id="status-text" data-i18n="ocr_status_mapping">MAPPING_PIXEL_INTEL...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Terminal: High-Security Interface -->
+    <div class="mt-20 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
+        <div class="cyber-card overflow-hidden border-slate-200 bg-white shadow-2xl">
+            <div class="bg-slate-900/40 px-8 py-5 border-b border-slate-200 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-amber-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                </div>
+                <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] italic" data-i18n="ocr_terminal_title">INTELLIGENCE_OUTPUT_TERMINAL</span>
+            </div>
+            <div class="p-10 font-mono text-[15px] leading-relaxed space-y-8">
+                <div class="flex gap-6 animate__animated animate__fadeInLeft">
+                    <span class="text-slate-700 font-black tracking-widest">[SYSTEM]</span>
+                    <span class="text-emerald-500 uppercase tracking-tight" data-i18n="ocr_detection_complete">IMAGE_DETECTION_SEQUENCE_COMPLETE</span>
+                </div>
+                <!-- ... existing rows ... -->
+                <div class="pt-10 border-t border-slate-200 mt-10 flex flex-col md:flex-row justify-between items-center gap-8 mobile-stack">
+                    <div class="flex items-center gap-6 mobile-stack">
+                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">PROBABILITY_SCORE:</span>
+                        <div class="px-6 py-2 bg-rose-500/10 text-rose-500 border border-rose-500/30 text-[10px] font-black rounded-lg uppercase tracking-[0.3em] animate-pulse">
+                            CRITICAL_DANGER
+                        </div>
+                    </div>
+                    <button class="flex items-center gap-3 text-cyan-500 text-[10px] font-black uppercase tracking-[0.4em] hover: transition-all group mobile-stack">
+                        <i class="fa-solid fa-copy group-hover:scale-110"></i>
+                        <span data-i18n="ocr_copy_trace">COPY_TRACE_LOG_DATA</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Intel: UX Clarification -->
+    <div class="mt-40 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
+            <h4 class=" font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_how_it_works">
+                <i class="fa-solid fa-circle-info text-cyan-500"></i> HOW_IT_WORKS
+            </h4>
+            <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light" data-i18n="ocr_how_it_works_desc">
+                ระบบ VISION ใช้งานโมเดล AI ในกลุ่ม Convolutional Neural Networks (CNN) ร่วมกับ Tesseract-Engine เพื่อถอดรหัสข้อความจากความแตกต่างของพิกเซลในภาพ แม้จะเป็นภาพถ่ายที่เบลอหรือเอียง ระบบก็พยายามจำลองโครงสร้างใหม่เพื่อความแม่นยำสูงสุด
+            </p>
+        </div>
+        <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
+            <h4 class=" font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_rapid_response">
+                <i class="fa-solid fa-bolt text-yellow-500"></i> RAPID_RESPONSE
+            </h4>
+            <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light" data-i18n="ocr_rapid_response_desc">
+                หากระบบตรวจพบ URLs หรือคีย์เวิร์ดที่ตรงกับฐานข้อมูล Threat-List ที่ Janis AI เฝ้าสังเกตการณ์อยู่ ข้อมูลจะถูกส่งเข้าบล็อกเกอร์กลางทันทีเพื่อป้องกันผู้ใช้รายอื่นในเครือข่าย PhishGuard
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes ocrScan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+.group:hover #scan-line {
+    animation: ocrScan 2.5s linear infinite;
+}
+</style>
+
+<script>
+document.getElementById('file-upload').addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+        document.getElementById('processing-state').classList.remove('hidden');
+        document.getElementById('ocr-result-container').classList.add('hidden');
+        
+        let steps = [
+            translations[currentLang]['ocr_status_reading'],
+            translations[currentLang]['ocr_status_sharpening'],
+            translations[currentLang]['ocr_status_recognition'],
+            translations[currentLang]['ocr_status_cross_ref'],
+            translations[currentLang]['ocr_status_finalizing']
+        ];
+        let i = 0;
+        let interval = setInterval(() => {
+            document.getElementById('status-text').innerText = steps[i];
+            i++;
+            if (i >= steps.length) {
+                clearInterval(interval);
+                document.getElementById('processing-state').classList.add('hidden');
+                document.getElementById('ocr-result-container').classList.remove('hidden');
+            }
+        }, 1000);
+    }
+});
+</script>
+{% endblock %}

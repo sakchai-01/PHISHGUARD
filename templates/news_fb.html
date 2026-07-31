@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block title %}Analysis | Facebook Scam Intelligence{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative">
+    <!-- Breadcrumb -->
+    <div class="mb-16 animate__animated animate__fadeIn">
+        <a href="/news" class="inline-flex items-center gap-4 text-slate-500 hover:text-blue-400 transition-all group font-black uppercase tracking-[0.2em] text-[10px]">
+            <i class="fa-solid fa-chevron-left group-hover:-translate-x-2 transition-transform"></i>
+            RETURN_TO_INTELLIGENCE_FEED
+        </a>
+    </div>
+
+    <!-- Article Header: Premium Tactical Header -->
+    <header class="mb-24 animate__animated animate__fadeInUp">
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+            <i class="fa-brands fa-facebook animate-pulse"></i> SOCIAL_INTELLIGENCE_FEED
+        </div>
+        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);">
+            FACEBOOK <span class="text-gradient">SCAM_INTEL.</span>
+        </h1>
+        <p class="text-slate-500 max-w-4xl font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);">
+            เจาะลึกเทคนิคการปลอมแปลงบัญชีและเพจธุรกิจในเครือข่าย Facebook เพื่อสกัดกั้นภัยคุกคามก่อนสูญเสียทรัพย์สิน
+        </p>
+    </header>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 py-10 border-y border-slate-200 mt-16">
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">TRANSMISSION_DATE</p>
+                <p class=" font-mono text-sm tracking-tight italic">24_FEB_2026</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">INTEL_SOURCE</p>
+                <p class="text-blue-400 font-mono text-sm tracking-tight italic">CYBER_INTEL_JANIS</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">READ_TIME</p>
+                <p class=" font-mono text-sm tracking-tight italic">05:00_MIN</p>
+            </div>
+            <div class="space-y-2 text-right">
+                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest">THREAT_LEVEL</p>
+                <span class="px-3 py-1 bg-rose-500/10 text-rose-500 border border-rose-500/30 text-[10px] font-black rounded uppercase tracking-widest animate-pulse">Critical</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Visual Artifact -->
+    <div class="cyber-card p-4 border-slate-200 mb-24 overflow-hidden animate__animated animate__fadeInUp bg-white backdrop-blur-3xl shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+        <div class="aspect-video bg-slate-900 rounded-[2.5rem] relative flex items-center justify-center overflow-hidden border border-slate-200">
+            <div class="absolute inset-0 bg-blue-600/5 mix-blend-overlay"></div>
+            <i class="fa-brands fa-facebook text-[18rem] text-slate-800 opacity-20 rotate-12 transition-all group-hover:scale-110"></i>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+            <div class="absolute bottom-16 left-16 p-10 border-l-4 border-blue-600 bg-white backdrop-blur-md rounded-r-3xl">
+                <p class=" text-3xl font-black uppercase italic tracking-tighter mb-2 font-['Orbitron']">SOCIAL_ENGINEERING_VECTOR</p>
+                <p class="text-blue-500 text-[10px] font-black tracking-[0.5em] uppercase opacity-60">Sub-Domain: Hijacking_Analysis</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content: Tactical Breakdown -->
+    <article class="prose prose-invert max-w-none text-slate-400 font-['Kanit'] leading-relaxed text-xl animate__animated animate__fadeInUp font-light">
+        <p class="text-2xl  font-bold mb-12 border-b border-slate-200 pb-12 italic">
+            ในช่วงเดือนที่ผ่านมา ทางทีมงานตรวจพบการสร้าง <b class="text-blue-400">เพจปลอม</b> บน Facebook เพิ่มขึ้นมากกว่า 300% โดยส่วนใหญ่จะใช้รูปภาพและชื่อที่คล้ายคลึงกับหน่วยงานราชการหรือธนาคาร
+        </p>
+
+        <p class="mb-12">
+            มิจฉาชีพหันมาใช้เทคนิค <b class="">"Brand Hijacking"</b> มากขึ้น โดยการสวมรอยเป็นหน่วยงานที่มีความน่าเชื่อถือสูง เพื่อสร้างความตกใจและบีบคั้นให้เหยื่อรีบดำเนินการบางอย่าง เช่น การรีเซ็ตรหัสผ่าน หรือการดาวน์โหลดแอปพลิเคชันที่ระบุว่าเป็น "แอปฯ ตรวจสอบความปลอดภัย" แต่แท้จริงแล้วคือมัลแวร์ดูดเงินที่แฝงมาในรูปแบบไฟล์ติดตั้ง (.APK)
+        </p>
+
+        <!-- Indicators Box: High-Tech Infographic -->
+        <div class="cyber-card p-12 md:p-20 border-rose-500/10 bg-rose-500/[0.03] my-24 relative overflow-hidden backdrop-blur-3xl shadow-inner">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-rose-500/5 blur-[120px] pointer-events-none"></div>
+            <h3 class="text-rose-500 font-black uppercase tracking-[0.5em] text-xs mb-12 flex items-center gap-4 font-['Orbitron']">
+                <i class="fa-solid fa-triangle-exclamation animate-pulse"></i> DETECTED_RED_FLAGS
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div class="space-y-12">
+                     <div class="flex gap-8 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-600/10 border border-rose-500/30 flex items-center justify-center text-rose-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-rose-600 group-hover: transition-all">01</div>
+                        <div>
+                            <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">Follower Disparity</b>
+                            <p class="text-base text-slate-500 font-light leading-relaxed">เพจปลอมมักจะมีผู้ติดตามน้อยกว่าของจริง หรือยอดไลก์มาจากบัญชีที่เป็น Bot ที่ไม่มีกิจกรรมเคลื่อนไหว</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-8 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-600/10 border border-rose-500/30 flex items-center justify-center text-rose-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-rose-600 group-hover: transition-all">03</div>
+                        <div>
+                            <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">SUSPICIOUS_REDIRECT</b>
+                            <p class="text-base text-slate-500 font-light leading-relaxed">การแนบลิงก์ผ่าน Shortener (เช่น bit.ly) เพื่อนำทางผู้ใช้ไปยังเว็บไซต์ที่ไม่ได้ขึ้นต้นด้วย facebook.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-12">
+                    <div class="flex gap-8 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-600/10 border border-rose-500/30 flex items-center justify-center text-rose-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-rose-600 group-hover: transition-all">02</div>
+                        <div>
+                            <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">NAME_HISTORY_FAIL</b>
+                            <p class="text-base text-slate-500 font-light leading-relaxed">เมื่อตรวจสอบความโปร่งใสจะพบประวัติการเปลี่ยนชื่ออย่างรวดเร็ว จากชื่อเดิมที่ไม่เกี่ยวข้องกับหน่วยงานปัจจุบัน</p>
+                        </div>
+                    </div>
+                     <div class="flex gap-8 group">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-600/10 border border-rose-500/30 flex items-center justify-center text-rose-500 font-black shrink-0 text-xs shadow-lg group-hover:bg-rose-600 group-hover: transition-all">04</div>
+                        <div>
+                            <b class=" text-xl block mb-3 uppercase italic tracking-tight font-['Orbitron']">AD_CONTENT_ONLY</b>
+                            <p class="text-base text-slate-500 font-light leading-relaxed">เพจไม่มีเนื้อหาให้ความรู้อื่นๆ นอกจากโพสต์ที่ล่อลวงหรือโพสต์โฆษณาเพื่อหาเหยื่อรายใหม่เพียงอย่างเดียว</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-4xl font-black  italic uppercase tracking-tighter mt-32 mb-10 font-['Orbitron']">Tactical <span class="text-blue-500">Neutralization</span></h2>
+        <p class="mb-12">
+            ก่อนจะเชื่อข้อมูลใดๆ ใน Facebook ให้มองหาเครื่องหมาย <b class="text-blue-500">Blue Badge</b> (Verified) เสมอ และหากได้รับการติดต่อผ่าน Messenger ที่อ้างว่าเป็นเจ้าหน้าที่ ให้ทำการ Block ทันที เพราะหน่วยงานรัฐในประเทศไทยไม่มีนโยบายทักแชทส่วนตัวเพื่อทำธุรกรรมหรือขอข้อมูลส่วนบุคคล
+        </p>
+
+        <div class="p-12 bg-white border border-slate-200 rounded-[3rem] mt-24 shadow-2xl relative overflow-hidden backdrop-blur-3xl">
+            <i class="fa-solid fa-microchip absolute top-1/2 -right-12 -translate-y-1/2 text-[15rem] /5 -rotate-12"></i>
+            <p class="font-black text-blue-500 uppercase tracking-[0.5em] text-xs mb-6 font-['Orbitron']">COMMAND_SUMMARY:</p>
+            <p class=" font-['Kanit'] italic text-xl leading-relaxed font-light relative z-10">
+                "ระมัดระวังลิงก์แปลกปลอม ตรวจสอบประวัติเพจ และห้ามดาวน์โหลดแอปพลิเคชันจากลิงก์ที่ส่งมาในอินบ็อกซ์โดยเด็ดขาด การสแกนด้วย Janis AI คือด่านหน้าในการปกป้องตัวตนของคุณ"
+            </p>
+        </div>
+    </article>
+
+    <!-- Call to Action: Integrated Scanner -->
+    <div class="mt-40 pt-24 border-t border-slate-200 text-center">
+        <p class="text-slate-500 mb-12 text-lg font-['Kanit'] font-light italic">พบเห็นเพจที่น่าสงสัย? ใช้ระบบตรวจจับของเราสแกนข้อมูล Intelligence ได้ฟรี</p>
+        <a href="/detect/fb" class="cyber-btn px-6 py-4 md:px-16 md:py-8 text-base md:text-xl group overflow-hidden mobile-full">
+            <span class="relative z-10 flex items-center gap-4">
+                <i class="fa-solid fa-satellite-dish text-2xl group-hover:animate-pulse"></i>
+                LAUNCH_FACEBOOK_PROBE
+            </span>
+        </a>
+    </div>
+</div>
+{% endblock %}

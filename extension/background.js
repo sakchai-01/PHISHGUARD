@@ -1,5 +1,12 @@
 // background.js - Bridge between content script and Janis AI Backend
 
+try {
+  importScripts('ml_engine.js');
+  console.log("🧠 Janis On-Device ML Engine Loaded Successfully");
+} catch (e) {
+  console.warn("⚠️ Failed to import ml_engine.js:", e);
+}
+
 let API_BASE = "http://localhost:5000";
 
 // Load API base from extension storage if user set it in settings; otherwise use default
@@ -26,7 +33,20 @@ if (chrome && chrome.storage && chrome.storage.sync) {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(`📩 Incoming Message: ${request.action}`, request);
 
+  if (request.action === "predictML") {
+    if (self.janisML) {
+      const result = self.janisML.predict(request.url, request.title || '', request.text || '', request.domMeta || {});
+      sendResponse(result);
+    } else {
+      sendResponse({ error: "ML Engine Not Initialized" });
+    }
+    return true;
+  }
+
   if (request.action === "scanUrl") {
+    // Run On-Device ML prediction locally first (0ms latency)
+    const localMLResult = self.janisML ? self.janisML.predict(request.url, request.title || '', request.text || '', request.domMeta || {}) : null;
+
     // allow popup to override api base for quick tests via _api_base_override
     if (request._api_base_override) {
       const original = API_BASE;
@@ -34,25 +54,38 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       scanUrl(request.url)
         .then(res => {
           API_BASE = original;
+          res.local_ml = localMLResult;
           console.log("✅ Scan URL Result:", res);
           sendResponse(res);
         })
         .catch(err => {
           API_BASE = original;
           console.error("❌ Scan URL Error:", err);
-          sendResponse({ error: "การสแกนล้มเหลว", details: err.message });
+          sendResponse({
+            error: "การเชื่อมต่อล้มเหลว",
+            details: err.message,
+            local_ml: localMLResult,
+            status: (localMLResult && localMLResult.riskScore > 65) ? "danger" : "safe"
+          });
         });
       return true;
     }
 
     scanUrl(request.url)
       .then(res => {
+        res.local_ml = localMLResult;
         console.log("✅ Scan URL Result:", res);
         sendResponse(res);
       })
       .catch(err => {
         console.error("❌ Scan URL Error:", err);
-        sendResponse({ error: "การสแกนล้มเหลว", details: err.message });
+        // If server connection fails, fallback to local ML decision!
+        sendResponse({
+          error: "การเชื่อมต่อล้มเหลว (ใช้ระบบ ML ในเครื่องเป็นสายรอง)",
+          details: err.message,
+          local_ml: localMLResult,
+          status: (localMLResult && localMLResult.riskScore > 65) ? "danger" : "safe"
+        });
       });
     return true; 
   }

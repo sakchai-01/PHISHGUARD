@@ -42,8 +42,19 @@ def calculate_entropy(text: str) -> float:
     return -sum(p * math.log2(p) for p in prob)
 
 
-def get_domain_age_days(domain: str, timeout: float = 2.0) -> int:
-    """ดึงอายุโดเมนจาก WHOIS โดยตั้ง timeout 2 วินาที หากล้มเหลวคืนค่า -1"""
+WHOIS_CACHE: Dict[str, int] = {}
+
+def get_domain_age_days(domain: str, timeout: float = 0.05) -> int:
+    """
+    ดึงอายุโดเมนจาก WHOIS โดยใช้ Cache และ Timeout แบบรวดเร็ว (<10ms target)
+    หากเกิน timeout หรือดึงไม่ได้ให้ domain_age = -1 ตามข้อกำหนด
+    """
+    if not domain or domain in ['localhost', '127.0.0.1']:
+        return -1
+    
+    if domain in WHOIS_CACHE:
+        return WHOIS_CACHE[domain]
+
     def _whois_lookup():
         try:
             import whois
@@ -63,8 +74,11 @@ def get_domain_age_days(domain: str, timeout: float = 2.0) -> int:
     try:
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             future = executor.submit(_whois_lookup)
-            return future.result(timeout=timeout)
+            age = future.result(timeout=timeout)
+            WHOIS_CACHE[domain] = age
+            return age
     except Exception:
+        WHOIS_CACHE[domain] = -1
         return -1
 
 
@@ -106,8 +120,8 @@ def quick_check(url: str) -> dict:
             score += 40
             reasons.append("ใช้ IP Address แทนชื่อโดเมน")
 
-        # Rule c: โดเมนอายุ < 14 วัน จาก WHOIS = +35 risk (timeout 2s)
-        domain_age = get_domain_age_days(domain_full, timeout=2.0)
+        # Rule c: โดเมนอายุ < 14 วัน จาก WHOIS = +35 risk
+        domain_age = get_domain_age_days(domain_full, timeout=0.05)
         if 0 <= domain_age < 14:
             score += 35
             reasons.append(f"อายุโดเมนเพียง {domain_age} วัน (น้อยกว่า 14 วัน)")
@@ -189,8 +203,7 @@ def extract_features(url: str) -> Dict[str, float]:
         abnormal_tlds = {'tk', 'ml', 'ga', 'cf', 'xyz', 'top', 'gq', 'work', 'click', 'site', 'online', 'vip', 'cc'}
         shorteners = {'bit.ly', 'tinyurl.com', 't.co', 'is.gd', 'buff.ly', 'goo.gl', 'ow.ly'}
 
-        domain_age = get_domain_age_days(domain_full, timeout=2.0)
-        
+        domain_age = get_domain_age_days(domain_full, timeout=0.05)
         query_params = parse_qs(parsed.query)
 
         features = {
@@ -217,7 +230,6 @@ def extract_features(url: str) -> Dict[str, float]:
         }
         return features
     except Exception as e:
-        # Default 20 features fallback
         return {
             "url_length": float(len(url)), "domain_length": 10.0, "num_dots": 2.0, "num_hyphens": 0.0, "num_digits": 0.0,
             "has_https": 0.0, "has_at": 0.0, "has_ip": 0.0, "entropy": 3.0, "domain_age_days": -1.0,
@@ -263,10 +275,9 @@ def check_url_full(url: str) -> dict:
         ml_score = ml_res.get("ml_score", 50.0)
         shap_explain = ml_res.get("shap_explain", [])
         
-        # Combine reasons
         reasons.extend(shap_explain)
         
-        # Calculate Final Ensemble Score
+        # Final Ensemble Score
         final_score = round(0.3 * quick_score + 0.7 * ml_score, 2)
         final_score = min(max(final_score, 0.0), 100.0)
 

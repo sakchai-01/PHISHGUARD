@@ -5,11 +5,17 @@ app/domain_checker.py - 3-Layer URL Risk Checker Engine
 import re
 import math
 import time
+import socket
 import concurrent.futures
 from typing import Dict, Any, List
 from urllib.parse import urlparse, parse_qs
 
 import tldextract
+
+# Global Thread Pool Executor to prevent thread creation/shutdown delays
+_WHOIS_EXECUTOR = concurrent.futures.ThreadPoolExecutor(max_workers=8)
+WHOIS_CACHE: Dict[str, int] = {}
+
 
 # Helper function for Levenshtein Distance
 def levenshtein_distance(s1: str, s2: str) -> int:
@@ -42,21 +48,21 @@ def calculate_entropy(text: str) -> float:
     return -sum(p * math.log2(p) for p in prob)
 
 
-WHOIS_CACHE: Dict[str, int] = {}
-
 def get_domain_age_days(domain: str, timeout: float = 0.05) -> int:
     """
     ดึงอายุโดเมนจาก WHOIS โดยใช้ Cache และ Timeout แบบรวดเร็ว (<10ms target)
     หากเกิน timeout หรือดึงไม่ได้ให้ domain_age = -1 ตามข้อกำหนด
     """
-    if not domain or domain in ['localhost', '127.0.0.1']:
+    if not domain or domain in ['localhost', '127.0.0.1'] or re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', domain):
         return -1
     
     if domain in WHOIS_CACHE:
         return WHOIS_CACHE[domain]
 
     def _whois_lookup():
+        old_timeout = socket.getdefaulttimeout()
         try:
+            socket.setdefaulttimeout(0.4)
             import whois
             w = whois.whois(domain)
             creation_date = w.creation_date
@@ -69,14 +75,15 @@ def get_domain_age_days(domain: str, timeout: float = 0.05) -> int:
                     return age if age >= 0 else -1
         except Exception:
             pass
+        finally:
+            socket.setdefaulttimeout(old_timeout)
         return -1
 
     try:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_whois_lookup)
-            age = future.result(timeout=timeout)
-            WHOIS_CACHE[domain] = age
-            return age
+        future = _WHOIS_EXECUTOR.submit(_whois_lookup)
+        age = future.result(timeout=timeout)
+        WHOIS_CACHE[domain] = age
+        return age
     except Exception:
         WHOIS_CACHE[domain] = -1
         return -1

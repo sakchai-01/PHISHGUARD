@@ -3,9 +3,13 @@ pdg_ml.py - Layer 3 Machine Learning Engine using XGBoost & SHAP Explainer
 """
 
 import os
+import warnings
 import numpy as np
 import pandas as pd
 import xgboost as xgb
+
+warnings.filterwarnings("ignore")
+
 try:
     import shap
 except ImportError:

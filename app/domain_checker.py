@@ -1,44 +1,39 @@
-"""
-app/domain_checker.py - 3-Layer URL Risk Checker Engine
-"""
-
-import re
-import math
-import time
 import socket
-import concurrent.futures
-from typing import Dict, Any, List
-from urllib.parse import urlparse, parse_qs
+import time
+import math
+import re
+from app.whois_utils import whois_features
+from app.rl_engine import predict_rl_score
 
-import tldextract
+SUSPICIOUS_TLDS = ['.xyz', '.cc', '.live', '.vip', '.top', '.tk', '.ga', '.ml', '.cf', '.gq', '.online', '.site']
+KNOWN_BAD_URLS = [
+    'thaigrowthdigitalmarketing.cc', 'settradethailand.com', 'athur.net', 'ezbuy66.com',
+    'trade-thai.com', 'hsgi.xyz', 'btscswl.com', 'happinessco.cc', 'erwz.live',
+    'tokts.life', 'thaibet248.com', 'thaipvz.com', 'shopping-now-maket.com',
+    'pi-moneyloan.com', 'bjgth.cc', 'cryptoxj.com', 'bonanza-store.net', 'hshh-banktt.app',
+    'dedifeqa-spt.top', 'royaltrad.vip', 'jgol.live', 'affilliiate.com',
+    'astalavista.box.sk', 'crack.ms', 'cracksearchengine.net', 'cracks.am',
+    'crackfound.com', 'serialsite.com', 'crackz.ws', 'serialcrackz.com',
+    'crackteam.ws', 'zor.org', 'mscracks.com', 'anycracks.com', 'crackspider.net',
+    'siamcrack.com', 'serialz.to', 'serials.ws', 'seriall.com', 'keygen.us',
+    'theserials.com', 'crack-cd.com', 'crack.cd', 'grep.ws', 'asta-killer.com',
+    'powerddl.com', 'd-cracks-serials.com', 'crackspider.us', 'download-crack-serial.com',
+    'satanwarez.com', 'atom-soft.com', 'oday-warez.com', 'hackzone.us', 'netvouz.com',
+    'keygencrack.com', 'crackserver.com', 'cracks.thebugs.ws', 'download5000.com',
+    'freeserials.com', 'hackpr.net', 'clean-cracks.com', 'bestcracks.net',
+    'superserials.com', 'keygen.ru', 'customize.ru', 'sh3bwah.com', 'crackportal.com',
+    'crackserial.net', 'phazeddl.com', 'serialdevil.com'
+]
 
-# Global Thread Pool Executor to prevent thread creation/shutdown delays
-_WHOIS_EXECUTOR = concurrent.futures.ThreadPoolExecutor(max_workers=8)
-WHOIS_CACHE: Dict[str, int] = {}
+BRAND_TYPOSQUATTING_PATTERNS = [
+    r'g[0o]{2}gle', r'paypa[l1i]', r'kbank', r'kasikorn', r'scb[-_]?online',
+    r'krungthai', r'bangkokbank', r'ttb[-_]?bank', r'tmb', r'truemoney',
+    r'shopee', r'lazada', r'facebook', r'instagram', r'line[-_]?official'
+]
 
-
-# Helper function for Levenshtein Distance
-def levenshtein_distance(s1: str, s2: str) -> int:
-    """คำนวณ Levenshtein Distance ระหว่างข้อความ 2 ข้อความ"""
-    try:
-        import Levenshtein
-        return Levenshtein.distance(s1, s2)
-    except Exception:
-        if len(s1) < len(s2):
-            return levenshtein_distance(s2, s1)
-        if len(s2) == 0:
-            return len(s1)
-        previous_row = range(len(s2) + 1)
-        for i, c1 in enumerate(s1):
-            current_row = [i + 1]
-            for j, c2 in enumerate(s2):
-                insertions = previous_row[j + 1] + 1
-                deletions = current_row[j] + 1
-                substitutions = previous_row[j] + (c1 != c2)
-                current_row.append(min(insertions, deletions, substitutions))
-            previous_row = current_row
-        return previous_row[-1]
-
+# Simple in-memory cache
+ANALYSIS_CACHE = {}
+CACHE_TTL = 3600  # 1 hour
 
 def calculate_entropy(text: str) -> float:
     """คำนวณ Shannon Entropy เพื่อตรวจจับชื่อโดเมนที่สุ่มสร้างอัตโนมัติ (DGA)"""
@@ -48,283 +43,162 @@ def calculate_entropy(text: str) -> float:
     return -sum(p * math.log2(p) for p in prob)
 
 
-def get_domain_age_days(domain: str, timeout: float = 0.05) -> int:
-    """
-    ดึงอายุโดเมนจาก WHOIS โดยใช้ Cache และ Timeout แบบรวดเร็ว (<10ms target)
-    หากเกิน timeout หรือดึงไม่ได้ให้ domain_age = -1 ตามข้อกำหนด
-    """
-    if not domain or domain in ['localhost', '127.0.0.1'] or re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', domain):
-        return -1
+def analyze_domain(domain, url=None):
+    current_time = time.time()
+    cache_key = url if url else domain
     
-    if domain in WHOIS_CACHE:
-        return WHOIS_CACHE[domain]
+    if cache_key in ANALYSIS_CACHE:
+        cached = ANALYSIS_CACHE[cache_key]
+        if current_time < cached["expiry"]:
+            return cached["result"]
 
-    def _whois_lookup():
-        old_timeout = socket.getdefaulttimeout()
-        try:
-            socket.setdefaulttimeout(0.4)
-            import whois
-            w = whois.whois(domain)
-            creation_date = w.creation_date
-            if isinstance(creation_date, list):
-                creation_date = creation_date[0]
-            if creation_date:
-                import datetime
-                if isinstance(creation_date, datetime.datetime):
-                    age = (datetime.datetime.now() - creation_date).days
-                    return age if age >= 0 else -1
-        except Exception:
-            pass
-        finally:
-            socket.setdefaulttimeout(old_timeout)
-        return -1
+    # 0. Whitelist Check (Localhost & Internal IPs)
+    check_domain = domain.lower().split(':')[0]
+    if check_domain in ['127.0.0.1', 'localhost'] or check_domain.startswith('192.168.'):
+        result = {
+            "domain": domain,
+            "score": 0,
+            "risk": "ปลอดภัย",
+            "details": ["เป็น Localhost หรือ IP ภายในเครื่อง (ปลอดภัย 100%) 🟢"],
+            "whois": {}
+        }
+        ANALYSIS_CACHE[cache_key] = {"result": result, "expiry": current_time + CACHE_TTL}
+        return result
 
-    try:
-        future = _WHOIS_EXECUTOR.submit(_whois_lookup)
-        age = future.result(timeout=timeout)
-        WHOIS_CACHE[domain] = age
-        return age
-    except Exception:
-        WHOIS_CACHE[domain] = -1
-        return -1
+    score = 0
+    details = []
 
+    # 1. เช็คจาก Built-in Blacklist โดยตรง (Blacklist = 100% ทันที)
+    check_url = (url.lower().replace(' ', '') if url else domain.lower())
+    for bad_url in KNOWN_BAD_URLS:
+        if bad_url in check_url:
+            score += 100
+            details.append(f'ตรวจพบในฐานข้อมูลเว็บอันตราย (Built-in Blacklist): {bad_url}')
+            break
 
-# ==========================================
-# Layer 1 - Heuristic Rules
-# ==========================================
-def quick_check(url: str) -> dict:
-    """
-    Layer 1 - Heuristic Rules Check (<10ms target)
-    Returns: {"score": 0-100, "reasons": list[str]}
-    """
-    try:
-        score = 0
-        reasons = []
-        raw_url = url.lower().strip()
+    # ถ้าไม่โดน Blacklist เราจะใช้ RL Model เป็นแกนหลัก (60%) + Heuristics (40%)
+    if score < 100:
+        # RL Model Prediction (Primary Engine)
+        rl_score, rl_conf = predict_rl_score(check_url)
         
-        parsed = urlparse(raw_url if '://' in raw_url else 'http://' + raw_url)
-        host_only = parsed.netloc.split(':')[0]
+        # ถ่วงน้ำหนัก RL 60%
+        base_score = rl_score * 0.6
+        score += base_score
+        details.append(f"🧠 AI (RL) Score: {rl_score:.1f}/100 (Confidence: {rl_conf})")
         
-        try:
-            ext = tldextract.extract(raw_url)
-            subdomain = ext.subdomain.lower()
-            domain_name = ext.domain.lower()
-            tld = ext.suffix.lower()
-            domain_full = f"{domain_name}.{tld}" if tld else domain_name
-        except Exception:
-            subdomain = ""
-            domain_name = host_only.split('.')[0]
-            tld = ""
-            domain_full = host_only
+        heuristic_score = 0
+        # Whois Check (Backend original feature)
+        whois_data = whois_features(domain)
+        # pyrefly: ignore [unsupported-operation]
+        if whois_data["domain_age_days"] < 180:
+            heuristic_score += 15
+            details.append("โดเมนอายุสั้น ⚠️")
+            
+        if "-" in domain:
+            heuristic_score += 5
+            details.append("มีเครื่องหมาย - ในโดเมน")
 
-        # Rule a: มี @ ใน path = +30 risk
-        if '@' in parsed.path or '@' in parsed.netloc:
-            score += 30
-            reasons.append("พบเครื่องหมาย @ ใน URL Path หรือ Authority")
+        # 2. ตรวจสอบ IP Host Direct Connection (ไม่มีชื่อโดเมน)
+        domain_only = domain.split(':')[0]
+        if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', domain_only):
+            heuristic_score += 25
+            details.append(f'ใช้ IP Address โดยตรงเป็นโฮสต์ ({domain_only}) ⚠️')
 
-        # Rule b: ใช้ IP address แทนโดเมน = +40 risk
-        if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', host_only):
-            score += 40
-            reasons.append("ใช้ IP Address แทนชื่อโดเมน")
+        # 3. DGA / Domain Entropy Analysis
+        domain_name_part = domain_only.split('.')[0]
+        entropy_val = calculate_entropy(domain_name_part)
+        if len(domain_name_part) >= 6 and entropy_val > 3.8:
+            heuristic_score += 20
+            details.append(f'ความสุ่มของชื่อโดเมนสูงผิดปกติ (Entropy: {entropy_val:.2f}) ⚠️')
 
-        # Rule c: โดเมนอายุ < 14 วัน จาก WHOIS = +35 risk
-        domain_age = get_domain_age_days(domain_full, timeout=0.05)
-        if 0 <= domain_age < 14:
-            score += 35
-            reasons.append(f"อายุโดเมนเพียง {domain_age} วัน (น้อยกว่า 14 วัน)")
-
-        # Rule d: TLD เสี่ยง .tk .ml .ga .cf = +20 risk
-        risk_tlds = ['tk', 'ml', 'ga', 'cf']
-        if tld in risk_tlds or any(raw_url.endswith('.' + rt) or f'.{rt}/' in raw_url for rt in risk_tlds):
-            score += 20
-            reasons.append(f"ใช้นามสกุลโดเมนที่มีความเสี่ยงสูง (.{tld if tld else 'risk_tld'})")
-
-        # Rule e: Levenshtein distance < 2 กับแบรนด์ ['kbank','scb','bbl','krungthai','shopee','lazada'] = +50 risk
-        target_brands = ['kbank', 'scb', 'bbl', 'krungthai', 'shopee', 'lazada']
-        domain_tokens = re.split(r'[-_.]', f"{subdomain}.{domain_name}")
-        domain_tokens = [t for t in domain_tokens if t]
-
-        typo_detected = False
-        for brand in target_brands:
-            for token in domain_tokens:
-                dist = levenshtein_distance(token, brand)
-                if dist < 2:
-                    score += 50
-                    reasons.append(f"พบพฤติกรรมเลียนแบบแบรนด์ {brand.upper()}")
-                    typo_detected = True
-                    break
-            if typo_detected:
+        # 4. Brand Typosquatting Detection
+        for pattern in BRAND_TYPOSQUATTING_PATTERNS:
+            if re.search(pattern, check_url):
+                heuristic_score += 20
+                details.append(f'ตรวจพบพฤติกรรมสะกดเลียนแบบแบรนด์ดัง (Typosquatting): {pattern}')
                 break
 
-        # Rule f: Shannon entropy > 4.2 = +25 risk
-        entropy_val = calculate_entropy(domain_name)
-        if entropy_val > 4.2:
-            score += 25
-            reasons.append(f"ความสุ่มของชื่อโดเมนสูงผิดปกติ (Entropy: {entropy_val:.2f})")
+        # 5. ตรวจสอบคำที่มักพบในเว็บ Phishing/Scam และ Malware/Piracy
+        suspicious_words = [
+            'download', 'free', 'update', 'login', 'verify', 'account', 
+            'banking', 'trade', 'loan', 'money', 'crack', 'hack', 'keygen', 'cheat'
+        ]
+        for word in suspicious_words:
+            if word in check_url:
+                heuristic_score += 10
+                details.append(f'พบคำเสี่ยงต่อการหลอกลวง: {word}')
 
-        score = min(max(int(score), 0), 100)
-        return {
-            "score": score,
-            "reasons": reasons
-        }
-    except Exception as e:
-        return {
-            "score": 50,
-            "reasons": [f"Quick check error: {str(e)}"]
-        }
+        # 6. ตรวจสอบ TLD เสี่ยง
+        for tld in SUSPICIOUS_TLDS:
+            if check_url.endswith(tld) or f'{tld}/' in check_url:
+                heuristic_score += 15
+                details.append(f'ใช้นามสกุลโดเมนที่มีความเสี่ยงสูง: {tld}')
 
+        # 7. ตรวจสอบตัวเลขในชื่อโดเมน
+        digits = sum(c.isdigit() for c in domain)
+        if digits > 3:
+            heuristic_score += 10
+            details.append('ชื่อโดเมนมีตัวเลขปนอยู่มากผิดปกติ')
 
-# ==========================================
-# Layer 2 - Feature Extraction
-# ==========================================
-def extract_features(url: str) -> Dict[str, float]:
-    """
-    Layer 2 - Feature Extraction (20 features)
-    Returns dictionary mapping feature_name -> float value
-    """
-    try:
-        raw_url = url.lower().strip()
-        parsed = urlparse(raw_url if '://' in raw_url else 'http://' + raw_url)
-        host_only = parsed.netloc.split(':')[0]
+        # 5. Path Analysis (Advanced Risk Check)
+        if url:
+            from urllib.parse import urlparse
+            parsed_path = urlparse(url if '://' in url else 'http://' + url).path.lower()
+            
+            phishing_indicators = ['/login', '/signin', '/verify', '/account', '/banking', '/secure']
+            for indicator in phishing_indicators:
+                if indicator in parsed_path:
+                    heuristic_score += 15
+                    details.append(f"พบ Path ที่น่าสงสัย (Phishing Indicator): {indicator}")
+
+            malicious_exts = ['.exe', '.apk', '.bat', '.scr', '.zip']
+            for ext in malicious_exts:
+                if parsed_path.endswith(ext):
+                    heuristic_score += 15
+                    details.append(f"พบการเชื่อมโยงไปยังไฟล์ที่อาจเป็นอันตราย: {ext}")
+                    
+        # 6. Protocol and Prefix checks
+        if url:
+            check_url_lower = url.lower()
+            if check_url_lower.startswith('https://'):
+                heuristic_score -= 10
+                details.append("มีการเข้ารหัสการเชื่อมต่อ (HTTPS) 🔒")
+            elif check_url_lower.startswith('http://'):
+                heuristic_score += 5
+                details.append("ไม่มีการเข้ารหัสการเชื่อมต่อ (HTTP) ⚠️")
+            
+            # Check for www. prefix
+            if check_url_lower.startswith('www.') or '://www.' in check_url_lower:
+                heuristic_score += 10
+                details.append("โดเมนใช้ www. (มิจฉาชีพมักใช้เลียนแบบเว็บจริง) ⚠️")
+                    
+        # ถ่วงน้ำหนัก Heuristics ให้คะแนนรวมกันไม่เกิน 40 (และลดได้ไม่เกิน -20)
+        final_heuristics = max(-20, min(heuristic_score, 40))
+        score += final_heuristics
         
-        try:
-            ext = tldextract.extract(raw_url)
-            subdomain = ext.subdomain.lower()
-            domain_name = ext.domain.lower()
-            tld = ext.suffix.lower()
-            domain_full = f"{domain_name}.{tld}" if tld else domain_name
-        except Exception:
-            subdomain = ""
-            domain_name = host_only.split('.')[0]
-            tld = ""
-            domain_full = host_only
+    else:
+        whois_data = {}
 
-        domain_tokens = re.split(r'[-_.]', f"{subdomain}.{domain_name}")
-        domain_tokens = [t for t in domain_tokens if t]
+    # Cap score at 100
+    score = min(score, 100)
 
-        def _min_brand_dist(brand: str) -> float:
-            if not domain_tokens:
-                return float(len(brand))
-            return float(min(levenshtein_distance(t, brand) for t in domain_tokens))
+    risk = "ปลอดภัย"
+    if score >= 70:
+        risk = "อันตรายมาก 🔥"
+    elif score >= 40:
+        risk = "เสี่ยง ⚠️"
 
-        abnormal_tlds = {'tk', 'ml', 'ga', 'cf', 'xyz', 'top', 'gq', 'work', 'click', 'site', 'online', 'vip', 'cc'}
-        shorteners = {'bit.ly', 'tinyurl.com', 't.co', 'is.gd', 'buff.ly', 'goo.gl', 'ow.ly'}
-
-        domain_age = get_domain_age_days(domain_full, timeout=0.05)
-        query_params = parse_qs(parsed.query)
-
-        features = {
-            "url_length": float(len(raw_url)),
-            "domain_length": float(len(domain_name)),
-            "num_dots": float(raw_url.count('.')),
-            "num_hyphens": float(raw_url.count('-')),
-            "num_digits": float(sum(c.isdigit() for c in raw_url)),
-            "has_https": 1.0 if raw_url.startswith('https') else 0.0,
-            "has_at": 1.0 if '@' in raw_url else 0.0,
-            "has_ip": 1.0 if re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', host_only) else 0.0,
-            "entropy": float(calculate_entropy(domain_name)),
-            "domain_age_days": float(domain_age),
-            "tld_abnormal": 1.0 if tld in abnormal_tlds else 0.0,
-            "brand_distance_kbank": _min_brand_dist('kbank'),
-            "brand_distance_scb": _min_brand_dist('scb'),
-            "brand_distance_shopee": _min_brand_dist('shopee'),
-            "subdomain_length": float(len(subdomain)),
-            "path_length": float(len(parsed.path)),
-            "has_punycode": 1.0 if 'xn--' in host_only else 0.0,
-            "num_params": float(len(query_params)),
-            "is_shortened_url": 1.0 if host_only in shorteners else 0.0,
-            "favicon_match_brand": 0.0
-        }
-        return features
-    except Exception as e:
-        return {
-            "url_length": float(len(url)), "domain_length": 10.0, "num_dots": 2.0, "num_hyphens": 0.0, "num_digits": 0.0,
-            "has_https": 0.0, "has_at": 0.0, "has_ip": 0.0, "entropy": 3.0, "domain_age_days": -1.0,
-            "tld_abnormal": 0.0, "brand_distance_kbank": 5.0, "brand_distance_scb": 5.0, "brand_distance_shopee": 5.0,
-            "subdomain_length": 0.0, "path_length": 0.0, "has_punycode": 0.0, "num_params": 0.0,
-            "is_shortened_url": 0.0, "favicon_match_brand": 0.0
-        }
-
-
-# ==========================================
-# Ensemble Logic - check_url_full
-# ==========================================
-def check_url_full(url: str) -> dict:
-    """
-    Ensemble Logic for 3-Layer Phishing Guard
-    Step 1: quick_check (If score > 80, return immediately)
-    Step 2: If score <= 80, extract_features + pdg_ml.predict_risk
-    Final Score = 0.3 * heuristic + 0.7 * ml_score
-    Returns: {"final_score": 0-100, "level": "ปลอดภัย|เสี่ยง|อันตราย", "reasons": [...], "response_time_ms": int}
-    """
-    start_time = time.time()
-    try:
-        # Step 1: Layer 1 Quick Check
-        quick_res = quick_check(url)
-        quick_score = quick_res.get("score", 0)
-        reasons = list(quick_res.get("reasons", []))
-
-        # Early exit if score > 80
-        if quick_score > 80:
-            elapsed_ms = int((time.time() - start_time) * 1000)
-            return {
-                "final_score": float(quick_score),
-                "level": "อันตราย",
-                "reasons": reasons,
-                "response_time_ms": elapsed_ms
-            }
-
-        # Step 2: Layer 2 & 3 Feature Extraction + XGBoost ML Prediction
-        features = extract_features(url)
-        import pdg_ml
-        ml_res = pdg_ml.predict_risk(features)
-        
-        ml_score = ml_res.get("ml_score", 50.0)
-        shap_explain = ml_res.get("shap_explain", [])
-        
-        reasons.extend(shap_explain)
-        
-        # Final Ensemble Score
-        final_score = round(0.3 * quick_score + 0.7 * ml_score, 2)
-        final_score = min(max(final_score, 0.0), 100.0)
-
-        # Risk Level
-        if final_score >= 70.0:
-            level = "อันตราย"
-        elif final_score >= 40.0:
-            level = "เสี่ยง"
-        else:
-            level = "ปลอดภัย"
-
-        elapsed_ms = int((time.time() - start_time) * 1000)
-
-        return {
-            "final_score": final_score,
-            "level": level,
-            "reasons": reasons,
-            "response_time_ms": elapsed_ms
-        }
-    except Exception as e:
-        elapsed_ms = int((time.time() - start_time) * 1000)
-        return {
-            "final_score": 50.0,
-            "level": "เสี่ยง",
-            "reasons": [f"Processing error fallback: {str(e)}"],
-            "response_time_ms": elapsed_ms
-        }
-
-
-# ==========================================
-# Legacy Wrapper for Backward Compatibility
-# ==========================================
-def analyze_domain(domain: str, url: str = None) -> dict:
-    """Wrapper function to maintain backward compatibility with legacy endpoints"""
-    target_url = url if url else domain
-    result = check_url_full(target_url)
-    return {
+    result = {
         "domain": domain,
-        "score": result["final_score"],
-        "risk": result["level"],
-        "details": result["reasons"],
-        "whois": {}
+        "score": score,
+        "risk": risk,
+        "details": details,
+        "whois": whois_data
     }
+    
+    ANALYSIS_CACHE[cache_key] = {
+        "result": result,
+        "expiry": current_time + CACHE_TTL
+    }
+    
+    return result

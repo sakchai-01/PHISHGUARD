@@ -23,3 +23,8 @@ email-validator
 pydantic-settings
 python-jose[cryptography]
 sqlalchemy
+tldextract
+xgboost
+shap
+Levenshtein
+pytest

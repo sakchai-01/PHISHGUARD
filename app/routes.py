@@ -73,13 +73,6 @@ async def report_post(request: Request, email: str = Form(...), url: str = Form(
     return templates.TemplateResponse(request=request, name="report.html", context={
         # pyrefly: ignore [unbound-name]
         "success": f"ขอบคุณสำหรับการแจ้งเบาะแสคุณ {email}! เราจะตรวจสอบโดยเร็วที่สุด (รหัสอ้างอิง: {report_id if 'report_id' in locals() else 'Pending'})",
-        "google_client_id": os.getenv("GOOGLE_CLIENT_ID")
-    })
-
-@router.get("/detect/fb", response_class=HTMLResponse)
-async def detect_fb(request: Request):
-    return templates.TemplateResponse(request=request, name="detect_fb.html", context={
-        "google_client_id": os.getenv("GOOGLE_CLIENT_ID")
     })
 
 

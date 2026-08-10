@@ -122,15 +122,18 @@ async def api_ocr(file: UploadFile = File(...)):
     try:
         content = await file.read()
         mime_type = file.content_type or "image/png"
-        text = await asyncio.to_thread(analyze_image_vision, content, mime_type)
+        res_data = await asyncio.to_thread(analyze_image_vision, content, mime_type)
         return JSONResponse({
             "success": True,
-            "text": text or "",
+            "text": res_data.get("text", ""),
+            "is_ai": res_data.get("is_ai", False),
+            "ai_reason": res_data.get("ai_reason", ""),
+            "ai_confidence": res_data.get("ai_confidence", "Low"),
             "filename": file.filename
         })
     except Exception as e:
         print(f"OCR Endpoint error: {e}")
-        return JSONResponse({"success": False, "error": str(e), "text": ""})
+        return JSONResponse({"success": False, "error": str(e), "text": "", "is_ai": False})
 
 @router.post("/scan")
 async def scan_url(request: Request):

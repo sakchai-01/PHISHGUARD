@@ -17,7 +17,7 @@
             OCR <span class="text-gradient">VISION.</span>
         </h1>
         <p class="text-slate-500 max-w-4xl mx-auto font-medium font-['Kanit'] leading-relaxed text-sm md:text-base" data-i18n="ocr_header_desc">
-            สกัดข้อความจากภาพ ตรวจสอบกล้อง/รุ่นโทรศัพท์ ตรวจภาพตัดต่อจากแอป และวิเคราะห์สัญญาณภาพ AI
+            ถอดรหัสข้อความจากภาพ ตรวจสอบกล้อง/รุ่นโทรศัพท์ ตรวจแอปตัดต่อภาพ และวิเคราะห์สัญญาณภาพ AI
         </p>
     </div>
 
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <!-- Active Upload Preview Card (Displays Immediately Upon File Select) -->
+    <!-- Active Upload Preview Card (Displays IMMEDIATELY Upon File Selection) -->
     <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
         <div class="cyber-card p-6 md:p-8 bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-800">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
@@ -90,14 +90,14 @@
         </div>
     </div>
 
-    <!-- Processing State Progress Indicator -->
+    <!-- Processing State Progress Bar -->
     <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
         <div class="cyber-card p-6 bg-white border border-cyan-500/30 shadow-lg rounded-xl">
             <div class="flex items-center gap-6">
                 <div class="w-12 h-12 rounded-full border-4 border-cyan-500/10 border-t-cyan-500 animate-spin flex-shrink-0"></div>
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center mb-1">
-                        <p class="text-cyan-600 font-black uppercase tracking-widest text-[10px]" data-i18n="ocr_neural_decoder">NEURAL_DECODER_RUNNING</p>
+                        <p class="text-cyan-600 font-black uppercase tracking-widest text-[10px]">NEURAL_VISION_SCANNING</p>
                         <span id="ocr-progress-pct" class="text-xs font-mono font-bold text-cyan-600">0%</span>
                     </div>
                     <!-- Progress Bar -->
@@ -184,7 +184,7 @@
                     </div>
 
                     <div class="relative bg-slate-950 rounded-xl p-6 border border-slate-800 font-mono text-sm text-slate-100 leading-relaxed shadow-inner">
-                        <textarea id="extracted-text-box" readonly class="w-full h-44 bg-transparent text-cyan-300 font-mono text-xs md:text-sm resize-y outline-none leading-relaxed border-none focus:ring-0" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
+                        <textarea id="extracted-text-box" readonly class="w-full h-48 bg-transparent text-cyan-300 font-mono text-xs md:text-sm resize-y outline-none leading-relaxed border-none focus:ring-0" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
                     </div>
                 </div>
 
@@ -224,7 +224,7 @@
                 <i class="fa-solid fa-circle-info text-cyan-500"></i> HOW_IT_WORKS
             </h4>
             <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light">
-                ระบบสกัดข้อความ OCR ทำงานร่วมกับ ExifReader Forensic Core เพื่ออ่านเมทาเดตาเชิงลึกของภาพถ่าย ระบุยี่ห้อกล้อง/โทรศัพท์ ตรวจร่องรอยซอฟต์แวร์ตัดต่อภาพ และตรวจสอบสัญญาณภาพสังเคราะห์จาก AI
+                ระบบสกัดข้อความ OCR ทำงานร่วมกับ Vision Neural Core เพื่ออ่านข้อความทั้งภาษาไทยและอังกฤษแบบคำต่อคำ ตรวจสอบยี่ห้อกล้อง/โทรศัพท์ ตรวจร่องรอยซอฟต์แวร์ตัดต่อภาพ และวิเคราะห์สัญญาณภาพสังเคราะห์จาก AI
             </p>
         </div>
         <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
@@ -272,10 +272,10 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     document.getElementById('processing-state').classList.remove('hidden');
     document.getElementById('ocr-result-container').classList.add('hidden');
 
-    document.getElementById('ocr-progress-bar').style.width = '10%';
-    document.getElementById('ocr-progress-pct').innerText = '10%';
+    document.getElementById('ocr-progress-bar').style.width = '15%';
+    document.getElementById('ocr-progress-pct').innerText = '15%';
 
-    // 2. Read File Info & Display Preview Image Immediately via FileReader
+    // 2. Read File Info & Display Preview Image IMMEDIATELY via FileReader Data URL
     document.getElementById('preview-filename').innerText = file.name;
     document.getElementById('preview-filename').title = file.name;
     document.getElementById('preview-filetype').innerText = (file.type || 'IMAGE/UNKNOWN').toUpperCase();
@@ -300,8 +300,8 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     // 3. Perform Forensic EXIF & Metadata Analysis (Camera Phone, Edit Software, AI)
     analyzeImageForensics(file);
 
-    // 4. Perform OCR Recognition (Tesseract with fallback)
-    runOCRRecognition(file);
+    // 4. Perform OCR Recognition (Backend Vision API + Client Tesseract Fallback)
+    performDualOCRRecognition(file);
 });
 
 // Forensic Analysis: EXIF Data, Camera Model, Editing App & AI Detection
@@ -326,7 +326,7 @@ function analyzeImageForensics(file) {
             deviceSub = lens ? `เลนส์: ${lens}` : "ข้อมูล EXIF แท้จากกล้องถ่าย";
         } else {
             deviceName = "ไม่พบข้อมูลกล้องถ่าย";
-            deviceSub = "ภาพสกรีนช็อต (Screenshot) หรือดาวน์โหลดจากเว็บ";
+            deviceSub = "ภาพสกรีนช็อต (Screenshot) หรือภาพดาวน์โหลดจากเว็บ";
         }
         document.getElementById('meta-device').innerText = deviceName;
         document.getElementById('meta-device-sub').innerText = deviceSub;
@@ -397,26 +397,57 @@ function analyzeImageForensics(file) {
     });
 }
 
-// OCR Recognition Processor
-function runOCRRecognition(file) {
+// Dual-Engine OCR Recognition (API Backend + Client-side Tesseract Fallback)
+function performDualOCRRecognition(file) {
     let updateProgress = (pct, textMsg) => {
         document.getElementById('ocr-progress-bar').style.width = `${pct}%`;
         document.getElementById('ocr-progress-pct').innerText = `${pct}%`;
         if (textMsg) document.getElementById('quick-status-text').innerText = textMsg;
     };
 
-    updateProgress(25, "กำลังสกัดข้อความในพิกเซลด้วย AI...");
+    updateProgress(35, "กำลังส่งภาพเข้าวิเคราะห์ถอดรหัสข้อความ...");
 
-    // Timeout Safeguard (Fallback after 7 seconds if Tesseract hangs on tessdata CDN)
-    let hasCompleted = false;
-    let fallbackTimeout = setTimeout(() => {
-        if (!hasCompleted) {
-            hasCompleted = true;
-            console.warn("Tesseract OCR response timed out. Executing fast image text fallback...");
-            updateProgress(100, "ประมวลผลเสร็จสิ้น (Fallback)");
-            finalizeOCRResult(extractFallbackTextFromFilename(file.name), file);
+    let hasResponded = false;
+
+    // 1. Primary Engine: Send to FastAPI /api/ocr (Uses Gemini Vision / Server OCR)
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch('/api/ocr', {
+        method: 'POST',
+        body: formData
+    }).then(res => res.json()).then(data => {
+        if (!hasResponded) {
+            if (data.success && data.text && data.text.trim().length > 0) {
+                hasResponded = true;
+                updateProgress(100, "ถอดรหัสข้อความเสร็จสมบูรณ์ (Vision AI)");
+                finalizeOCRResult(data.text, file);
+            } else {
+                console.log("Backend OCR returned empty, falling back to Client Tesseract...");
+                runClientTesseract(file, updateProgress, hasResponded, resText => {
+                    if (!hasResponded) {
+                        hasResponded = true;
+                        finalizeOCRResult(resText, file);
+                    }
+                });
+            }
         }
-    }, 8000);
+    }).catch(err => {
+        console.warn("Backend OCR API Error, falling back to Tesseract:", err);
+        if (!hasResponded) {
+            runClientTesseract(file, updateProgress, hasResponded, resText => {
+                if (!hasResponded) {
+                    hasResponded = true;
+                    finalizeOCRResult(resText, file);
+                }
+            });
+        }
+    });
+}
+
+// Client-side Tesseract OCR Engine
+function runClientTesseract(file, updateProgress, hasResponded, callback) {
+    updateProgress(50, "กำลังถอดรหัสข้อความด้วย Tesseract Core...");
 
     if (typeof Tesseract !== 'undefined') {
         Tesseract.recognize(
@@ -424,38 +455,24 @@ function runOCRRecognition(file) {
             'eng+tha',
             {
                 logger: m => {
-                    if (!hasCompleted && m.status === 'recognizing text') {
+                    if (m.status === 'recognizing text') {
                         let p = Math.round(m.progress * 100);
-                        updateProgress(Math.min(95, 30 + Math.round(p * 0.65)), `กำลังแกะข้อความในภาพ... (${p}%)`);
+                        updateProgress(Math.min(95, 50 + Math.round(p * 0.45)), `กำลังแกะข้อความ... (${p}%)`);
                     }
                 }
             }
         ).then(({ data: { text } }) => {
-            if (!hasCompleted) {
-                hasCompleted = true;
-                clearTimeout(fallbackTimeout);
-                updateProgress(100, "การแกะข้อความเสร็จสมบูรณ์");
-                finalizeOCRResult(text, file);
-            }
+            callback(text || "");
         }).catch(err => {
-            if (!hasCompleted) {
-                hasCompleted = true;
-                clearTimeout(fallbackTimeout);
-                console.warn("Tesseract recognize error:", err);
-                updateProgress(100, "ประมวลผลเสร็จสิ้น");
-                finalizeOCRResult("", file);
-            }
+            console.warn("Tesseract client error:", err);
+            // Try English only if eng+tha fails
+            Tesseract.recognize(file, 'eng').then(({ data: { text } }) => {
+                callback(text || "");
+            }).catch(() => callback(""));
         });
     } else {
-        hasCompleted = true;
-        clearTimeout(fallbackTimeout);
-        updateProgress(100, "การประมวลผลเสร็จสมบูรณ์");
-        finalizeOCRResult("", file);
+        callback("");
     }
-}
-
-function extractFallbackTextFromFilename(fname) {
-    return "";
 }
 
 function finalizeOCRResult(text, file) {
@@ -468,7 +485,7 @@ function finalizeOCRResult(text, file) {
 
     const textBox = document.getElementById('extracted-text-box');
     if (!currentExtractedText) {
-        textBox.value = "[ระบบสแกนภาพแล้ว แต่ไม่พบข้อความตัวอักษรที่เด่นชัด หรือภาพมีความละเอียดต่ำ/เบลอเกินไป]";
+        textBox.value = "[ภาพนี้ไม่มีข้อความตัวอักษร หรือข้อความมีความเบลออย่างมาก]";
     } else {
         textBox.value = currentExtractedText;
     }

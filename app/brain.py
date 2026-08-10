@@ -21,55 +21,26 @@ KNOWN_BAD_URLS = [
     'royaltrad.vip', 'astalavista.box.sk', 'crack.ms', 'seriall.com', 'serialz.to'
 ]
 
+from app.domain_checker import check_url_full, quick_check
+
 def predict_risk(url: str):
     """
-    วิเคราะห์ความเสี่ยงของ URL ด้วยกฎ Heuristic และ Blacklist
+    วิเคราะห์ความเสี่ยงของ URL ด้วย 3-Layer Phishing Guard (20-Feature Engine)
     Returns: (score: int, risk_level: str, status: str, reasons: list[str])
     """
-    url = url.lower().replace(' ', '')
-    score = 0
-    reasons = []
-
-    # 1. Blacklist Check
-    for bad_url in KNOWN_BAD_URLS:
-        if bad_url in url:
-            score += 100
-            reasons.append(f'ตรวจพบใน Blacklist: {bad_url}')
-            break
-
-    if score < 100:
-        # 2. Heuristic Rules (Suspicious Words)
-        suspicious_words = [
-            'download', 'free', 'update', 'login', 'verify',
-            'account', 'banking', 'trade', 'loan', 'money'
-        ]
-        for word in suspicious_words:
-            if word in url:
-                score += 30
-                reasons.append(f'พบคำเสี่ยง: {word}')
-
-        # 3. Bad TLDs
-        bad_tlds = ['.xyz', '.cc', '.live', '.vip', '.top', '.app', '.tk', '.ga']
-        for tld in bad_tlds:
-            if url.endswith(tld) or f'{tld}/' in url:
-                score += 35
-                reasons.append(f'นามสกุลโดเมนเสี่ยงสูง: {tld}')
-
-        # 4. Digits in Domain
-        domain = url.split('/')[0] if '/' in url else url
-        if sum(c.isdigit() for c in domain) > 3:
-            score += 25
-            reasons.append('ชื่อโดเมนมีตัวเลขมากผิดปกติ')
-
-    # Result calculation
-    if score >= 60:
-        risk_level, status = "High", "Dangerous"
-    elif score >= 30:
-        risk_level, status = "Medium", "Warning"
+    result = check_url_full(url)
+    score = int(result.get("final_score", 0))
+    risk_level = result.get("level", "ปลอดภัย")
+    
+    if score >= 70:
+        status = "Dangerous"
+    elif score >= 40:
+        status = "Warning"
     else:
-        risk_level, status = "Low", "Safe"
-
-    return min(score, 100), risk_level, status, reasons
+        status = "Safe"
+        
+    reasons = result.get("reasons", [])
+    return score, risk_level, status, reasons
 
 
 # ==========================================
@@ -100,7 +71,8 @@ Your mission is to analyze messages, links, or files for phishing, scams, and cy
 GUIDELINES:
 1. If the user asks for a security analysis, you MUST provide a structured JSON response within your message.
 2. If the user is just chatting or asking general questions, respond naturally but maintain your professional 'Security Expert' persona.
-3. Your analysis should be thorough but the advice should be easy to follow.
+3. Pay special attention to brand impersonation and suspicious domain structures (e.g., official brand keywords embedded in untrusted domains or subdomains, such as 'scb-online.top' or 'kbank.co.th.scam.net').
+4. Your analysis should be thorough but the advice should be easy to follow.
 
 DATA FORMAT FOR ANALYSIS:
 When you detect a threat or are asked to analyze something, include this JSON structure in your response:

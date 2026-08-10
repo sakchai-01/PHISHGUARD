@@ -62,6 +62,35 @@ else:
 
 model = client if client else None
 
+
+def analyze_image_vision(image_bytes: bytes, mime_type: str = "image/png") -> str:
+    """
+    Extracts all Thai & English text verbatim from an image using Gemini Vision API.
+    """
+    if not client:
+        return ""
+
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    for mod_name in models_to_try:
+        try:
+            from google.genai import types
+            part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type or "image/png")
+            prompt = (
+                "Extract all text (both Thai and English) visible in this image verbatim. "
+                "Output ONLY the exact text detected line by line. Do not add intro or markdown formatting."
+            )
+            res = client.models.generate_content(
+                model=mod_name,
+                contents=[part, prompt]
+            )
+            if res and res.text:
+                return res.text.strip()
+        except Exception as exc:
+            print(f"Gemini Vision model {mod_name} error: {exc}")
+            continue
+
+    return ""
+
 # System prompt for JANIS_AI
 SYSTEM_PROMPT = """You are 'JANIS_AI', a high-level AI Cybersecurity Specialist.
 You are female, professional, and helpful. Always use polite female Thai particles like 'ค่ะ' or 'นะคะ'. 

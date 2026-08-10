@@ -103,7 +103,7 @@
         <div class="h-[1px] flex-1 bg-white shadow-sm"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
         <!-- Janis AI -->
         <a href="/chat" class="cyber-card p-12 group bg-violet-950/10 hover:bg-violet-600/10 border-violet-500/10 hover:border-violet-500/40">
             <div class="w-20 h-20 rounded-3xl bg-violet-600/10 flex items-center justify-center mb-10 border border-violet-500/20 group-hover:bg-violet-600 group-hover:scale-110 group-hover:rotate-6 transition duration-500 shadow-xl shadow-violet-900/10">
@@ -112,16 +112,6 @@
             <h3 class="text-2xl font-black text-gray-900 mb-4 tracking-tight uppercase" data-i18n="nav_janis">JANIS AI CORE</h3>
             <p class="text-gray-500 text-sm leading-relaxed font-['Kanit']" data-i18n="card_janis_desc">ศูนย์กลางระบบนิวรอนเพื่อวิเคราะห์พฤติกรรมมิจฉาชีพเชิงลึกด้วย AI</p>
             <div class="mt-8 text-violet-500 text-[10px] font-black tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">INITIALIZE TERM _</div>
-        </a>
-
-        <!-- FB Scanner -->
-        <a href="/detect/fb" class="cyber-card p-12 group bg-blue-950/10 hover:bg-blue-600/10 border-blue-500/10 hover:border-blue-500/40">
-            <div class="w-20 h-20 rounded-3xl bg-blue-600/10 flex items-center justify-center mb-10 border border-blue-500/20 group-hover:bg-blue-600 group-hover:scale-110 group-hover:rotate-6 transition duration-500 shadow-xl shadow-blue-900/10">
-                <i class="fa-brands fa-facebook-f text-4xl text-blue-400 group-hover:"></i>
-            </div>
-            <h3 class="text-2xl font-black text-gray-900 mb-4 tracking-tight uppercase" data-i18n="nav_fb">FB DETECTOR</h3>
-            <p class="text-gray-500 text-sm leading-relaxed font-['Kanit']" data-i18n="card_fb_desc">ตรวจสอบเพจปลอม โปรไฟล์สวมรอย และพฤติกรรมผิดปกติบนโซเชียลมีเดีย</p>
-            <div class="mt-8 text-blue-500 text-[10px] font-black tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">SCAN SOCIAL _</div>
         </a>
 
         <!-- Vision Module -->
@@ -247,6 +237,7 @@
             });
         }
     };
+
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const queryUrl = urlParams.get('url');

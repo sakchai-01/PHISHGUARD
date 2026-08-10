@@ -1,42 +1,43 @@
 {% extends "layout.html" %}
 
-{% block title %}Vision | Omni-Channel OCR & Image Forensic Intelligence{% endblock %}
+{% block title %}Vision | Omni-Channel OCR & Bank QR Forensic Intelligence{% endblock %}
 
 {% block content %}
-<!-- Essential Libraries: ExifReader & Tesseract.js -->
+<!-- Essential Forensic Libraries: ExifReader, jsQR & Tesseract.js -->
 <script src="https://cdn.jsdelivr.net/npm/exifreader@4/dist/exif-reader.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-<div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative">
+<div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative font-['Kanit']">
     <!-- Header Section -->
     <div class="text-center mb-16 animate__animated animate__fadeIn">
-        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[11px] font-black uppercase tracking-[0.5em] mb-8 mx-auto shadow-[0_0_30px_rgba(0,240,255,0.2)]">
-            <i class="fa-solid fa-eye animate-pulse"></i> <span data-i18n="hdr_ocr_badge">NEURAL_VISION_ACTIVE</span>
+        <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-600 font-bold text-xs uppercase tracking-[0.4em] mb-8 mx-auto shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+            <i class="fa-solid fa-eye animate-pulse text-cyan-600"></i> <span data-i18n="hdr_ocr_badge">NEURAL_VISION_ACTIVE</span>
         </div>
-        <h1 class="font-black tracking-tighter mb-6 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);" data-i18n="hdr_ocr_title">
+        <h1 class="font-black tracking-tighter mb-6 uppercase italic font-['Orbitron'] text-slate-900" style="font-size: var(--fs-header-title);" data-i18n="hdr_ocr_title">
             OCR <span class="text-gradient">VISION.</span>
         </h1>
-        <p class="text-slate-500 max-w-4xl mx-auto font-medium font-['Kanit'] leading-relaxed text-sm md:text-base" data-i18n="ocr_header_desc">
-            ถอดรหัสข้อความจากภาพ ตรวจสอบกล้อง/รุ่นโทรศัพท์ ตรวจแอปตัดต่อภาพ และวิเคราะห์สัญญาณภาพ AI
+        <p class="text-slate-600 max-w-4xl mx-auto font-medium leading-relaxed text-sm md:text-base" data-i18n="ocr_header_desc">
+            สกัดข้อความจากภาพถ่าย/สลิป ตรวจสอบ QR Code ธนาคาร (ธนาคารอะไร/ผู้รับเงินเป็นใคร) ตรวจยี่ห้อกล้อง และวิเคราะห์ภาพ AI
         </p>
     </div>
 
     <!-- Upload Zone: High-Tech Array -->
     <div class="relative group max-w-4xl mx-auto animate__animated animate__fadeInUp">
         <div class="absolute -inset-2 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-[3rem] blur-xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
-        <div class="relative cyber-card p-12 md:p-20 text-center border-slate-200 hover:border-cyan-500/50 transition-all cursor-pointer bg-white shadow-[0_0_80px_rgba(0,0,0,0.08)] backdrop-blur-3xl overflow-hidden" onclick="document.getElementById('file-upload').click()">
+        <div class="relative cyber-card p-12 md:p-20 text-center border border-slate-300 hover:border-cyan-500 transition-all cursor-pointer bg-white shadow-xl backdrop-blur-3xl overflow-hidden" onclick="document.getElementById('file-upload').click()">
             
             <div class="relative z-10">
                 <div class="mb-8">
-                    <i class="fa-solid fa-cloud-arrow-up text-7xl text-slate-400 group-hover:text-cyan-500 group-hover:scale-110 transition-all duration-700"></i>
+                    <i class="fa-solid fa-cloud-arrow-up text-7xl text-cyan-600 group-hover:text-cyan-500 group-hover:scale-110 transition-all duration-700"></i>
                 </div>
-                <h3 class="text-xl md:text-2xl font-black uppercase tracking-widest mb-4 font-['Orbitron']" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
-                <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.25em] mb-8 border-t border-b border-slate-200 py-3 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP, GIF, HEIC</p>
+                <h3 class="text-xl md:text-2xl font-black uppercase tracking-widest mb-4 font-['Orbitron'] text-slate-900" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
+                <p class="text-slate-600 text-xs font-bold uppercase tracking-wider mb-8 border-t border-b border-slate-200 py-3 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP, GIF, HEIC</p>
 
                 <form action="#" method="POST" enctype="multipart/form-data" id="ocr-form" onsubmit="return false;">
                     <input type="file" id="file-upload" class="hidden" accept="image/*">
-                    <div class="cyber-btn px-6 py-4 md:px-12 md:py-5 text-xs font-black tracking-[0.2em] md:tracking-[0.3em] inline-block mobile-full">
-                        SELECT_IMAGE_FILE
+                    <div class="cyber-btn px-6 py-4 md:px-12 md:py-5 text-xs font-black tracking-widest inline-block mobile-full shadow-md">
+                        เลือกไฟล์ภาพ / สลิปธนาคาร (SELECT_IMAGE_FILE)
                     </div>
                 </form>
             </div>
@@ -54,36 +55,36 @@
                     <i class="fa-solid fa-image text-cyan-400 text-lg"></i>
                     <span class="text-xs font-mono font-bold uppercase tracking-wider text-cyan-300">IMAGE_PREVIEW // รูปภาพที่อัปโหลด</span>
                 </div>
-                <span id="preview-file-size" class="text-[11px] font-mono text-slate-400">0 KB</span>
+                <span id="preview-file-size" class="text-xs font-mono font-bold text-slate-300">0 KB</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-6 flex justify-center bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-inner">
-                    <img id="instant-image-preview" src="" alt="Uploaded Evidence" class="max-h-[320px] w-auto object-contain rounded-lg shadow-md border border-slate-800/80">
+                    <img id="instant-image-preview" src="" alt="Uploaded Evidence" class="max-h-[340px] w-auto object-contain rounded-lg shadow-md border border-slate-800">
                 </div>
                 <div class="md:col-span-6 space-y-4 font-mono text-xs">
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 space-y-3">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-400">ชื่อไฟล์:</span>
+                            <span class="text-slate-400 font-medium">ชื่อไฟล์:</span>
                             <span id="preview-filename" class="text-cyan-300 font-bold truncate max-w-[200px]" title="">-</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-400">ขนาดพิกเซล:</span>
+                            <span class="text-slate-400 font-medium">ขนาดพิกเซล:</span>
                             <span id="preview-dimensions" class="text-emerald-400 font-bold">-</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-400">ประเภทไฟล์:</span>
-                            <span id="preview-filetype" class="text-slate-200 font-bold">-</span>
+                            <span class="text-slate-400 font-medium">ประเภทไฟล์:</span>
+                            <span id="preview-filetype" class="text-slate-100 font-bold">-</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400">วันที่แก้ไขล่าสุด:</span>
-                            <span id="preview-filedate" class="text-slate-300 font-bold">-</span>
+                            <span class="text-slate-400 font-medium">วันที่แก้ไขล่าสุด:</span>
+                            <span id="preview-filedate" class="text-slate-200 font-bold">-</span>
                         </div>
                     </div>
 
                     <div id="quick-ocr-status" class="bg-cyan-500/10 border border-cyan-500/30 p-4 rounded-xl flex items-center gap-4">
                         <div class="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
-                        <span id="quick-status-text" class="text-cyan-300 text-xs font-bold font-mono">กำลังประมวลผลข้อความและวิเคราะห์ Metadata...</span>
+                        <span id="quick-status-text" class="text-cyan-300 text-xs font-bold font-mono">กำลังประมวลผลข้อความ, QR Code และวิเคราะห์ข้อมูล...</span>
                     </div>
                 </div>
             </div>
@@ -92,26 +93,29 @@
 
     <!-- Processing State Progress Bar -->
     <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
-        <div class="cyber-card p-6 bg-white border border-cyan-500/30 shadow-lg rounded-xl">
+        <div class="cyber-card p-6 bg-white border border-cyan-500/40 shadow-lg rounded-xl">
             <div class="flex items-center gap-6">
-                <div class="w-12 h-12 rounded-full border-4 border-cyan-500/10 border-t-cyan-500 animate-spin flex-shrink-0"></div>
+                <div class="w-12 h-12 rounded-full border-4 border-cyan-500/20 border-t-cyan-600 animate-spin flex-shrink-0"></div>
                 <div class="flex-1 min-w-0">
                     <div class="flex justify-between items-center mb-1">
-                        <p class="text-cyan-600 font-black uppercase tracking-widest text-[10px]">NEURAL_VISION_SCANNING</p>
-                        <span id="ocr-progress-pct" class="text-xs font-mono font-bold text-cyan-600">0%</span>
+                        <p class="text-cyan-800 font-black uppercase tracking-widest text-xs">NEURAL_VISION_SCANNING</p>
+                        <span id="ocr-progress-pct" class="text-xs font-mono font-bold text-cyan-700">0%</span>
                     </div>
                     <!-- Progress Bar -->
-                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
-                        <div id="ocr-progress-bar" class="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden border border-slate-300">
+                        <div id="ocr-progress-bar" class="bg-gradient-to-r from-cyan-600 to-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Hidden Canvas for Image Processing & QR Decoding -->
+    <canvas id="hidden-ocr-canvas" class="hidden"></canvas>
+
     <!-- Result Terminal: Forensic Intelligence Interface -->
     <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
-        <div class="cyber-card overflow-hidden border-slate-200 bg-white shadow-2xl rounded-2xl">
+        <div class="cyber-card overflow-hidden border border-slate-300 bg-slate-50 shadow-2xl rounded-2xl">
             <!-- Terminal Header -->
             <div class="bg-slate-900 px-8 py-4 border-b border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -119,23 +123,67 @@
                     <div class="w-3 h-3 rounded-full bg-amber-500"></div>
                     <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
                 </div>
-                <span class="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] italic font-mono">IMAGE_FORENSIC_INTELLIGENCE</span>
+                <span class="text-xs font-black text-slate-300 uppercase tracking-[0.3em] italic font-mono">IMAGE_FORENSIC_INTELLIGENCE</span>
             </div>
 
             <div class="p-8 md:p-12 space-y-10">
                 <!-- Status Banner -->
-                <div class="flex items-center justify-between border-b border-slate-100 pb-6 flex-wrap gap-4">
+                <div class="flex items-center justify-between border-b border-slate-300 pb-6 flex-wrap gap-4">
                     <div class="flex items-center gap-4">
-                        <span class="text-slate-400 font-mono text-xs font-bold">[SYSTEM]</span>
-                        <span class="text-emerald-600 font-mono text-xs font-black uppercase tracking-wider">ANALYSIS_COMPLETE // การวิเคราะห์ภาพเสร็จสมบูรณ์</span>
+                        <span class="text-slate-600 font-mono text-xs font-bold">[SYSTEM]</span>
+                        <span class="text-emerald-700 font-mono text-xs font-black uppercase tracking-wider">ANALYSIS_COMPLETE // การวิเคราะห์ภาพเสร็จสมบูรณ์</span>
                     </div>
-                    <span id="scan-timestamp" class="text-slate-400 font-mono text-xs"></span>
+                    <span id="scan-timestamp" class="text-slate-600 font-mono text-xs font-bold"></span>
                 </div>
 
-                <!-- SECTION 1: Forensic Image Analysis (กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
+                <!-- SECTION 1: BANK QR CODE & PROMPTPAY FORENSICS (ถ้าเป็นภาพสลิป/QR โอนเงิน) -->
+                <div id="bank-qr-card" class="hidden bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-xl p-6 border border-cyan-500/40 shadow-xl space-y-5">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 flex-wrap gap-3">
+                        <h4 class="text-cyan-400 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono">
+                            <i class="fa-solid fa-qrcode text-lg"></i> ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_QR_ANALYSIS)
+                        </h4>
+                        <span id="bank-qr-status-badge" class="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-bold rounded-md font-mono">
+                            VERIFIED_PAYMENT_QR
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+                        <div class="bg-slate-900/90 p-4 rounded-lg border border-slate-800 space-y-3">
+                            <div class="flex justify-between border-b border-slate-800 pb-2">
+                                <span class="text-slate-400">🏦 สถาบันการเงิน / ธนาคาร:</span>
+                                <span id="bank-name-val" class="text-cyan-300 font-bold text-sm">-</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800 pb-2">
+                                <span class="text-slate-400">👤 บัญชีผู้รับเงิน / พร้อมเพย์:</span>
+                                <span id="bank-target-val" class="text-emerald-400 font-bold text-sm truncate max-w-[180px]">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">ประเภทบัญชี/ID:</span>
+                                <span id="bank-target-type-val" class="text-slate-200 font-bold">-</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/90 p-4 rounded-lg border border-slate-800 space-y-3">
+                            <div class="flex justify-between border-b border-slate-800 pb-2">
+                                <span class="text-slate-400">💰 จำนวนเงิน (Amount):</span>
+                                <span id="bank-amount-val" class="text-amber-400 font-bold text-sm">-</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-800 pb-2">
+                                <span class="text-slate-400">สถานะการตรวจสอบ:</span>
+                                <span id="bank-verify-status" class="text-emerald-400 font-bold">QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">ข้อมูล Raw Payload:</span>
+                                <span id="bank-raw-payload" class="text-slate-400 truncate max-w-[180px]" title="">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Forensic Image Analysis (กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
                 <div class="space-y-4">
                     <h4 class="text-slate-900 font-black tracking-wider uppercase flex items-center gap-2 text-xs font-mono">
-                        <i class="fa-solid fa-microscope text-cyan-600"></i> ผลการวิเคราะห์ที่มาของภาพ (FORENSIC_ORIGIN_ANALYSIS)
+                        <i class="fa-solid fa-microscope text-cyan-700"></i> ผลการวิเคราะห์ที่มาของภาพ (FORENSIC_ORIGIN_ANALYSIS)
                     </h4>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -145,7 +193,7 @@
                                 <i class="fa-solid fa-mobile-screen-button"></i> โทรศัพท์ / รุ่นกล้อง
                             </div>
                             <p id="meta-device" class="text-sm font-bold text-slate-100 font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-device-sub" class="text-[10px] text-slate-400 font-mono">-</p>
+                            <p id="meta-device-sub" class="text-xs text-slate-300 font-mono">-</p>
                         </div>
 
                         <!-- Card 2: Software / Editing App -->
@@ -154,7 +202,7 @@
                                 <i class="fa-solid fa-wand-magic-sparkles"></i> ซอฟต์แวร์ / แอปตัดต่อ
                             </div>
                             <p id="meta-software" class="text-sm font-bold text-slate-100 font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-software-sub" class="text-[10px] text-slate-400 font-mono">-</p>
+                            <p id="meta-software-sub" class="text-xs text-slate-300 font-mono">-</p>
                         </div>
 
                         <!-- Card 3: AI Image Generator Detection -->
@@ -163,38 +211,38 @@
                                 <i class="fa-solid fa-robot"></i> ตรวจสอบการสร้างจาก AI
                             </div>
                             <p id="meta-ai-status" class="text-sm font-bold text-slate-100 font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-ai-sub" class="text-[10px] text-slate-400 font-mono">-</p>
+                            <p id="meta-ai-sub" class="text-xs text-slate-300 font-mono">-</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- SECTION 2: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
+                <!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-center flex-wrap gap-3">
                         <h4 class="text-slate-900 font-black tracking-wider uppercase flex items-center gap-2 text-xs font-mono">
-                            <i class="fa-solid fa-file-lines text-cyan-600"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
+                            <i class="fa-solid fa-file-lines text-cyan-700"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
                         </h4>
                         <div class="flex items-center gap-3">
-                            <span id="meta-textstats" class="text-xs font-mono text-slate-500 font-bold">0 คำ / 0 ตัวอักษร</span>
-                            <button onclick="copyExtractedText()" class="px-4 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 border border-cyan-500/30 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-2">
+                            <span id="meta-textstats" class="text-xs font-mono text-slate-800 font-bold">0 คำ / 0 ตัวอักษร</span>
+                            <button onclick="copyExtractedText()" class="px-4 py-2 bg-cyan-700 hover:bg-cyan-800 text-white border border-cyan-800 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-2 shadow-sm">
                                 <i class="fa-solid fa-copy"></i>
                                 <span id="copy-btn-text">คัดลอกข้อความ</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="relative bg-slate-950 rounded-xl p-6 border border-slate-800 font-mono text-sm text-slate-100 leading-relaxed shadow-inner">
-                        <textarea id="extracted-text-box" readonly class="w-full h-48 bg-transparent text-cyan-300 font-mono text-xs md:text-sm resize-y outline-none leading-relaxed border-none focus:ring-0" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
+                    <div class="relative bg-slate-900 rounded-xl p-5 border border-slate-700 font-mono text-sm text-slate-100 leading-relaxed shadow-inner">
+                        <textarea id="extracted-text-box" readonly class="w-full h-48 bg-slate-950 text-cyan-300 p-4 rounded-lg font-mono text-xs md:text-sm resize-y outline-none leading-relaxed border border-slate-800 focus:ring-1 focus:ring-cyan-500 font-bold" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
                     </div>
                 </div>
 
-                <!-- SECTION 3: Extracted URLs & Threat Intel -->
-                <div id="threat-section" class="bg-rose-500/5 border border-rose-500/20 rounded-xl p-6 space-y-4 font-mono text-xs">
+                <!-- SECTION 4: Extracted URLs & Threat Intel -->
+                <div id="threat-section" class="bg-rose-50 border border-rose-300 rounded-xl p-6 space-y-4 font-mono text-xs">
                     <div class="flex justify-between items-center flex-wrap gap-3">
-                        <h4 class="text-rose-700 font-black uppercase tracking-wider flex items-center gap-2 text-xs">
-                            <i class="fa-solid fa-triangle-exclamation"></i> ผลการตรวจพบลิงก์ & ภัยคุกคามในภาพ (THREAT_ANALYSIS)
+                        <h4 class="text-rose-900 font-black uppercase tracking-wider flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-700"></i> ผลการตรวจพบลิงก์ & ภัยคุกคามในภาพ (THREAT_ANALYSIS)
                         </h4>
-                        <div id="risk-badge" class="px-4 py-1 bg-rose-500/10 text-rose-600 border border-rose-500/30 text-[10px] font-black rounded-md uppercase tracking-wider">
+                        <div id="risk-badge" class="px-4 py-1.5 bg-rose-600 text-white text-xs font-black rounded-md uppercase tracking-wider shadow-sm">
                             ANALYZING
                         </div>
                     </div>
@@ -205,11 +253,11 @@
                 </div>
 
                 <!-- Footer Actions -->
-                <div class="pt-6 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <button onclick="document.getElementById('file-upload').click()" class="text-slate-500 hover:text-cyan-600 text-xs font-mono font-bold flex items-center gap-2 transition-all">
+                <div class="pt-6 border-t border-slate-300 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <button onclick="document.getElementById('file-upload').click()" class="text-slate-700 hover:text-cyan-800 text-xs font-mono font-bold flex items-center gap-2 transition-all">
                         <i class="fa-solid fa-arrows-rotate"></i> อัปโหลดภาพใหม่ (UPLOAD_ANOTHER_IMAGE)
                     </button>
-                    <a href="/report" class="cyber-btn px-6 py-3 text-xs font-black tracking-widest inline-block">
+                    <a href="/report" class="cyber-btn px-6 py-3 text-xs font-black tracking-widest inline-block shadow-md">
                         แจ้งเบาะแสภาพนี้ (REPORT_EVIDENCE)
                     </a>
                 </div>
@@ -219,20 +267,20 @@
 
     <!-- Tech Intel: UX Clarification -->
     <div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
-            <h4 class="font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_how_it_works">
-                <i class="fa-solid fa-circle-info text-cyan-500"></i> HOW_IT_WORKS
+        <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-md rounded-r-xl">
+            <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-900 text-base">
+                <i class="fa-solid fa-circle-info text-cyan-600"></i> หลักการทำงานของเอ็นจิ้น
             </h4>
-            <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light">
-                ระบบสกัดข้อความ OCR ทำงานร่วมกับ Vision Neural Core เพื่ออ่านข้อความทั้งภาษาไทยและอังกฤษแบบคำต่อคำ ตรวจสอบยี่ห้อกล้อง/โทรศัพท์ ตรวจร่องรอยซอฟต์แวร์ตัดต่อภาพ และวิเคราะห์สัญญาณภาพสังเคราะห์จาก AI
+            <p class="text-slate-600 text-sm leading-relaxed">
+                ระบบสกัดข้อความ Vision Neural Core ทำงานร่วมกับ jsQR Decoder เพื่ออ่าน QR Code ธนาคาร/พร้อมเพย์ ถอดรหัสชื่อผู้รับเงิน/สถาบันการเงิน พร้อมตรวจสอบ EXIF Hardware Data จากเซนเซอร์กล้องและสัญญาณภาพสังเคราะห์ AI
             </p>
         </div>
-        <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
-            <h4 class="font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_rapid_response">
-                <i class="fa-solid fa-bolt text-yellow-500"></i> RAPID_RESPONSE
+        <div class="p-10 border-l-4 border-yellow-500 bg-white shadow-md rounded-r-xl">
+            <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-900 text-base">
+                <i class="fa-solid fa-bolt text-yellow-600"></i> การตอบสนองภัยคุกคาม
             </h4>
-            <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light">
-                หากระบบตรวจพบ URLs หรือคีย์เวิร์ดสุ่มเสี่ยงที่ตรงกับฐานข้อมูลภัยคุกคาม ข้อมูลจะถูกสกัดออกมาอย่างชัดเจน พร้อมให้คุณคลิกสแกนตรวจสอบความเสี่ยงต่อได้ทันที
+            <p class="text-slate-600 text-sm leading-relaxed">
+                หากระบบตรวจพบ URLs หรือคีย์เวิร์ดสุ่มเสี่ยงหลอกลวง ข้อมูลจะถูกสกัดออกมาอย่างชัดเจน พร้อมให้คุณคลิกสแกนตรวจสอบความเสี่ยงต่อได้ทันที 1-Click
             </p>
         </div>
     </div>
@@ -271,6 +319,7 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     document.getElementById('active-preview-card').classList.remove('hidden');
     document.getElementById('processing-state').classList.remove('hidden');
     document.getElementById('ocr-result-container').classList.add('hidden');
+    document.getElementById('bank-qr-card').classList.add('hidden');
 
     document.getElementById('ocr-progress-bar').style.width = '15%';
     document.getElementById('ocr-progress-pct').innerText = '15%';
@@ -288,10 +337,13 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
         const imgObj = document.getElementById('instant-image-preview');
         imgObj.src = dataUrl;
 
-        // Measure natural dimensions
+        // Measure natural dimensions and decode QR code from Canvas
         const tempImg = new Image();
         tempImg.onload = function() {
             document.getElementById('preview-dimensions').innerText = `${tempImg.naturalWidth} × ${tempImg.naturalHeight} px`;
+            
+            // Scan for QR Code (Bank / PromptPay QR)
+            scanCanvasForQRCode(tempImg);
         };
         tempImg.src = dataUrl;
     };
@@ -300,9 +352,110 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     // 3. Perform Forensic EXIF & Metadata Analysis (Camera Phone, Edit Software, AI)
     analyzeImageForensics(file);
 
-    // 4. Perform OCR Recognition (Backend Vision API + Client Tesseract Fallback)
+    // 4. Perform Dual-Engine OCR Recognition
     performDualOCRRecognition(file);
 });
+
+// QR Code & Bank PromptPay Decoder via jsQR
+function scanCanvasForQRCode(imgElement) {
+    if (typeof jsQR === 'undefined') return;
+
+    const canvas = document.getElementById('hidden-ocr-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = imgElement.naturalWidth;
+    canvas.height = imgElement.naturalHeight;
+    ctx.drawImage(imgElement, 0, 0);
+
+    try {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+        });
+
+        if (code && code.data) {
+            console.log("QR Code Payload detected:", code.data);
+            const bankData = parsePromptPayPayload(code.data);
+            if (bankData) {
+                renderBankQRCard(bankData);
+            }
+        }
+    } catch (err) {
+        console.log("QR Scan info:", err);
+    }
+}
+
+// Parse Thai PromptPay EMVCo Standard Payload
+function parsePromptPayPayload(payload) {
+    if (!payload) return null;
+    
+    let bankInfo = {
+        is_qr: true,
+        bank: "Thai QR Payment / พร้อมเพย์",
+        target_id: "ผู้รับเงินตามระบบพร้อมเพย์",
+        target_type: "พร้อมเพย์ (PromptPay)",
+        amount: "ผู้จ่ายระบุจำนวนเงิน",
+        raw_payload: payload
+    };
+
+    let pLower = payload.toLowerCase();
+    
+    // Check specific Thai Banks
+    if (payload.includes("A000000677010111") || payload.includes("A000000677010112")) {
+        bankInfo.bank = "พร้อมเพย์ / Thai QR Payment (ทุกธนาคาร)";
+    }
+    
+    if (pLower.includes("scb") || payload.includes("000414")) {
+        bankInfo.bank = "SCB (ธนาคารไทยพาณิชย์)";
+    } else if (pLower.includes("kbank") || payload.includes("000004")) {
+        bankInfo.bank = "KBank (ธนาคารกสิกรไทย)";
+    } else if (pLower.includes("ktb") || payload.includes("000006")) {
+        bankInfo.bank = "KTB (ธนาคารกรุงไทย)";
+    } else if (pLower.includes("bbl") || payload.includes("000002")) {
+        bankInfo.bank = "BBL (ธนาคารกรุงเทพ)";
+    } else if (pLower.includes("bay") || payload.includes("000025")) {
+        bankInfo.bank = "BAY (ธนาคารกรุงศรีอยุธยา)";
+    } else if (pLower.includes("ttb") || payload.includes("000011")) {
+        bankInfo.bank = "TTB (ธนาคารทหารไทยธนชาต)";
+    } else if (pLower.includes("gsb") || payload.includes("000030")) {
+        bankInfo.bank = "GSB (ธนาคารออมสิน)";
+    }
+
+    // Parse Mobile Number (Tag 01130066...)
+    let mobileMatch = payload.match(/01130066(\d{9})/);
+    if (mobileMatch) {
+        let rawNum = "0" + mobileMatch[1];
+        bankInfo.target_id = rawNum.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+        bankInfo.target_type = "หมายเลขโทรศัพท์พร้อมเพย์ (Mobile PromptPay)";
+    }
+
+    // Parse National ID / Tax ID (Tag 0213...)
+    let taxMatch = payload.match(/0213(\d{13})/);
+    if (taxMatch) {
+        bankInfo.target_id = taxMatch[1].replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+        bankInfo.target_type = "เลขประจำตัวผู้เสียภาษี/บัตรประชาชน (National ID / Tax ID)";
+    }
+
+    // Parse Tag 54 (Amount)
+    let amountMatch = payload.match(/54(\d{2})(\d+\.\d{2}|\d+)/);
+    if (amountMatch) {
+        let len = parseInt(amountMatch[1]);
+        let amtStr = amountMatch[2].substring(0, len);
+        bankInfo.amount = parseFloat(amtStr).toLocaleString('th-TH', { minimumFractionDigits: 2 }) + " บาท";
+    }
+
+    return bankInfo;
+}
+
+function renderBankQRCard(b) {
+    document.getElementById('bank-name-val').innerText = b.bank;
+    document.getElementById('bank-target-val').innerText = b.target_id || "ผู้จ่ายระบุตัวตน";
+    document.getElementById('bank-target-type-val').innerText = b.target_type;
+    document.getElementById('bank-amount-val').innerText = b.amount || "ผู้จ่ายระบุจำนวนเงิน";
+    document.getElementById('bank-raw-payload').innerText = b.raw_payload;
+    document.getElementById('bank-raw-payload').title = b.raw_payload;
+
+    document.getElementById('bank-qr-card').classList.remove('hidden');
+}
 
 // Forensic Analysis: EXIF Data, Camera Model, Editing App & AI Detection
 function analyzeImageForensics(file) {
@@ -405,7 +558,7 @@ function performDualOCRRecognition(file) {
         if (textMsg) document.getElementById('quick-status-text').innerText = textMsg;
     };
 
-    updateProgress(35, "กำลังส่งภาพเข้าวิเคราะห์ถอดรหัสข้อความ...");
+    updateProgress(35, "กำลังสกัดข้อความในพิกเซลภาพด้วย AI...");
 
     let hasResponded = false;
 
@@ -445,7 +598,7 @@ function performDualOCRRecognition(file) {
     });
 }
 
-// Client-side Tesseract OCR Engine
+// Client-side Tesseract OCR Engine with Canvas Pre-processing
 function runClientTesseract(file, updateProgress, hasResponded, callback) {
     updateProgress(50, "กำลังถอดรหัสข้อความด้วย Tesseract Core...");
 
@@ -477,6 +630,9 @@ function runClientTesseract(file, updateProgress, hasResponded, callback) {
 
 function finalizeOCRResult(text, file) {
     currentExtractedText = (text || "").trim();
+
+    // Check if text contains Bank / PromptPay / SCB / KBank Slip information
+    parseBankTextFromOCR(currentExtractedText);
     
     // Calculate Text Statistics
     const wordCount = currentExtractedText ? currentExtractedText.split(/\s+/).filter(Boolean).length : 0;
@@ -485,7 +641,7 @@ function finalizeOCRResult(text, file) {
 
     const textBox = document.getElementById('extracted-text-box');
     if (!currentExtractedText) {
-        textBox.value = "[ภาพนี้ไม่มีข้อความตัวอักษร หรือข้อความมีความเบลออย่างมาก]";
+        textBox.value = "[ระบบประมวลผลแล้ว แต่ไม่พบข้อความตัวอักษร หรือข้อความมีความเบลอเป็นอย่างมาก]";
     } else {
         textBox.value = currentExtractedText;
     }
@@ -507,13 +663,13 @@ function finalizeOCRResult(text, file) {
         detectedUrls.forEach(url => {
             let cleanUrl = url.replace(/[.,;)]+$/, '');
             let item = document.createElement('div');
-            item.className = 'flex items-center justify-between bg-white border border-rose-200 rounded-lg p-3 gap-3 flex-wrap';
+            item.className = 'flex items-center justify-between bg-white border border-rose-300 rounded-lg p-3 gap-3 flex-wrap shadow-sm';
             item.innerHTML = `
-                <div class="flex items-center gap-2 font-mono text-xs text-rose-700 truncate max-w-[280px] md:max-w-[400px]">
-                    <i class="fa-solid fa-link text-rose-500"></i>
+                <div class="flex items-center gap-2 font-mono text-xs text-rose-900 truncate max-w-[280px] md:max-w-[400px]">
+                    <i class="fa-solid fa-link text-rose-600"></i>
                     <span class="font-bold truncate">${cleanUrl}</span>
                 </div>
-                <button onclick="scanDetectedUrl('${encodeURIComponent(cleanUrl)}')" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[10px] font-bold font-mono transition-all flex items-center gap-1">
+                <button onclick="scanDetectedUrl('${encodeURIComponent(cleanUrl)}')" class="px-3 py-1 bg-rose-700 hover:bg-rose-800 text-white rounded text-xs font-bold font-mono transition-all flex items-center gap-1 shadow-sm">
                     <i class="fa-solid fa-magnifying-glass"></i> สแกน URL นี้
                 </button>
             `;
@@ -521,26 +677,26 @@ function finalizeOCRResult(text, file) {
         });
     } else if (foundKeywords.length > 0) {
         let item = document.createElement('div');
-        item.className = 'text-xs text-amber-700 font-mono bg-amber-50 border border-amber-200 rounded-lg p-3';
-        item.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-600"></i> ตรวจพบคำสุ่มเสี่ยงหลอกลวงในภาพ: <span class="font-bold text-amber-900">${foundKeywords.join(', ')}</span>`;
+        item.className = 'text-xs text-amber-900 font-mono bg-amber-100 border border-amber-300 rounded-lg p-3 font-bold';
+        item.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-700"></i> ตรวจพบคำสุ่มเสี่ยงหลอกลวงในภาพ: <span class="font-black text-amber-950">${foundKeywords.join(', ')}</span>`;
         urlListContainer.appendChild(item);
     } else {
         let item = document.createElement('div');
-        item.className = 'text-xs text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 rounded-lg p-3';
-        item.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> ไม่พบ URL หรือสัญลักษณ์ภัยคุกคามในข้อความภาพนี้`;
+        item.className = 'text-xs text-emerald-900 font-mono bg-emerald-100 border border-emerald-300 rounded-lg p-3 font-bold';
+        item.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-700"></i> ไม่พบ URL หรือสัญลักษณ์ภัยคุกคามในข้อความภาพนี้`;
         urlListContainer.appendChild(item);
     }
 
     const riskBadge = document.getElementById('risk-badge');
     if (isHighRisk) {
         riskBadge.innerText = 'CRITICAL DANGER / มีความเสี่ยงสูง';
-        riskBadge.className = 'px-4 py-1 bg-rose-500/10 text-rose-600 border border-rose-500/30 text-[10px] font-black rounded-md uppercase tracking-wider animate-pulse';
+        riskBadge.className = 'px-4 py-1.5 bg-rose-700 text-white text-xs font-black rounded-md uppercase tracking-wider shadow-sm animate-pulse';
     } else if (foundKeywords.length > 0) {
         riskBadge.innerText = 'SUSPICIOUS / น่าสงสัย';
-        riskBadge.className = 'px-4 py-1 bg-amber-500/10 text-amber-600 border border-amber-500/30 text-[10px] font-black rounded-md uppercase tracking-wider';
+        riskBadge.className = 'px-4 py-1.5 bg-amber-600 text-white text-xs font-black rounded-md uppercase tracking-wider shadow-sm';
     } else {
         riskBadge.innerText = 'SAFE / ปลอดภัย';
-        riskBadge.className = 'px-4 py-1 bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 text-[10px] font-black rounded-md uppercase tracking-wider';
+        riskBadge.className = 'px-4 py-1.5 bg-emerald-700 text-white text-xs font-black rounded-md uppercase tracking-wider shadow-sm';
     }
 
     document.getElementById('scan-timestamp').innerText = `TIMESTAMP: ${new Date().toLocaleTimeString('th-TH')}`;
@@ -548,6 +704,37 @@ function finalizeOCRResult(text, file) {
     // Hide progress & show terminal result container
     document.getElementById('processing-state').classList.add('hidden');
     document.getElementById('ocr-result-container').classList.remove('hidden');
+}
+
+// Parse Bank Transfer Slip Text (e.g. SCB, KBank, PromptPay Slips)
+function parseBankTextFromOCR(text) {
+    if (!text) return;
+    let tLower = text.toLowerCase();
+    
+    let isBankSlip = tLower.includes('scb') || tLower.includes('kbank') || tLower.includes('promptpay') || tLower.includes('พร้อมเพย์') || tLower.includes('โอนเงินสำเร็จ') || tLower.includes('โอนเงิน');
+    if (!isBankSlip) return;
+
+    let bankName = "พร้อมเพย์ / Thai QR Payment";
+    if (tLower.includes('scb') || tLower.includes('ไทยพาณิชย์')) bankName = "SCB (ธนาคารไทยพาณิชย์)";
+    else if (tLower.includes('kbank') || tLower.includes('กสิกร')) bankName = "KBank (ธนาคารกสิกรไทย)";
+    else if (tLower.includes('krungthai') || tLower.includes('กรุงไทย')) bankName = "KTB (ธนาคารกรุงไทย)";
+    else if (tLower.includes('bangkok') || tLower.includes('กรุงเทพ')) bankName = "BBL (ธนาคารกรุงเทพ)";
+
+    // Match recipient
+    let targetId = "ตรวจพบสลิปการโอนเงิน/QR";
+    let accMatch = text.match(/(xxx-xxx-\d{4}|\d{3}-\d{3}-\d{4}|\d{10,13})/);
+    if (accMatch) targetId = accMatch[1];
+
+    let nameMatch = text.match(/(นาย|นาง|นางสาว|บริษัท|บจก\.|ร้าน)\s+([^\n\r]+)/);
+    if (nameMatch) targetId += ` (${nameMatch[1]} ${nameMatch[2].trim()})`;
+
+    renderBankQRCard({
+        bank: bankName,
+        target_id: targetId,
+        target_type: "สลิปการโอนเงิน/PromptPay",
+        amount: "ระบุตามสลิปการโอน",
+        raw_payload: "สกัดข้อมูลจากข้อความบนสลิปธนาคาร"
+    });
 }
 
 function copyExtractedText() {

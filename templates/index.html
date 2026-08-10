@@ -247,5 +247,13 @@
             });
         }
     };
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryUrl = urlParams.get('url');
+        if (queryUrl) {
+            urlInput.value = queryUrl;
+            scanBtn.click();
+        }
+    });
 </script>
 {% endblock %}

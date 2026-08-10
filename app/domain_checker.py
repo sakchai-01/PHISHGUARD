@@ -512,9 +512,12 @@ def _safe_whois_features(host: str) -> dict[str, Any]:
     if cached is not None:
         return cached
 
+    result: dict[str, Any]
     try:
-        result = whois_features(normalized_host)
-        if not isinstance(result, dict):
+        raw_result = whois_features(normalized_host)
+        if isinstance(raw_result, dict):
+            result = dict(raw_result)
+        else:
             result = {"domain_age_days": None, "registrar": "Unknown"}
     except Exception:
         result = {"domain_age_days": None, "registrar": "Unknown"}

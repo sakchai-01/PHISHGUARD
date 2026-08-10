@@ -506,6 +506,8 @@ def _legacy_risk_level(score: float) -> str:
 def _safe_whois_features(host: str) -> dict[str, Any]:
     normalized_host = _normalize_host(host)
     if not normalized_host or _is_ip_address(normalized_host) or _is_loopback_or_localhost(normalized_host):
+        return {"domain_age_days": None, "registrar": "Unavailable"}
+
     cached = _cache_get(_whois_cache, normalized_host)
     if cached is not None:
         return cached

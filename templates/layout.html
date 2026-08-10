@@ -102,78 +102,78 @@
     </nav>
 
     <!-- Mobile Navigation Drawer -->
-    <div id="mobileMenu" class="lg:hidden fixed inset-0 z-[1001] bg-slate-950/95 backdrop-blur-2xl translate-x-full transition-transform duration-300 font-['Kanit'] text-white">
+    <div id="mobileMenu" class="lg:hidden fixed inset-0 z-[1001] bg-white/95 backdrop-blur-2xl translate-x-full transition-transform duration-300 font-['Kanit'] text-slate-950">
         <div class="p-6 md:p-10 h-full overflow-y-auto flex flex-col relative max-w-lg mx-auto">
             <!-- Branding/Close Header -->
-            <div class="flex justify-between items-center mb-8 relative z-10 pb-4 border-b border-slate-800">
+            <div class="flex justify-between items-center mb-8 relative z-10 pb-4 border-b-2 border-slate-950">
                 <div class="flex flex-col">
-                    <span class="text-cyan-400 font-black uppercase tracking-widest text-sm md:text-base flex items-center gap-2" data-i18n="menu_title">
-                        <i class="fa-solid fa-bars text-cyan-400"></i> เมนูเข้าถึงด่วน
+                    <span class="text-slate-950 font-black uppercase tracking-widest text-sm md:text-base flex items-center gap-2" data-i18n="menu_title">
+                        <i class="fa-solid fa-bars text-green-600"></i> เมนูเข้าถึงด่วน
                     </span>
-                    <span class="text-xs text-slate-400 font-medium mt-0.5" data-i18n="menu_sub">Direct Access Navigation</span>
+                    <span class="text-xs text-slate-600 font-medium mt-0.5" data-i18n="menu_sub">Direct Access Navigation</span>
                 </div>
-                <button onclick="toggleMobileMenu()" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-white hover:bg-rose-600 hover:text-white transition-all shadow-md">
+                <button onclick="toggleMobileMenu()" class="w-12 h-12 rounded-xl bg-white border-2 border-slate-950 flex items-center justify-center text-slate-950 hover:bg-green-600 hover:border-green-600 hover:text-white transition-all shadow-md">
                     <i class="fa-solid fa-xmark text-2xl"></i>
                 </button>
             </div>
 
             <!-- Navigation Links: Heroic Scale Button Blocks -->
             <div class="flex flex-col gap-4 relative z-10">
-                <a href="/" class="p-5 rounded-2xl bg-slate-900 border-2 border-slate-800 hover:border-cyan-500 flex items-center justify-between group transition-all shadow-md" onclick="toggleMobileMenu()">
+                <a href="/" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-white group-hover:text-cyan-400 transition-colors" data-i18n="menu_home">หน้าแรก</span>
-                        <span class="text-xs text-slate-400 font-medium mt-0.5" data-i18n="menu_home_sub">กลับสู่หน้าหลัก</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_home">หน้าแรก</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_home_sub">กลับสู่หน้าหลัก</span>
                     </div>
-                    <i class="fa-solid fa-house text-xl text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-house text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
 
-                <a href="/about" class="p-5 rounded-2xl bg-slate-900 border-2 border-slate-800 hover:border-cyan-500 flex items-center justify-between group transition-all shadow-md" onclick="toggleMobileMenu()">
+                <a href="/about" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-white group-hover:text-cyan-400 transition-colors" data-i18n="menu_about">เกี่ยวกับ</span>
-                        <span class="text-xs text-slate-400 font-medium mt-0.5" data-i18n="menu_about_sub">พันธกิจด้านความปลอดภัย</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_about">เกี่ยวกับ</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_about_sub">พันธกิจด้านความปลอดภัย</span>
                     </div>
-                    <i class="fa-solid fa-info-circle text-xl text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-info-circle text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
 
-                <a href="/news" class="p-5 rounded-2xl bg-slate-900 border-2 border-slate-800 hover:border-violet-500 flex items-center justify-between group transition-all shadow-md" onclick="toggleMobileMenu()">
+                <a href="/news" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-white group-hover:text-violet-400 transition-colors" data-i18n="menu_threats">ข่าวภัยคุกคาม</span>
-                        <span class="text-xs text-slate-400 font-medium mt-0.5" data-i18n="menu_threats_sub">อัปเดตข้อมูลภัยคุกคามล่าสุด</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_threats">ข่าวภัยคุกคาม</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_threats_sub">อัปเดตข้อมูลภัยคุกคามล่าสุด</span>
                     </div>
-                    <i class="fa-solid fa-satellite text-xl text-violet-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-satellite text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
 
-                <a href="/chat" class="p-5 rounded-2xl bg-slate-900 border-2 border-cyan-500/70 hover:border-cyan-400 flex items-center justify-between group transition-all shadow-xl" onclick="toggleMobileMenu()">
+                <a href="/chat" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-cyan-300 group-hover:text-cyan-200 transition-colors" data-i18n="menu_janis">JANIS AI</span>
-                        <span class="text-xs text-cyan-400/80 font-medium mt-0.5" data-i18n="menu_janis_sub">ผู้ช่วย AI ด้านความปลอดภัย</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_janis">JANIS AI</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_janis_sub">ผู้ช่วย AI ด้านความปลอดภัย</span>
                     </div>
-                    <i class="fa-solid fa-brain text-xl text-cyan-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-brain text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
 
-                <a href="/contact" class="p-5 rounded-2xl bg-slate-900 border-2 border-slate-800 hover:border-violet-500 flex items-center justify-between group transition-all shadow-md" onclick="toggleMobileMenu()">
+                <a href="/contact" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-white group-hover:text-violet-400 transition-colors" data-i18n="menu_contact">ศูนย์สนับสนุน</span>
-                        <span class="text-xs text-slate-400 font-medium mt-0.5" data-i18n="menu_contact_sub">ความช่วยเหลือด้านเทคนิค</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_contact">ศูนย์สนับสนุน</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_contact_sub">ความช่วยเหลือด้านเทคนิค</span>
                     </div>
-                    <i class="fa-solid fa-headset text-xl text-violet-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-headset text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
 
-                <a href="/report" class="p-5 rounded-2xl bg-slate-900 border-2 border-rose-500/70 hover:border-rose-400 flex items-center justify-between group transition-all shadow-xl" onclick="toggleMobileMenu()">
+                <a href="/report" class="p-5 rounded-2xl bg-white border-2 border-slate-950 hover:border-green-600 hover:bg-green-50 flex items-center justify-between group transition-all shadow-sm" onclick="toggleMobileMenu()">
                     <div class="flex flex-col">
-                        <span class="text-xl md:text-2xl font-black text-rose-400 group-hover:text-rose-300 transition-colors" data-i18n="menu_report">แจ้งภัยคุกคาม</span>
-                        <span class="text-xs text-rose-300/80 font-medium mt-0.5" data-i18n="menu_report_sub">รายงานเบาะแสและภัยมิจฉาชีพ</span>
+                        <span class="text-xl md:text-2xl font-black text-slate-950 group-hover:text-green-600 transition-colors" data-i18n="menu_report">แจ้งภัยคุกคาม</span>
+                        <span class="text-xs text-slate-600 group-hover:text-green-700 font-medium mt-0.5" data-i18n="menu_report_sub">รายงานเบาะแสและภัยมิจฉาชีพ</span>
                     </div>
-                    <i class="fa-solid fa-bolt text-xl text-rose-400 group-hover:scale-110 transition-transform"></i>
+                    <i class="fa-solid fa-bolt text-xl text-slate-950 group-hover:text-green-600 group-hover:scale-110 transition-all"></i>
                 </a>
             </div>
 
             <!-- Footer/Settings: High Impact -->
-            <div class="mt-8 pt-6 border-t border-slate-800 relative z-10">
-                 <button onclick="toggleLanguage(); toggleMobileMenu();" class="w-full py-4 rounded-xl border-2 border-cyan-500/40 bg-slate-900 text-cyan-300 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 hover:bg-slate-800 transition-all shadow-md">
-                    <i class="fa-solid fa-globe text-cyan-400 text-lg"></i> <span data-i18n="menu_switch_lang">เปลี่ยนภาษา (SWITCH LANGUAGE)</span>
+            <div class="mt-8 pt-6 border-t-2 border-slate-950 relative z-10">
+                 <button onclick="toggleLanguage(); toggleMobileMenu();" class="w-full py-4 rounded-xl border-2 border-slate-950 bg-white text-slate-950 hover:bg-green-600 hover:border-green-600 hover:text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 transition-all shadow-md">
+                    <i class="fa-solid fa-globe text-lg"></i> <span data-i18n="menu_switch_lang">เปลี่ยนภาษา (SWITCH LANGUAGE)</span>
                 </button>
-                <div class="flex justify-between items-center mt-6 text-xs text-slate-400 font-mono">
+                <div class="flex justify-between items-center mt-6 text-xs text-slate-600 font-mono font-bold">
                     <span data-i18n="menu_node">Node: TH_BKK_01</span>
                     <span data-i18n="menu_protocol">Protocol: V.2.0.4</span>
                 </div>

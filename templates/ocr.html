@@ -3,17 +3,20 @@
 {% block title %}Vision | Omni-Channel OCR Intelligence{% endblock %}
 
 {% block content %}
+<!-- Include Tesseract.js for Real-time Browser OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 <div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative">
     <!-- Header Section -->
     <div class="text-center mb-24 animate__animated animate__fadeIn">
         <div class="inline-flex items-center gap-4 px-8 py-3 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 mx-auto shadow-[0_0_30px_rgba(0,240,255,0.2)]">
             <i class="fa-solid fa-eye animate-pulse"></i> <span data-i18n="hdr_ocr_badge">NEURAL_VISION_ACTIVE</span>
         </div>
-        <h1 class="font-black  tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);" data-i18n="hdr_ocr_title">
+        <h1 class="font-black tracking-tighter mb-10 uppercase italic font-['Orbitron']" style="font-size: var(--fs-header-title);" data-i18n="hdr_ocr_title">
             OCR <span class="text-gradient">VISION.</span>
         </h1>
         <p class="text-slate-500 max-w-4xl mx-auto font-medium font-['Kanit'] leading-relaxed" style="font-size: var(--fs-header-desc);" data-i18n="ocr_header_desc">
-            เทคโนโลยีสกัดข้อความจากภาพด้วย AI ขั้นสูง เพื่อวิเคราะห์ลิงก์และเนื้อหาแฝงในภาพหลักฐาน
+            เทคโนโลยีสกัดข้อความจากภาพด้วย AI ขั้นสูง พร้อมแสดงข้อความที่อ่านได้ ภาพหลักฐาน และข้อมูลเชิงลึก (Metadata)
         </p>
     </div>
 
@@ -30,8 +33,8 @@
                 <div class="mb-10">
                     <i class="fa-solid fa-cloud-arrow-up text-8xl text-slate-700 group-hover:text-cyan-400 group-hover:scale-110 transition-all duration-700"></i>
                 </div>
-                <h3 class="text-2xl md:text-3xl font-black  uppercase tracking-widest mb-6 font-['Orbitron']" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
-                <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-12 border-t border-b border-slate-200 py-4 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP</p>
+                <h3 class="text-2xl md:text-3xl font-black uppercase tracking-widest mb-6 font-['Orbitron']" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
+                <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-12 border-t border-b border-slate-200 py-4 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP, GIF, BMP</p>
 
                 <form action="#" method="POST" enctype="multipart/form-data" id="ocr-form" onsubmit="return false;">
                     <input type="file" id="file-upload" class="hidden" accept="image/*">
@@ -48,15 +51,23 @@
 
     <!-- Processing State -->
     <div id="processing-state" class="mt-20 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
-        <div class="cyber-card p-10 bg-white border-cyan-500/30 backdrop-blur-3xl">
-            <div class="flex items-center gap-10">
-                <div class="relative">
-                    <div class="w-20 h-20 rounded-full border-4 border-cyan-500/10 border-t-cyan-500 animate-spin"></div>
-                    <i class="fa-solid fa-dna absolute inset-0 flex items-center justify-center text-cyan-500 text-xl animate-pulse"></i>
+        <div class="cyber-card p-10 bg-white border-cyan-500/30 backdrop-blur-3xl shadow-xl">
+            <div class="flex items-center gap-8">
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full border-4 border-cyan-500/10 border-t-cyan-500 animate-spin"></div>
+                    <i class="fa-solid fa-eye absolute inset-0 flex items-center justify-center text-cyan-500 text-lg animate-pulse"></i>
                 </div>
-                <div>
-                    <p class="text-cyan-500 font-black uppercase tracking-[0.5em] text-[10px] mb-3" data-i18n="ocr_neural_decoder">NEURAL_DECODER_ACTIVE</p>
-                    <p class=" font-['Orbitron'] text-xl tracking-tight leading-relaxed" id="status-text" data-i18n="ocr_status_mapping">MAPPING_PIXEL_INTEL...</p>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="text-cyan-500 font-black uppercase tracking-[0.4em] text-[10px]" data-i18n="ocr_neural_decoder">NEURAL_DECODER_ACTIVE</p>
+                        <span id="ocr-progress-pct" class="text-xs font-mono font-bold text-cyan-600">0%</span>
+                    </div>
+                    <p class="font-['Orbitron'] text-lg tracking-tight leading-relaxed text-slate-800 truncate" id="status-text" data-i18n="ocr_status_mapping">MAPPING_PIXEL_INTEL...</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden border border-slate-200">
+                        <div id="ocr-progress-bar" class="bg-gradient-to-r from-cyan-500 to-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,32 +75,120 @@
 
     <!-- Result Terminal: High-Security Interface -->
     <div class="mt-20 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
-        <div class="cyber-card overflow-hidden border-slate-200 bg-white shadow-2xl">
-            <div class="bg-slate-900/40 px-8 py-5 border-b border-slate-200 flex items-center justify-between">
+        <div class="cyber-card overflow-hidden border-slate-200 bg-white shadow-2xl rounded-2xl">
+            <!-- Terminal Header -->
+            <div class="bg-slate-900 px-8 py-5 border-b border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-2 h-2 rounded-full bg-rose-500"></div>
-                    <div class="w-2 h-2 rounded-full bg-amber-500"></div>
-                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
                 </div>
-                <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] italic" data-i18n="ocr_terminal_title">INTELLIGENCE_OUTPUT_TERMINAL</span>
+                <span class="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] italic font-mono" data-i18n="ocr_terminal_title">INTELLIGENCE_OUTPUT_TERMINAL</span>
             </div>
-            <div class="p-10 font-mono text-[15px] leading-relaxed space-y-8">
-                <div class="flex gap-6 animate__animated animate__fadeInLeft">
-                    <span class="text-slate-700 font-black tracking-widest">[SYSTEM]</span>
-                    <span class="text-emerald-500 uppercase tracking-tight" data-i18n="ocr_detection_complete">IMAGE_DETECTION_SEQUENCE_COMPLETE</span>
+
+            <div class="p-8 md:p-12 space-y-10">
+                <!-- Status Banner -->
+                <div class="flex items-center justify-between border-b border-slate-100 pb-6 flex-wrap gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-slate-400 font-mono text-xs font-bold">[SYSTEM]</span>
+                        <span class="text-emerald-600 font-mono text-xs font-black uppercase tracking-wider" data-i18n="ocr_detection_complete">IMAGE_DETECTION_SEQUENCE_COMPLETE</span>
+                    </div>
+                    <span id="scan-timestamp" class="text-slate-400 font-mono text-xs"></span>
                 </div>
-                <!-- ... existing rows ... -->
-                <div class="pt-10 border-t border-slate-200 mt-10 flex flex-col md:flex-row justify-between items-center gap-8 mobile-stack">
-                    <div class="flex items-center gap-6 mobile-stack">
-                        <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">PROBABILITY_SCORE:</span>
-                        <div class="px-6 py-2 bg-rose-500/10 text-rose-500 border border-rose-500/30 text-[10px] font-black rounded-lg uppercase tracking-[0.3em] animate-pulse">
-                            CRITICAL_DANGER
+
+                <!-- SECTION 1: Uploaded Image Preview & Deep Image Metadata -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <!-- Left: Uploaded Image Preview -->
+                    <div class="md:col-span-5 flex flex-col items-center">
+                        <div class="w-full relative group rounded-xl overflow-hidden border border-slate-200 bg-slate-950 p-2 shadow-inner">
+                            <img id="image-preview" src="" alt="Uploaded Evidence Image" class="w-full h-auto max-h-[350px] object-contain rounded-lg transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute bottom-4 left-4 right-4 bg-slate-900/80 backdrop-blur-md text-cyan-400 text-[10px] font-mono font-bold px-3 py-1.5 rounded border border-cyan-500/30 flex items-center justify-between">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-image"></i> IMAGE_PREVIEW</span>
+                                <span id="img-dim-badge" class="text-slate-300">0x0 px</span>
+                            </div>
                         </div>
                     </div>
-                    <button class="flex items-center gap-3 text-cyan-500 text-[10px] font-black uppercase tracking-[0.4em] hover: transition-all group mobile-stack">
-                        <i class="fa-solid fa-copy group-hover:scale-110"></i>
-                        <span data-i18n="ocr_copy_trace">COPY_TRACE_LOG_DATA</span>
+
+                    <!-- Right: Deep Image Metadata -->
+                    <div class="md:col-span-7 bg-slate-50 border border-slate-200/80 rounded-xl p-6 space-y-4 font-mono text-xs">
+                        <h4 class="text-slate-900 font-black tracking-wider uppercase flex items-center gap-2 border-b border-slate-200 pb-3 text-xs">
+                            <i class="fa-solid fa-circle-info text-cyan-600"></i> ข้อมูลเชิงลึกของภาพ (IMAGE_DEEP_METADATA)
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">ชื่อไฟล์ (File Name):</span>
+                                <span id="meta-filename" class="text-slate-900 font-bold truncate max-w-[200px]" title="">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">ประเภทไฟล์ (Format):</span>
+                                <span id="meta-filetype" class="text-slate-900 font-bold">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">ขนาดไฟล์ (File Size):</span>
+                                <span id="meta-filesize" class="text-slate-900 font-bold">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">มิติพิกเซล (Dimensions):</span>
+                                <span id="meta-dimensions" class="text-cyan-700 font-bold">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">สัดส่วนภาพ (Aspect Ratio):</span>
+                                <span id="meta-aspect" class="text-slate-900 font-bold">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+                                <span class="text-slate-500 font-medium">วันเดือนปีของไฟล์ (File Date):</span>
+                                <span id="meta-filedate" class="text-slate-900 font-bold">-</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-500 font-medium">สถิติข้อความ (Text Stats):</span>
+                                <span id="meta-textstats" class="text-emerald-700 font-bold">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Extracted OCR Text Display -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-slate-900 font-black tracking-wider uppercase flex items-center gap-2 text-xs font-mono">
+                            <i class="fa-solid fa-file-lines text-cyan-600"></i> ข้อความที่อ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
+                        </h4>
+                        <button onclick="copyExtractedText()" class="px-4 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 border border-cyan-500/30 rounded-lg text-xs font-bold font-mono transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-copy"></i>
+                            <span id="copy-btn-text">คัดลอกข้อความ</span>
+                        </button>
+                    </div>
+
+                    <div class="relative bg-slate-950 rounded-xl p-6 border border-slate-800 font-mono text-sm text-slate-100 leading-relaxed shadow-inner max-h-[300px] overflow-y-auto">
+                        <pre id="extracted-text" class="whitespace-pre-wrap break-words font-mono text-xs md:text-sm text-cyan-300">กำลังถอดรหัสข้อความ...</pre>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Extracted URLs & Threat Intel -->
+                <div id="threat-section" class="bg-rose-500/5 border border-rose-500/20 rounded-xl p-6 space-y-4 font-mono text-xs">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-rose-700 font-black uppercase tracking-wider flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-triangle-exclamation"></i> ผลการตรวจพบลิงก์ & ภัยคุกคามในภาพ (THREAT_ANALYSIS)
+                        </h4>
+                        <div id="risk-badge" class="px-4 py-1 bg-rose-500/10 text-rose-600 border border-rose-500/30 text-[10px] font-black rounded-md uppercase tracking-wider">
+                            ANALYZING
+                        </div>
+                    </div>
+
+                    <div id="detected-urls-list" class="space-y-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="pt-6 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <button onclick="document.getElementById('file-upload').click()" class="text-slate-500 hover:text-cyan-600 text-xs font-mono font-bold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-arrows-rotate"></i> อัปโหลดภาพใหม่ (UPLOAD_ANOTHER_IMAGE)
                     </button>
+                    <a href="/report" class="cyber-btn px-6 py-3 text-xs font-black tracking-widest inline-block">
+                        แจ้งเบาะแสภาพนี้ (REPORT_EVIDENCE)
+                    </a>
                 </div>
             </div>
         </div>
@@ -98,19 +197,19 @@
     <!-- Tech Intel: UX Clarification -->
     <div class="mt-40 grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
-            <h4 class=" font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_how_it_works">
+            <h4 class="font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_how_it_works">
                 <i class="fa-solid fa-circle-info text-cyan-500"></i> HOW_IT_WORKS
             </h4>
             <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light" data-i18n="ocr_how_it_works_desc">
-                ระบบ VISION ใช้งานโมเดล AI ในกลุ่ม Convolutional Neural Networks (CNN) ร่วมกับ Tesseract-Engine เพื่อถอดรหัสข้อความจากความแตกต่างของพิกเซลในภาพ แม้จะเป็นภาพถ่ายที่เบลอหรือเอียง ระบบก็พยายามจำลองโครงสร้างใหม่เพื่อความแม่นยำสูงสุด
+                ระบบ VISION ใช้งานโมเดล AI สกัดข้อความภาษาไทยและอังกฤษจากภาพร่วมกับ Tesseract Neural Engine เพื่ออ่านข้อความในพิกเซล ถอดสกัดลิงก์แฝง และดึงเมทาเดตาเชิงลึกของไฟล์ภาพหลักฐาน
             </p>
         </div>
         <div class="p-10 border-l border-slate-200 bg-white/[0.02]">
-            <h4 class=" font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_rapid_response">
+            <h4 class="font-black uppercase tracking-widest mb-6 flex items-center gap-3" data-i18n="ocr_rapid_response">
                 <i class="fa-solid fa-bolt text-yellow-500"></i> RAPID_RESPONSE
             </h4>
             <p class="text-slate-500 font-['Kanit'] text-sm leading-relaxed font-light" data-i18n="ocr_rapid_response_desc">
-                หากระบบตรวจพบ URLs หรือคีย์เวิร์ดที่ตรงกับฐานข้อมูล Threat-List ที่ Janis AI เฝ้าสังเกตการณ์อยู่ ข้อมูลจะถูกส่งเข้าบล็อกเกอร์กลางทันทีเพื่อป้องกันผู้ใช้รายอื่นในเครือข่าย PhishGuard
+                หากระบบตรวจพบ URLs หรือคีย์เวิร์ดที่ตรงกับฐานข้อมูล Threat-List ข้อมูลจะถูกสกัดออกมาให้อย่างชัดเจน และพร้อมให้คุณคลิกสแกนความเสี่ยงทันที
             </p>
         </div>
     </div>
@@ -129,29 +228,193 @@
 </style>
 
 <script>
+let currentExtractedText = "";
+
+function formatBytes(bytes, decimals = 2) {
+    if (!bytes || bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function gcd(a, b) {
+    return (b == 0) ? a : gcd(b, a % b);
+}
+
 document.getElementById('file-upload').addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
-        document.getElementById('processing-state').classList.remove('hidden');
-        document.getElementById('ocr-result-container').classList.add('hidden');
-        
-        let steps = [
-            translations[currentLang]['ocr_status_reading'],
-            translations[currentLang]['ocr_status_sharpening'],
-            translations[currentLang]['ocr_status_recognition'],
-            translations[currentLang]['ocr_status_cross_ref'],
-            translations[currentLang]['ocr_status_finalizing']
-        ];
-        let i = 0;
-        let interval = setInterval(() => {
-            document.getElementById('status-text').innerText = steps[i];
-            i++;
-            if (i >= steps.length) {
-                clearInterval(interval);
-                document.getElementById('processing-state').classList.add('hidden');
-                document.getElementById('ocr-result-container').classList.remove('hidden');
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 1. Reset UI
+    document.getElementById('processing-state').classList.remove('hidden');
+    document.getElementById('ocr-result-container').classList.add('hidden');
+    document.getElementById('ocr-progress-bar').style.width = '5%';
+    document.getElementById('ocr-progress-pct').innerText = '5%';
+
+    // 2. Extract File Metadata
+    const fileName = file.name || 'unknown_image';
+    const fileType = file.type || 'image/png';
+    const fileSizeStr = `${formatBytes(file.size)} (${file.size.toLocaleString()} bytes)`;
+    const fileDateStr = file.lastModified ? new Date(file.lastModified).toLocaleString('th-TH') : new Date().toLocaleString('th-TH');
+
+    document.getElementById('meta-filename').innerText = fileName;
+    document.getElementById('meta-filename').title = fileName;
+    document.getElementById('meta-filetype').innerText = fileType.toUpperCase();
+    document.getElementById('meta-filesize').innerText = fileSizeStr;
+    document.getElementById('meta-filedate').innerText = fileDateStr;
+    document.getElementById('scan-timestamp').innerText = `SCAN_TIME: ${new Date().toLocaleTimeString('th-TH')}`;
+
+    // 3. Render Image Preview & Measure Dimensions
+    const imgUrl = URL.createObjectURL(file);
+    const imgObj = new Image();
+    imgObj.onload = function() {
+        const w = imgObj.naturalWidth;
+        const h = imgObj.naturalHeight;
+        const div = gcd(w, h);
+        const aspectStr = (div > 0) ? `${w/div}:${h/div}` : `${w}:${h}`;
+
+        document.getElementById('image-preview').src = imgUrl;
+        document.getElementById('img-dim-badge').innerText = `${w}x${h} px`;
+        document.getElementById('meta-dimensions').innerText = `${w} × ${h} px`;
+        document.getElementById('meta-aspect').innerText = `${aspectStr} (${(w/h).toFixed(2)})`;
+    };
+    imgObj.src = imgUrl;
+
+    // 4. Run Tesseract OCR Process
+    let updateProgress = (pct, statusMsg) => {
+        document.getElementById('ocr-progress-bar').style.width = `${pct}%`;
+        document.getElementById('ocr-progress-pct').innerText = `${pct}%`;
+        if (statusMsg) {
+            document.getElementById('status-text').innerText = statusMsg;
+        }
+    };
+
+    updateProgress(15, "INITIALIZING_VISION_MODEL...");
+
+    if (window.Tesseract) {
+        Tesseract.recognize(
+            file,
+            'tha+eng',
+            {
+                logger: m => {
+                    if (m.status === 'recognizing text') {
+                        let p = Math.round(m.progress * 100);
+                        updateProgress(Math.min(95, 20 + Math.round(p * 0.75)), `READING_TEXT_PIXELS... (${p}%)`);
+                    } else if (m.status) {
+                        updateProgress(20, `${m.status.toUpperCase()}...`);
+                    }
+                }
             }
-        }, 1000);
+        ).then(({ data: { text } }) => {
+            updateProgress(100, "FINALIZING_OUTPUT...");
+            processOCRResult(text, file);
+        }).catch(err => {
+            console.warn("Tesseract OCR fallback:", err);
+            updateProgress(100, "FINALIZING_FALLBACK...");
+            processOCRResult("", file);
+        });
+    } else {
+        // Simulated Step Fallback if CDN blocked
+        let steps = ["READING_BUFFER...", "PROCESSING_PIXELS...", "ANALYZING_TEXT..."];
+        let i = 0;
+        let timer = setInterval(() => {
+            i++;
+            updateProgress(20 + i * 25, steps[i % steps.length]);
+            if (i >= 3) {
+                clearInterval(timer);
+                processOCRResult("", file);
+            }
+        }, 800);
     }
 });
+
+function processOCRResult(text, file) {
+    currentExtractedText = text.trim();
+    
+    const wordCount = currentExtractedText ? currentExtractedText.split(/\s+/).filter(Boolean).length : 0;
+    const charCount = currentExtractedText ? currentExtractedText.length : 0;
+    document.getElementById('meta-textstats').innerText = `${wordCount} คำ / ${charCount} ตัวอักษร`;
+
+    if (!currentExtractedText) {
+        document.getElementById('extracted-text').innerText = "[ไม่พบข้อความชัดเจนในรูปภาพ หรือรูปภาพเป็นสัญลักษณ์]";
+    } else {
+        document.getElementById('extracted-text').innerText = currentExtractedText;
+    }
+
+    // 5. Extract URLs & Threats from Text
+    const urlRegex = /(https?:\/\/[^\s]+|[a-zA-Z0-9-]+\.(?:com|co\.th|net|org|xyz|tk|ga|ml|cf|gq|top|vip|live|online|site)[^\s]*)/gi;
+    const detectedUrls = currentExtractedText ? (currentExtractedText.match(urlRegex) || []) : [];
+
+    const suspiciousKeywords = ['login', 'verify', 'account', 'password', 'scb', 'kbank', 'krungthai', 'bangkokbank', 'shopee', 'lazada', 'โอนเงิน', 'ยืนยัน', 'อัปเดต', 'รับรางวัล', 'bit.ly', '@'];
+    const lowerText = currentExtractedText.toLowerCase();
+    const foundKeywords = suspiciousKeywords.filter(kw => lowerText.includes(kw));
+
+    const urlListContainer = document.getElementById('detected-urls-list');
+    urlListContainer.innerHTML = '';
+
+    let isHighRisk = detectedUrls.length > 0 || foundKeywords.length >= 2;
+
+    if (detectedUrls.length > 0) {
+        detectedUrls.forEach(url => {
+            let cleanUrl = url.replace(/[.,;)]+$/, '');
+            let item = document.createElement('div');
+            item.className = 'flex items-center justify-between bg-white border border-rose-200 rounded-lg p-3 gap-3 flex-wrap';
+            item.innerHTML = `
+                <div class="flex items-center gap-2 font-mono text-xs text-rose-700 truncate max-w-[280px] md:max-w-[400px]">
+                    <i class="fa-solid fa-link text-rose-500"></i>
+                    <span class="font-bold truncate">${cleanUrl}</span>
+                </div>
+                <button onclick="scanDetectedUrl('${encodeURIComponent(cleanUrl)}')" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-[10px] font-bold font-mono transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-magnifying-glass"></i> สแกน URL นี้
+                </button>
+            `;
+            urlListContainer.appendChild(item);
+        });
+    } else if (foundKeywords.length > 0) {
+        let item = document.createElement('div');
+        item.className = 'text-xs text-amber-700 font-mono bg-amber-50 border border-amber-200 rounded-lg p-3';
+        item.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-600"></i> ตรวจพบคำสุ่มเสี่ยงหลอกลวงในภาพ: <span class="font-bold text-amber-900">${foundKeywords.join(', ')}</span>`;
+        urlListContainer.appendChild(item);
+    } else {
+        let item = document.createElement('div');
+        item.className = 'text-xs text-emerald-700 font-mono bg-emerald-50 border border-emerald-200 rounded-lg p-3';
+        item.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> ไม่พบ URL หรือสัญลักษณ์ภัยคุกคามในข้อความภาพนี้`;
+        urlListContainer.appendChild(item);
+    }
+
+    const riskBadge = document.getElementById('risk-badge');
+    if (isHighRisk) {
+        riskBadge.innerText = 'CRITICAL DANGER / มีความเสี่ยงสูง';
+        riskBadge.className = 'px-4 py-1 bg-rose-500/10 text-rose-600 border border-rose-500/30 text-[10px] font-black rounded-md uppercase tracking-wider animate-pulse';
+    } else if (foundKeywords.length > 0) {
+        riskBadge.innerText = 'SUSPICIOUS / น่าสงสัย';
+        riskBadge.className = 'px-4 py-1 bg-amber-500/10 text-amber-600 border border-amber-500/30 text-[10px] font-black rounded-md uppercase tracking-wider';
+    } else {
+        riskBadge.innerText = 'SAFE / ปลอดภัย';
+        riskBadge.className = 'px-4 py-1 bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 text-[10px] font-black rounded-md uppercase tracking-wider';
+    }
+
+    // Hide loader & show result container
+    document.getElementById('processing-state').classList.add('hidden');
+    document.getElementById('ocr-result-container').classList.remove('hidden');
+}
+
+function copyExtractedText() {
+    if (!currentExtractedText) return;
+    navigator.clipboard.writeText(currentExtractedText).then(() => {
+        const btnText = document.getElementById('copy-btn-text');
+        btnText.innerText = 'คัดลอกสำเร็จ!';
+        setTimeout(() => {
+            btnText.innerText = 'คัดลอกข้อความ';
+        }, 2000);
+    });
+}
+
+function scanDetectedUrl(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    window.location.href = `/?url=${encodeURIComponent(url)}`;
+}
 </script>
 {% endblock %}

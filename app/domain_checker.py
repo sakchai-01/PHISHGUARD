@@ -607,74 +607,76 @@ def quick_check(url: str) -> dict[str, Any]:
     if bad_url:
         return {
             "score": 100,
-            "reasons": [f"ตรวจพบในฐานข้อมูลเว็บอันตราย (Built-in Blacklist): {bad_url}"],
+            "reasons": [f"ตรวจพบในฐานข้อมูลเว็บอันตราย (Blacklist ความเสี่ยง 100%): {bad_url}"],
         }
 
     if _is_ip_address(host):
         score += 35
-        reasons.append(f"ใช้ IP Address โดยตรงเป็นโฮสต์ ({host})")
+        reasons.append(f"ใช้ IP Address โดยตรงเป็นโฮสต์ ({host}) (+35%)")
         if _is_private_or_reserved_ip(host):
             score += 15
-            reasons.append("IP อยู่ในช่วง private/reserved จึงไม่ควรสแกนหรือเชื่อถือจากภายนอก")
+            reasons.append("IP อยู่ในช่วง private/reserved จึงไม่ควรสแกนหรือเชื่อถือจากภายนอก (+15%)")
 
     if parsed.username or parsed.password or "@" in normalized_url.split("/", 3)[-1]:
         score += 30
-        reasons.append("พบสัญลักษณ์ @ ใน URL ซึ่งมักใช้ซ่อนโดเมนปลายทางจริง")
+        reasons.append("พบสัญลักษณ์ @ ใน URL ซึ่งมักใช้ซ่อนโดเมนปลายทางจริง (+30%)")
 
     if _has_suspicious_tld(host):
         score += 15
-        reasons.append(f"ใช้นามสกุลโดเมนที่มีความเสี่ยงสูง: {_tld(host)}")
+        reasons.append(f"ใช้นามสกุลโดเมนที่มีความเสี่ยงสูง: {_tld(host)} (+15%)")
 
     found_words = [word for word in SUSPICIOUS_WORDS if word in normalized_url]
     if found_words:
-        score += min(30, len(found_words) * 10)
-        reasons.append(f"พบคำที่มักใช้ในเว็บหลอกลวง: {', '.join(sorted(found_words)[:5])}")
+        w_score = min(30, len(found_words) * 10)
+        score += w_score
+        reasons.append(f"พบคำที่มักใช้ในเว็บหลอกลวง: {', '.join(sorted(found_words)[:5])} (+{w_score}%)")
 
     path_hits = [indicator for indicator in PHISHING_PATH_INDICATORS if _path_has_indicator(path, indicator)]
     if path_hits:
-        score += min(30, len(path_hits) * 12)
-        reasons.append(f"พบ path ที่น่าสงสัย: {', '.join(sorted(path_hits)[:4])}")
+        p_score = min(30, len(path_hits) * 12)
+        score += p_score
+        reasons.append(f"พบ path ที่น่าสงสัย: {', '.join(sorted(path_hits)[:4])} (+{p_score}%)")
 
     if any(path.endswith(ext) for ext in MALICIOUS_EXTENSIONS):
         score += 20
-        reasons.append("ลิงก์ชี้ไปยังไฟล์ที่อาจเป็นอันตราย")
+        reasons.append("ลิงก์ชี้ไปยังไฟล์ที่อาจเป็นอันตราย (+20%)")
 
     if "xn--" in host:
         score += 25
-        reasons.append("พบโดเมน Punycode ซึ่งอาจใช้ปลอมแปลงตัวอักษร")
+        reasons.append("พบโดเมน Punycode ซึ่งอาจใช้ปลอมแปลงตัวอักษร (+25%)")
 
     main_label = _main_label(host)
     entropy = calculate_entropy(main_label)
     if len(main_label) >= 6 and entropy > 3.8:
         score += 20
-        reasons.append(f"ชื่อโดเมนมีความสุ่มสูงผิดปกติ (Entropy: {entropy:.2f})")
+        reasons.append(f"ชื่อโดเมนมีความสุ่มสูงผิดปกติ (Entropy: {entropy:.2f}) (+20%)")
 
     digit_count = sum(char.isdigit() for char in host)
     if digit_count > 3:
         score += 10
-        reasons.append("ชื่อโดเมนมีตัวเลขปนอยู่มากผิดปกติ")
+        reasons.append("ชื่อโดเมนมีตัวเลขปนอยู่มากผิดปกติ (+10%)")
 
     if "-" in registered_domain and not _is_trusted_host(host):
         score += 5
-        reasons.append("มีเครื่องหมาย - ในชื่อโดเมน")
+        reasons.append("มีเครื่องหมาย - ในชื่อโดเมน (+5%)")
 
     host_labels = host.split(".") if host else []
     if len(host_labels) >= 4 and not _is_trusted_host(host):
         score += 10
-        reasons.append("มีชั้น subdomain หลายระดับผิดปกติ")
+        reasons.append("มีชั้น subdomain หลายระดับผิดปกติ (+10%)")
 
     if registered_domain in SHORTENER_DOMAINS:
         score += 25
-        reasons.append("ใช้บริการย่อลิงก์ ทำให้ตรวจปลายทางจริงได้ยาก")
+        reasons.append("ใช้บริการย่อลิงก์ ทำให้ตรวจปลายทางจริงได้ยาก (+25%)")
 
     brand_reason = _brand_impersonation_reason(normalized_url, host)
     if brand_reason:
         score += 25
-        reasons.append(brand_reason)
+        reasons.append(f"{brand_reason} (+25%)")
 
     if has_explicit_scheme and parsed.scheme == "http":
         score += 5
-        reasons.append("ไม่มีการเข้ารหัสการเชื่อมต่อ (HTTP)")
+        reasons.append("ไม่มีการเข้ารหัสการเชื่อมต่อ (HTTP) (+5%)")
 
     if _is_trusted_host(host) and score <= 15:
         score = max(0, score - 10)

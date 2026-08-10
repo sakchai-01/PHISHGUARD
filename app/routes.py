@@ -3,7 +3,7 @@ import json
 import base64
 import asyncio
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, Request, Form, Response, Depends, status
+from fastapi import APIRouter, Request, Form, Response, Depends, status, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from urllib.parse import urlparse
@@ -16,7 +16,7 @@ from app.core.database import (
     delete_report
 )
 from app.domain_checker import analyze_domain
-from app.brain import get_ai_response, extract_json
+from app.brain import get_ai_response, extract_json, analyze_image_vision
 import json
 import base64
 
@@ -116,6 +116,21 @@ async def check_url(request: Request):
                 analysis["details"].append(bl_msg)
 
     return analysis
+
+@router.post("/api/ocr")
+async def api_ocr(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        mime_type = file.content_type or "image/png"
+        text = await asyncio.to_thread(analyze_image_vision, content, mime_type)
+        return JSONResponse({
+            "success": True,
+            "text": text or "",
+            "filename": file.filename
+        })
+    except Exception as e:
+        print(f"OCR Endpoint error: {e}")
+        return JSONResponse({"success": False, "error": str(e), "text": ""})
 
 @router.post("/scan")
 async def scan_url(request: Request):

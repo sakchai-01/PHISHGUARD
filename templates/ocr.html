@@ -711,7 +711,9 @@ function performDualOCRRecognition(file) {
                 // If Vision AI detected AI generation markers, update AI status card immediately
                 if (data.is_ai) {
                     document.getElementById('meta-ai-status').innerText = "🚨 ตรวจพบสัญญาณภาพสังเคราะห์จาก AI";
-                    document.getElementById('meta-ai-sub').innerText = data.ai_reason || "Gemini Vision พบลักษณะเฉพาะของภาพ AI";
+                    document.getElementById('meta-ai-sub').innerText = data.ai_reason || "Gemini Vision พบลักษณะเฉพาะของการสร้างภาพด้วยโมเดล AI";
+                } else if (data.ai_reason && data.ai_reason.trim().length > 0) {
+                    document.getElementById('meta-ai-sub').innerText = data.ai_reason;
                 }
 
                 if (data.text && data.text.trim().length > 0) {

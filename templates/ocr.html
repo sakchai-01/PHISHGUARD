@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
-
 {% block title %}Vision | Omni-Channel OCR & Bank QR Forensic Intelligence{% endblock %}
-
 {% block content %}
 <!-- Essential Forensic Libraries: ExifReader, jsQR, Tesseract.js & Leaflet.js Map -->
 <script src="https://cdn.jsdelivr.net/npm/exifreader@4/dist/exif-reader.min.js"></script>
@@ -9,7 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative font-['Kanit'] text-slate-900">
     <!-- Header Section -->
     <div class="text-center mb-16 animate__animated animate__fadeIn">
@@ -23,7 +20,6 @@
             สกัดข้อความจากภาพถ่าย/สลิป ตรวจสอบ QR Code ธนาคาร (ธนาคารอะไร/ผู้รับเงินเป็นใคร) ตรวจยี่ห้อกล้อง และวิเคราะห์ภาพ AI
         </p>
     </div>
-
     <!-- Upload Zone: High-Tech Array -->
     <div class="relative group max-w-4xl mx-auto animate__animated animate__fadeInUp">
         <div class="absolute -inset-2 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-[3rem] blur-xl opacity-10 group-hover:opacity-30 transition duration-1000"></div>
@@ -35,7 +31,6 @@
                 </div>
                 <h3 class="text-xl md:text-2xl font-black uppercase tracking-widest mb-4 font-['Orbitron'] text-slate-950" data-i18n="ocr_init_upload">INITIALIZE_UPLOAD</h3>
                 <p class="text-slate-800 text-xs font-black uppercase tracking-wider mb-8 border-t-2 border-b-2 border-slate-300 py-3 inline-block" data-i18n="ocr_max_payload">MAX_PAYLOAD: 10MB // FORMATS: JPG, PNG, WEBP, GIF, HEIC</p>
-
                 <form action="#" method="POST" enctype="multipart/form-data" id="ocr-form" onsubmit="return false;">
                     <input type="file" id="file-upload" class="hidden" accept="image/*">
                     <div class="cyber-btn px-6 py-4 md:px-12 md:py-5 text-sm font-black tracking-widest inline-block mobile-full shadow-lg">
@@ -43,14 +38,12 @@
                     </div>
                 </form>
             </div>
-
             <!-- Animated Scan Line -->
             <div id="scan-line" class="absolute left-0 right-0 h-[2px] bg-cyan-600 shadow-[0_0_30px_#0284c7] opacity-0 group-hover:opacity-100 pointer-events-none"></div>
         </div>
     </div>
-
     <!-- Active Upload Preview Card (Displays IMMEDIATELY Upon File Selection) -->
-    <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto" style="display: none;">
+    <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
         <div class="cyber-card p-6 md:p-8 bg-white text-slate-950 rounded-2xl shadow-xl border-2 border-slate-950">
             <div class="flex items-center justify-between border-b-2 border-slate-950 pb-4 mb-6">
                 <div class="flex items-center gap-3">
@@ -59,7 +52,6 @@
                 </div>
                 <span id="preview-file-size" class="text-xs font-mono font-black text-slate-950">0 KB</span>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                 <div class="md:col-span-6 flex justify-center bg-slate-50 p-4 rounded-xl border-2 border-slate-950 shadow-sm">
                     <img id="instant-image-preview" src="" alt="Uploaded Evidence" class="max-h-[360px] w-auto object-contain rounded-lg shadow-md border-2 border-slate-950">
@@ -83,7 +75,6 @@
                             <span id="preview-filedate" class="text-slate-950 font-black">-</span>
                         </div>
                     </div>
-
                     <div id="quick-ocr-status" class="bg-white border-2 border-slate-950 p-4 rounded-xl flex items-center gap-4 shadow-sm">
                         <div class="w-6 h-6 border-3 border-green-600 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
                         <span id="quick-status-text" class="text-slate-950 text-xs font-black font-mono">กำลังประมวลผลข้อความ, QR Code และวิเคราะห์ข้อมูล...</span>
@@ -92,9 +83,8 @@
             </div>
         </div>
     </div>
-
     <!-- Processing State Progress Bar -->
-    <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto" style="display: none;">
+    <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
         <div class="cyber-card p-6 bg-white border-2 border-cyan-600 shadow-xl rounded-xl">
             <div class="flex items-center gap-6">
                 <div class="w-12 h-12 rounded-full border-4 border-cyan-200 border-t-cyan-700 animate-spin flex-shrink-0"></div>
@@ -111,12 +101,10 @@
             </div>
         </div>
     </div>
-
     <!-- Hidden Canvas for Image Processing & QR Decoding -->
     <canvas id="hidden-ocr-canvas" class="hidden"></canvas>
-
     <!-- Result Terminal: Forensic Intelligence Interface -->
-    <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container" style="display: none;">
+    <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
         <div class="cyber-card overflow-hidden border-2 border-slate-950 bg-white shadow-2xl rounded-2xl">
             <!-- Terminal Header -->
             <div class="bg-slate-100 px-8 py-4 border-b-2 border-slate-950 flex items-center justify-between text-slate-950">
@@ -127,7 +115,6 @@
                 </div>
                 <span class="text-xs font-black text-slate-950 uppercase tracking-[0.3em] italic font-mono">IMAGE_FORENSIC_INTELLIGENCE</span>
             </div>
-
             <div class="p-8 md:p-12 space-y-10">
                 <!-- Status Banner -->
                 <div class="flex items-center justify-between border-b-2 border-slate-200 pb-6 flex-wrap gap-4">
@@ -137,50 +124,37 @@
                     </div>
                     <span id="scan-timestamp" class="text-slate-800 font-mono text-xs font-black"></span>
                 </div>
-
-                <!-- SECTION 1: DYNAMIC MULTI-TYPE QR CODE FORENSICS (สแกน QR Code ทุกประเภท: ธนาคาร / URL / Wi-Fi / vCard / ข้อความ) -->
-                <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6" style="display: none;">
+                <!-- SECTION 1: BANK QR CODE & PROMPTPAY FORENSICS (ถ้าเป็นภาพสลิป/QR โอนเงิน) -->
+                <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
-                            <i id="qr-type-icon" class="fa-solid fa-qrcode text-xl text-green-600"></i> <span id="qr-card-title-text">ผลการวิเคราะห์ QR CODE (QR_CODE_ANALYSIS)</span>
+                            <i class="fa-solid fa-qrcode text-xl text-green-600"></i> ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_QR_ANALYSIS)
                         </h4>
                         <span id="bank-qr-status-badge" class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
-                            QR_CODE_DETECTED
+                            VERIFIED_PAYMENT_QR
                         </span>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
                         <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
-                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
-                                <span id="qr-field1-label" class="text-slate-700 font-bold">🏦 สถาบันการเงิน / ประเภท:</span>
-                                <span id="bank-name-val" class="text-slate-950 font-black text-sm md:text-base text-right truncate max-w-[220px]">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">🏦 สถาบันการเงิน / ธนาคาร:</span>
+                                <span id="bank-name-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
-                                <span id="qr-field2-label" class="text-slate-700 font-bold">👤 บัญชีผู้รับเงิน / เป้าหมาย:</span>
-                                <span id="bank-target-val" class="text-green-700 font-black text-sm md:text-base truncate max-w-[200px] text-right">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">👤 บัญชีผู้รับเงิน / พร้อมเพย์:</span>
+                                <span id="bank-target-val" class="text-green-700 font-black text-sm md:text-base truncate max-w-[200px]">-</span>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span id="qr-field3-label" class="text-slate-700 font-bold">ประเภทบัญชี/ID:</span>
-                                <span id="bank-target-type-val" class="text-slate-950 font-black text-xs text-right">-</span>
+                            <div class="flex justify-between">
+                                <span class="text-slate-700 font-bold">ประเภทบัญชี/ID:</span>
+                                <span id="bank-target-type-val" class="text-slate-950 font-black text-xs">-</span>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
-                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
-                                <span id="qr-field4-label" class="text-slate-700 font-bold">💰 จำนวนเงิน (Amount):</span>
-                                <span id="bank-amount-val" class="text-slate-950 font-black text-sm md:text-base text-right">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">💰 จำนวนเงิน (Amount):</span>
+                                <span id="bank-amount-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
-                                <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
-                                <span id="bank-verify-status" class="text-green-700 font-black">ถอดรหัสโครงสร้าง QR Code สำเร็จ</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-slate-700 font-bold">ข้อมูล Raw Payload:</span>
-                                <span id="bank-raw-payload" class="text-slate-600 font-mono truncate max-w-[180px]" title="">-</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>-between border-b border-slate-300 pb-3">
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
                                 <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
                                 <span id="bank-verify-status" class="text-green-700 font-black">QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT</span>
                             </div>
@@ -191,13 +165,11 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- SECTION 2: Forensic Image Analysis (กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
                 <div class="space-y-4">
                     <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
                         <i class="fa-solid fa-microscope text-green-600 text-base"></i> ผลการวิเคราะห์ที่มาของภาพ (FORENSIC_ORIGIN_ANALYSIS)
                     </h4>
-
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Card 1: Camera Device / Phone Model -->
                         <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
@@ -207,7 +179,6 @@
                             <p id="meta-device" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
                             <p id="meta-device-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
                         </div>
-
                         <!-- Card 2: Software / Editing App -->
                         <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
                             <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
@@ -216,7 +187,6 @@
                             <p id="meta-software" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
                             <p id="meta-software-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
                         </div>
-
                         <!-- Card 3: AI Image Generator Detection -->
                         <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
                             <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
@@ -227,9 +197,8 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
-                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6" style="display: none;">
+                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
                             <i class="fa-solid fa-location-dot text-xl text-green-600 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
@@ -243,7 +212,6 @@
                             </a>
                         </div>
                     </div>
-
                     <!-- Leaflet Map Container -->
                     <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-950 shadow-inner z-10">
                         <div id="leaflet-map" class="w-full h-full"></div>
@@ -255,7 +223,6 @@
                         <span id="gps-altitude-val" class="text-slate-600">ความสูง: -</span>
                     </div>
                 </div>
-
                 <!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-950 pb-2">
@@ -270,12 +237,10 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="relative bg-white rounded-2xl p-6 border-2 border-slate-950 font-mono shadow-md">
                         <textarea id="extracted-text-box" readonly class="w-full h-52 bg-slate-50 text-slate-950 p-4 rounded-xl font-mono text-sm md:text-base resize-y outline-none leading-relaxed border-2 border-slate-950 focus:border-green-600 font-black tracking-wide" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
                     </div>
                 </div>
-
                 <!-- SECTION 4: Extracted URLs & Threat Intel -->
                 <div id="threat-section" class="bg-rose-100 border-2 border-rose-400 rounded-2xl p-6 space-y-4 font-mono text-xs shadow-md">
                     <div class="flex justify-between items-center flex-wrap gap-3">
@@ -286,12 +251,10 @@
                             ANALYZING
                         </div>
                     </div>
-
                     <div id="detected-urls-list" class="space-y-3">
                         <!-- Populated by JS -->
                     </div>
                 </div>
-
                 <!-- Footer Actions -->
                 <div class="pt-6 border-t-2 border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                     <button onclick="document.getElementById('file-upload').click()" class="text-slate-900 hover:text-cyan-800 text-xs font-mono font-black flex items-center gap-2 transition-all">
@@ -304,10 +267,9 @@
             </div>
         </div>
     </div>
-
-    <!-- Tech Intel: UX Clarification (Hidden until image uploaded) -->
-    <div id="tech-intel-section" class="mt-32 hidden animate__animated animate__fadeIn grid grid-cols-1 md:grid-cols-2 gap-12" style="display: none;">
-        <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-xl rounded-r-2xl border-2 border-slate-950 border-l-cyan-600">
+    <!-- Tech Intel: UX Clarification -->
+    <div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-xl rounded-r-2xl">
             <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-950 text-base">
                 <i class="fa-solid fa-circle-info text-cyan-600 text-lg"></i> หลักการทำงานของเอ็นจิ้น
             </h4>
@@ -315,7 +277,7 @@
                 ระบบสกัดข้อความ Vision Neural Core ทำงานร่วมกับ jsQR Decoder เพื่ออ่าน QR Code ธนาคาร/พร้อมเพย์ ถอดรหัสชื่อผู้รับเงิน/สถาบันการเงิน พร้อมตรวจสอบ EXIF Hardware Data จากเซนเซอร์กล้องและสัญญาณภาพสังเคราะห์ AI
             </p>
         </div>
-        <div class="p-10 border-l-4 border-amber-500 bg-white shadow-xl rounded-r-2xl border-2 border-slate-950 border-l-amber-500">
+        <div class="p-10 border-l-4 border-amber-500 bg-white shadow-xl rounded-r-2xl">
             <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-950 text-base">
                 <i class="fa-solid fa-bolt text-amber-600 text-lg"></i> การตอบสนองภัยคุกคาม
             </h4>
@@ -325,7 +287,6 @@
         </div>
     </div>
 </div>
-
 <style>
 @keyframes ocrScan {
     0% { top: 0; opacity: 0; }
@@ -337,10 +298,8 @@
     animation: ocrScan 2.5s linear infinite;
 }
 </style>
-
 <script>
 let currentExtractedText = "";
-
 function formatBytes(bytes, decimals = 2) {
     if (!bytes || bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -349,42 +308,29 @@ function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
-
 // Global File Input Change Listener
 document.getElementById('file-upload').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
-
     // 1. Instantly Display Preview Card & Hide Result Terminal
-    document.getElementById('active-preview-card').style.display = 'block';
     document.getElementById('active-preview-card').classList.remove('hidden');
-    document.getElementById('processing-state').style.display = 'block';
     document.getElementById('processing-state').classList.remove('hidden');
-    document.getElementById('tech-intel-section').style.display = 'grid';
-    document.getElementById('tech-intel-section').classList.remove('hidden');
-    document.getElementById('ocr-result-container').style.display = 'none';
     document.getElementById('ocr-result-container').classList.add('hidden');
-    document.getElementById('bank-qr-card').style.display = 'none';
     document.getElementById('bank-qr-card').classList.add('hidden');
-    document.getElementById('gps-location-card').style.display = 'none';
     document.getElementById('gps-location-card').classList.add('hidden');
-
     document.getElementById('ocr-progress-bar').style.width = '15%';
     document.getElementById('ocr-progress-pct').innerText = '15%';
-
     // 2. Read File Info & Display Preview Image IMMEDIATELY via FileReader Data URL
     document.getElementById('preview-filename').innerText = file.name;
     document.getElementById('preview-filename').title = file.name;
     document.getElementById('preview-filetype').innerText = (file.type || 'IMAGE/UNKNOWN').toUpperCase();
     document.getElementById('preview-file-size').innerText = formatBytes(file.size);
     document.getElementById('preview-filedate').innerText = file.lastModified ? new Date(file.lastModified).toLocaleString('th-TH') : new Date().toLocaleString('th-TH');
-
     const reader = new FileReader();
     reader.onload = function(evt) {
         const dataUrl = evt.target.result;
         const imgObj = document.getElementById('instant-image-preview');
         imgObj.src = dataUrl;
-
         // Measure natural dimensions and decode QR code from Canvas
         const tempImg = new Image();
         tempImg.onload = function() {
@@ -396,217 +342,100 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
         tempImg.src = dataUrl;
     };
     reader.readAsDataURL(file);
-
     // 3. Perform Forensic EXIF & Metadata Analysis (Camera Phone, Edit Software, AI)
     analyzeImageForensics(file);
-
     // 4. Perform Dual-Engine OCR Recognition
     performDualOCRRecognition(file);
 });
-
 // QR Code & Bank PromptPay Decoder via jsQR
 function scanCanvasForQRCode(imgElement) {
     if (typeof jsQR === 'undefined') return;
-
     const canvas = document.getElementById('hidden-ocr-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = imgElement.naturalWidth;
     canvas.height = imgElement.naturalHeight;
     ctx.drawImage(imgElement, 0, 0);
-
     try {
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const code = jsQR(imageData.data, imageData.width, imageData.height, {
             inversionAttempts: "dontInvert",
         });
-
         if (code && code.data) {
             console.log("QR Code Payload detected:", code.data);
-            const qrData = parseQRCodePayload(code.data);
-            if (qrData) {
-                renderQRCodeCard(qrData);
+            const bankData = parsePromptPayPayload(code.data);
+            if (bankData) {
+                renderBankQRCard(bankData);
             }
         }
     } catch (err) {
         console.log("QR Scan info:", err);
     }
 }
-
-// Universal Multi-Type QR Code Forensic Parser (Bank, Website URL, Wi-Fi, vCard, General Text)
-function parseQRCodePayload(payload) {
+// Parse Thai PromptPay EMVCo Standard Payload
+function parsePromptPayPayload(payload) {
     if (!payload) return null;
     
-    let pTrim = payload.trim();
-    let pLower = pTrim.toLowerCase();
-
-    let qrInfo = {
-        type: "TEXT_GENERAL",
-        type_title: "ผลการวิเคราะห์ QR CODE ข้อความทั่วไป (GENERAL_TEXT_QR)",
-        type_badge: "TEXT_QR_CODE",
-        icon_class: "fa-solid fa-font text-xl text-green-600",
-        field1_label: "ประเภทข้อมูล:",
-        field1_val: "ข้อความทั่วไป / รหัสซีเรียล",
-        field2_label: "ความยาวข้อความ:",
-        field2_val: `${pTrim.length} ตัวอักษร`,
-        field3_label: "รูปแบบ Encoding:",
-        field3_val: "UTF-8 Plaintext",
-        field4_label: "เนื้อหาใน QR:",
-        field4_val: pTrim.length > 25 ? pTrim.substring(0, 25) + "..." : pTrim,
-        field5_val: "ถอดรหัสข้อความใน QR Code สำเร็จ",
-        raw_payload: pTrim
+    let bankInfo = {
+        is_qr: true,
+        bank: "Thai QR Payment / พร้อมเพย์",
+        target_id: "ผู้รับเงินตามระบบพร้อมเพย์",
+        target_type: "พร้อมเพย์ (PromptPay)",
+        amount: "ผู้จ่ายระบุจำนวนเงิน",
+        raw_payload: payload
     };
-
-    // 1. BANK / PROMPTPAY PAYMENT QR
-    if (pTrim.includes("A000000677010111") || pTrim.includes("A000000677010112") || pTrim.startsWith("000201")) {
-        qrInfo.type = "BANK_PAYMENT";
-        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_PAYMENT_QR)";
-        qrInfo.type_badge = "PAYMENT_QR_VERIFIED";
-        qrInfo.icon_class = "fa-solid fa-money-bill-transfer text-xl text-green-600";
-        qrInfo.field1_label = "🏦 สถาบันการเงิน / ธนาคาร:";
-        qrInfo.field1_val = "พร้อมเพย์ / Thai QR Payment";
-        qrInfo.field2_label = "👤 บัญชีผู้รับเงิน / พร้อมเพย์:";
-        qrInfo.field2_val = "ผู้รับเงินตามระบบพร้อมเพย์";
-        qrInfo.field3_label = "ประเภทบัญชี/ID:";
-        qrInfo.field3_val = "พร้อมเพย์ (PromptPay)";
-        qrInfo.field4_label = "💰 จำนวนเงิน (Amount):";
-        qrInfo.field4_val = "ผู้จ่ายระบุจำนวนเงิน";
-        qrInfo.field5_val = "QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT (EMVCo)";
-
-        // Check specific Thai Banks
-        if (pLower.includes("scb") || pTrim.includes("000414")) qrInfo.field1_val = "SCB (ธนาคารไทยพาณิชย์)";
-        else if (pLower.includes("kbank") || pTrim.includes("000004")) qrInfo.field1_val = "KBank (ธนาคารกสิกรไทย)";
-        else if (pLower.includes("ktb") || pTrim.includes("000006")) qrInfo.field1_val = "KTB (ธนาคารกรุงไทย)";
-        else if (pLower.includes("bbl") || pTrim.includes("000002")) qrInfo.field1_val = "BBL (ธนาคารกรุงเทพ)";
-        else if (pLower.includes("bay") || pTrim.includes("000025")) qrInfo.field1_val = "BAY (ธนาคารกรุงศรีอยุธยา)";
-        else if (pLower.includes("ttb") || pTrim.includes("000011")) qrInfo.field1_val = "TTB (ธนาคารทหารไทยธนชาต)";
-        else if (pLower.includes("gsb") || pTrim.includes("000030")) qrInfo.field1_val = "GSB (ธนาคารออมสิน)";
-
-        // Mobile PromptPay
-        let mobileMatch = pTrim.match(/01130066(\d{9})/);
-        if (mobileMatch) {
-            let rawNum = "0" + mobileMatch[1];
-            qrInfo.field2_val = rawNum.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-            qrInfo.field3_val = "หมายเลขโทรศัพท์พร้อมเพย์";
-        }
-
-        // Tax ID PromptPay
-        let taxMatch = pTrim.match(/0213(\d{13})/);
-        if (taxMatch) {
-            qrInfo.field2_val = taxMatch[1].replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-            qrInfo.field3_val = "เลขประจำตัวผู้เสียภาษี/บัตรประชาชน";
-        }
-
-        // Amount Tag 54
-        let amountMatch = pTrim.match(/54(\d{2})(\d+\.\d{2}|\d+)/);
-        if (amountMatch) {
-            let len = parseInt(amountMatch[1]);
-            let amtStr = amountMatch[2].substring(0, len);
-            qrInfo.field4_val = parseFloat(amtStr).toLocaleString('th-TH', { minimumFractionDigits: 2 }) + " บาท";
-        }
-
-        return qrInfo;
+    let pLower = payload.toLowerCase();
+    
+    // Check specific Thai Banks
+    if (payload.includes("A000000677010111") || payload.includes("A000000677010112")) {
+        bankInfo.bank = "พร้อมเพย์ / Thai QR Payment (ทุกธนาคาร)";
     }
-
-    // 2. URL / WEBSITE / SOCIAL MEDIA QR CODE
-    if (pLower.startsWith("http://") || pLower.startsWith("https://") || pLower.startsWith("line://") || pLower.startsWith("wa.me/")) {
-        qrInfo.type = "URL_WEBSITE";
-        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ลิงก์เว็บไซต์ / โซเชียล (WEBSITE_URL_QR)";
-        qrInfo.type_badge = "URL_QR_DETECTED";
-        qrInfo.icon_class = "fa-solid fa-link text-xl text-green-600";
-        qrInfo.field1_label = "🌐 ประเภท QR Code:";
-        qrInfo.field1_val = "เว็บไซต์ / ลิงก์ URL";
-        qrInfo.field2_label = "🔗 ที่อยู่ปลายทาง (Target URL):";
-        qrInfo.field2_val = pTrim;
-        
-        try {
-            let urlObj = new URL(pTrim.startsWith("http") ? pTrim : "https://" + pTrim);
-            qrInfo.field3_label = "🔒 โดเมนหลัก (Domain):";
-            qrInfo.field3_val = urlObj.hostname;
-        } catch (e) {
-            qrInfo.field3_label = "ชนิดลิงก์:";
-            qrInfo.field3_val = "Web Application Link";
-        }
-
-        qrInfo.field4_label = "🚀 ทางลัดเปิดลิงก์:";
-        qrInfo.field4_val = `<a href="${pTrim}" target="_blank" rel="noopener noreferrer" class="cyber-btn px-4 py-1.5 text-xs font-mono inline-block shadow-sm">เปิดลิงก์ในแท็บใหม่ 🔗</a>`;
-        qrInfo.field5_val = "ตรวจพบลิงก์ URL ใน QR Code";
-        return qrInfo;
+    
+    if (pLower.includes("scb") || payload.includes("000414")) {
+        bankInfo.bank = "SCB (ธนาคารไทยพาณิชย์)";
+    } else if (pLower.includes("kbank") || payload.includes("000004")) {
+        bankInfo.bank = "KBank (ธนาคารกสิกรไทย)";
+    } else if (pLower.includes("ktb") || payload.includes("000006")) {
+        bankInfo.bank = "KTB (ธนาคารกรุงไทย)";
+    } else if (pLower.includes("bbl") || payload.includes("000002")) {
+        bankInfo.bank = "BBL (ธนาคารกรุงเทพ)";
+    } else if (pLower.includes("bay") || payload.includes("000025")) {
+        bankInfo.bank = "BAY (ธนาคารกรุงศรีอยุธยา)";
+    } else if (pLower.includes("ttb") || payload.includes("000011")) {
+        bankInfo.bank = "TTB (ธนาคารทหารไทยธนชาต)";
+    } else if (pLower.includes("gsb") || payload.includes("000030")) {
+        bankInfo.bank = "GSB (ธนาคารออมสิน)";
     }
-
-    // 3. WIFI NETWORK CONNECT QR CODE
-    if (pLower.startsWith("wifi:")) {
-        qrInfo.type = "WIFI_NETWORK";
-        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE เชื่อมต่อ Wi-Fi (WIFI_NETWORK_QR)";
-        qrInfo.type_badge = "WIFI_QR_DETECTED";
-        qrInfo.icon_class = "fa-solid fa-wifi text-xl text-green-600";
-        
-        let ssidMatch = pTrim.match(/S:([^;]+)/i);
-        let passMatch = pTrim.match(/P:([^;]+)/i);
-        let typeMatch = pTrim.match(/T:([^;]+)/i);
-
-        qrInfo.field1_label = "📶 ชื่อเครือข่าย Wi-Fi (SSID):";
-        qrInfo.field1_val = ssidMatch ? ssidMatch[1] : "ไม่ระบุชื่อ";
-        qrInfo.field2_label = "🔑 รหัสผ่าน (Password):";
-        qrInfo.field2_val = passMatch ? passMatch[1] : "ไม่มีรหัสผ่าน (Open Network)";
-        qrInfo.field3_label = "🛡️ ระบบเข้ารหัส:";
-        qrInfo.field3_val = typeMatch ? typeMatch[1].toUpperCase() : "WPA/WPA2";
-        qrInfo.field4_label = "สถานะการเชื่อมต่อ:";
-        qrInfo.field4_val = "พร้อมสแกนเชื่อมต่อ Wi-Fi";
-        qrInfo.field5_val = "โครงสร้าง Wi-Fi QR Code ถูกต้อง";
-        return qrInfo;
+    // Parse Mobile Number (Tag 01130066...)
+    let mobileMatch = payload.match(/01130066(\d{9})/);
+    if (mobileMatch) {
+        let rawNum = "0" + mobileMatch[1];
+        bankInfo.target_id = rawNum.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+        bankInfo.target_type = "หมายเลขโทรศัพท์พร้อมเพย์ (Mobile PromptPay)";
     }
-
-    // 4. VCARD / CONTACT QR CODE
-    if (pLower.includes("begin:vcard") || pLower.startsWith("mecard:")) {
-        qrInfo.type = "VCARD_CONTACT";
-        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ข้อมูลติดต่อบุคคล (CONTACT_VCARD_QR)";
-        qrInfo.type_badge = "VCARD_QR_DETECTED";
-        qrInfo.icon_class = "fa-solid fa-address-card text-xl text-green-600";
-        
-        let fnMatch = pTrim.match(/(?:FN|N):([^\r\n;]+)/i);
-        let telMatch = pTrim.match(/TEL[^\:]*:([^\r\n;]+)/i);
-        let emailMatch = pTrim.match(/EMAIL[^\:]*:([^\r\n;]+)/i);
-
-        qrInfo.field1_label = "👤 ชื่อผู้ติดต่อ:";
-        qrInfo.field1_val = fnMatch ? fnMatch[1].trim() : "ไม่ระบุชื่อ";
-        qrInfo.field2_label = "📞 หมายเลขโทรศัพท์:";
-        qrInfo.field2_val = telMatch ? telMatch[1].trim() : "-";
-        qrInfo.field3_label = "✉️ อีเมล:";
-        qrInfo.field3_val = emailMatch ? emailMatch[1].trim() : "-";
-        qrInfo.field4_label = "ประเภทการ์ด:";
-        qrInfo.field4_val = "vCard Contact Profile";
-        qrInfo.field5_val = "ข้อมูลผู้ติดต่อ vCard ครบถ้วน";
-        return qrInfo;
+    // Parse National ID / Tax ID (Tag 0213...)
+    let taxMatch = payload.match(/0213(\d{13})/);
+    if (taxMatch) {
+        bankInfo.target_id = taxMatch[1].replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+        bankInfo.target_type = "เลขประจำตัวผู้เสียภาษี/บัตรประชาชน (National ID / Tax ID)";
     }
-
-    return qrInfo;
+    // Parse Tag 54 (Amount)
+    let amountMatch = payload.match(/54(\d{2})(\d+\.\d{2}|\d+)/);
+    if (amountMatch) {
+        let len = parseInt(amountMatch[1]);
+        let amtStr = amountMatch[2].substring(0, len);
+        bankInfo.amount = parseFloat(amtStr).toLocaleString('th-TH', { minimumFractionDigits: 2 }) + " บาท";
+    }
+    return bankInfo;
 }
-
-function renderQRCodeCard(q) {
-    document.getElementById('qr-type-icon').className = q.icon_class;
-    document.getElementById('qr-card-title-text').innerText = q.type_title;
-    document.getElementById('bank-qr-status-badge').innerText = q.type_badge;
-
-    document.getElementById('qr-field1-label').innerText = q.field1_label;
-    document.getElementById('bank-name-val').innerHTML = q.field1_val;
-
-    document.getElementById('qr-field2-label').innerText = q.field2_label;
-    document.getElementById('bank-target-val').innerHTML = q.field2_val;
-
-    document.getElementById('qr-field3-label').innerText = q.field3_label;
-    document.getElementById('bank-target-type-val').innerHTML = q.field3_val;
-
-    document.getElementById('qr-field4-label').innerText = q.field4_label;
-    document.getElementById('bank-amount-val').innerHTML = q.field4_val;
-
-    document.getElementById('bank-verify-status').innerText = q.field5_val;
-    document.getElementById('bank-raw-payload').innerText = q.raw_payload;
-    document.getElementById('bank-raw-payload').title = q.raw_payload;
-
-    document.getElementById('bank-qr-card').style.display = 'block';
+function renderBankQRCard(b) {
+    document.getElementById('bank-name-val').innerText = b.bank;
+    document.getElementById('bank-target-val').innerText = b.target_id || "ผู้จ่ายระบุตัวตน";
+    document.getElementById('bank-target-type-val').innerText = b.target_type;
+    document.getElementById('bank-amount-val').innerText = b.amount || "ผู้จ่ายระบุจำนวนเงิน";
+    document.getElementById('bank-raw-payload').innerText = b.raw_payload;
+    document.getElementById('bank-raw-payload').title = b.raw_payload;
     document.getElementById('bank-qr-card').classList.remove('hidden');
 }
-
 // Forensic Analysis: EXIF Data, Camera Model, Editing App & AI Detection
 function analyzeImageForensics(file) {
     if (typeof ExifReader === 'undefined') {
@@ -615,7 +444,6 @@ function analyzeImageForensics(file) {
         document.getElementById('meta-ai-status').innerText = "ไม่พบข้อมูลสถิติ AI";
         return;
     }
-
     ExifReader.load(file).then(tags => {
         // Camera Make & Model
         let make = tags['Make'] ? tags['Make'].description : null;
@@ -633,12 +461,10 @@ function analyzeImageForensics(file) {
         }
         document.getElementById('meta-device').innerText = deviceName;
         document.getElementById('meta-device-sub').innerText = deviceSub;
-
         // Editing Software / App
         let software = tags['Software'] ? tags['Software'].description : null;
         if (!software && tags['ProcessingSoftware']) software = tags['ProcessingSoftware'].description;
         if (!software && tags['HostComputer']) software = tags['HostComputer'].description;
-
         let softwareName = "-";
         let softwareSub = "ซอฟต์แวร์แต่งภาพ";
         if (software) {
@@ -650,12 +476,10 @@ function analyzeImageForensics(file) {
         }
         document.getElementById('meta-software').innerText = softwareName;
         document.getElementById('meta-software-sub').innerText = softwareSub;
-
         // AI Generated Image Analysis
         let isAi = false;
         let aiReason = "";
         const aiSignatures = ['midjourney', 'dall-e', 'dalle', 'stable diffusion', 'comfyui', 'firefly', 'bing image creator', 'chatgpt', 'novelai', 'c2pa', 'generative'];
-
         for (let tagKey in tags) {
             let desc = tags[tagKey].description ? String(tags[tagKey].description).toLowerCase() : '';
             for (let sig of aiSignatures) {
@@ -667,13 +491,11 @@ function analyzeImageForensics(file) {
             }
             if (isAi) break;
         }
-
         let fnameLower = file.name.toLowerCase();
         if (!isAi && (fnameLower.includes('midjourney') || fnameLower.includes('dalle') || fnameLower.includes('stable_diffusion'))) {
             isAi = true;
             aiReason = "ชื่อไฟล์ตรงกับรูปแบบของภาพสังเคราะห์ AI";
         }
-
         let aiStatusText = "-";
         let aiSubText = "-";
         if (isAi) {
@@ -688,7 +510,6 @@ function analyzeImageForensics(file) {
         }
         document.getElementById('meta-ai-status').innerText = aiStatusText;
         document.getElementById('meta-ai-sub').innerText = aiSubText;
-
         // GPS Geolocation Extractor & Interactive Leaflet Map
         let gpsCoords = extractGPSFromTags(tags);
         if (gpsCoords) {
@@ -696,7 +517,6 @@ function analyzeImageForensics(file) {
         } else {
             document.getElementById('gps-location-card').classList.add('hidden');
         }
-
     }).catch(err => {
         console.log("EXIF Load Info:", err);
         document.getElementById('meta-device').innerText = "ภาพไม่มี EXIF Metadata";
@@ -708,7 +528,6 @@ function analyzeImageForensics(file) {
         document.getElementById('gps-location-card').classList.add('hidden');
     });
 }
-
 // GPS Extraction Helper Function
 function extractGPSFromTags(tags) {
     if (!tags) return null;
@@ -721,13 +540,11 @@ function extractGPSFromTags(tags) {
             alt: tags.gps.Altitude || null
         };
     }
-
     // Direct tags fallback
     if (tags['GPSLatitude'] && tags['GPSLongitude']) {
         try {
             let latVal = tags['GPSLatitude'].description || tags['GPSLatitude'].value;
             let lngVal = tags['GPSLongitude'].description || tags['GPSLongitude'].value;
-
             let parseDMS = (val, ref) => {
                 if (typeof val === 'number') return ref === 'S' || ref === 'W' ? -val : val;
                 if (Array.isArray(val) && val.length >= 3) {
@@ -739,13 +556,10 @@ function extractGPSFromTags(tags) {
                 }
                 return parseFloat(val);
             };
-
             let latRef = tags['GPSLatitudeRef'] ? tags['GPSLatitudeRef'].description || 'N' : 'N';
             let lngRef = tags['GPSLongitudeRef'] ? tags['GPSLongitudeRef'].description || 'E' : 'E';
-
             let lat = parseDMS(latVal, latRef);
             let lng = parseDMS(lngVal, lngRef);
-
             if (!isNaN(lat) && !isNaN(lng)) {
                 let alt = tags['GPSAltitude'] ? parseFloat(tags['GPSAltitude'].description || tags['GPSAltitude'].value) : null;
                 return { lat, lng, alt };
@@ -754,19 +568,13 @@ function extractGPSFromTags(tags) {
             console.log("GPS parse fallback err:", e);
         }
     }
-
     return null;
 }
-
 let leafletMapInstance = null;
-
 function renderGPSMap(lat, lng, alt) {
     const gpsCard = document.getElementById('gps-location-card');
     if (!gpsCard) return;
-
-    gpsCard.style.display = 'block';
     gpsCard.classList.remove('hidden');
-
     document.getElementById('gps-lat-val').innerText = lat.toFixed(6);
     document.getElementById('gps-lng-val').innerText = lng.toFixed(6);
     document.getElementById('gps-lat-lng-text').innerText = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
@@ -775,24 +583,19 @@ function renderGPSMap(lat, lng, alt) {
     // Google Maps direct link button
     const gmapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
     document.getElementById('gmaps-link-btn').href = gmapsUrl;
-
     // Render Leaflet Map
     setTimeout(() => {
         const mapContainer = document.getElementById('leaflet-map');
         if (!mapContainer || typeof L === 'undefined') return;
-
         if (leafletMapInstance) {
             leafletMapInstance.remove();
             leafletMapInstance = null;
         }
-
         leafletMapInstance = L.map('leaflet-map').setView([lat, lng], 15);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(leafletMapInstance);
-
         const marker = L.marker([lat, lng]).addTo(leafletMapInstance);
         marker.bindPopup(`
             <div style="font-family: 'Kanit', sans-serif; text-align: center; padding: 4px;">
@@ -801,11 +604,9 @@ function renderGPSMap(lat, lng, alt) {
                 <a href="${gmapsUrl}" target="_blank" style="color: #0284c7; font-weight: bold; font-size: 12px; text-decoration: underline; display: inline-block; margin-top: 4px;">เปิดใน Google Maps 🗺️</a>
             </div>
         `).openPopup();
-
         leafletMapInstance.invalidateSize();
     }, 250);
 }
-
 // Dual-Engine OCR Recognition (API Backend + Client-side Tesseract Fallback)
 function performDualOCRRecognition(file) {
     let updateProgress = (pct, textMsg) => {
@@ -813,15 +614,11 @@ function performDualOCRRecognition(file) {
         document.getElementById('ocr-progress-pct').innerText = `${pct}%`;
         if (textMsg) document.getElementById('quick-status-text').innerText = textMsg;
     };
-
     updateProgress(35, "กำลังสกัดข้อความในพิกเซลภาพด้วย AI...");
-
     let hasResponded = false;
-
     // 1. Primary Engine: Send to FastAPI /api/ocr (Uses Gemini Vision / Server OCR)
     const formData = new FormData();
     formData.append("file", file);
-
     fetch('/api/ocr', {
         method: 'POST',
         body: formData
@@ -837,7 +634,6 @@ function performDualOCRRecognition(file) {
                         cleanAiReason = cleanAiReason.substring(0, 117) + "...";
                     }
                 }
-
                 if (data.is_ai) {
                     document.getElementById('meta-ai-status').innerText = "🚨 ตรวจพบสัญญาณภาพสังเคราะห์จาก AI";
                     document.getElementById('meta-ai-sub').innerText = cleanAiReason || "Gemini Vision พบลักษณะเฉพาะของการสร้างภาพด้วยโมเดล AI";
@@ -845,7 +641,6 @@ function performDualOCRRecognition(file) {
                     document.getElementById('meta-ai-status').innerText = "✅ ภาพถ่ายจริงจากกล้องถ่าย";
                     document.getElementById('meta-ai-sub').innerText = cleanAiReason;
                 }
-
                 if (data.text && data.text.trim().length > 0) {
                     hasResponded = true;
                     updateProgress(100, "ถอดรหัสข้อความเสร็จสมบูรณ์ (Vision AI)");
@@ -880,11 +675,9 @@ function performDualOCRRecognition(file) {
         }
     });
 }
-
 // Client-side Tesseract OCR Engine with Canvas Pre-processing
 function runClientTesseract(file, updateProgress, hasResponded, callback) {
     updateProgress(50, "กำลังถอดรหัสข้อความด้วย Tesseract Core...");
-
     if (typeof Tesseract !== 'undefined') {
         Tesseract.recognize(
             file,
@@ -910,10 +703,8 @@ function runClientTesseract(file, updateProgress, hasResponded, callback) {
         callback("");
     }
 }
-
 function finalizeOCRResult(text, file) {
     currentExtractedText = (text || "").trim();
-
     // Check if text contains Bank / PromptPay / SCB / KBank Slip information
     parseBankTextFromOCR(currentExtractedText);
     
@@ -921,27 +712,21 @@ function finalizeOCRResult(text, file) {
     const wordCount = currentExtractedText ? currentExtractedText.split(/\s+/).filter(Boolean).length : 0;
     const charCount = currentExtractedText ? currentExtractedText.length : 0;
     document.getElementById('meta-textstats').innerText = `${wordCount} คำ / ${charCount} ตัวอักษร`;
-
     const textBox = document.getElementById('extracted-text-box');
     if (!currentExtractedText) {
         textBox.value = "[ระบบประมวลผลแล้ว แต่ไม่พบข้อความตัวอักษร หรือข้อความมีความเบลอเป็นอย่างมาก]";
     } else {
         textBox.value = currentExtractedText;
     }
-
     // Extract URLs & Phishing Threat Analysis
     const urlRegex = /(https?:\/\/[^\s]+|[a-zA-Z0-9-]+\.(?:com|co\.th|net|org|xyz|tk|ga|ml|cf|gq|top|vip|live|online|site)[^\s]*)/gi;
     const detectedUrls = currentExtractedText ? (currentExtractedText.match(urlRegex) || []) : [];
-
     const suspiciousKeywords = ['login', 'verify', 'account', 'password', 'scb', 'kbank', 'krungthai', 'bangkokbank', 'shopee', 'lazada', 'โอนเงิน', 'ยืนยัน', 'อัปเดต', 'รับรางวัล', 'bit.ly', '@'];
     const lowerText = currentExtractedText.toLowerCase();
     const foundKeywords = suspiciousKeywords.filter(kw => lowerText.includes(kw));
-
     const urlListContainer = document.getElementById('detected-urls-list');
     urlListContainer.innerHTML = '';
-
     let isHighRisk = detectedUrls.length > 0 || foundKeywords.length >= 2;
-
     if (detectedUrls.length > 0) {
         detectedUrls.forEach(url => {
             let cleanUrl = url.replace(/[.,;)]+$/, '');
@@ -969,7 +754,6 @@ function finalizeOCRResult(text, file) {
         item.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-800 text-sm"></i> ไม่พบ URL หรือสัญลักษณ์ภัยคุกคามในข้อความภาพนี้`;
         urlListContainer.appendChild(item);
     }
-
     const riskBadge = document.getElementById('risk-badge');
     if (isHighRisk) {
         riskBadge.innerText = 'CRITICAL DANGER / มีความเสี่ยงสูง';
@@ -981,16 +765,11 @@ function finalizeOCRResult(text, file) {
         riskBadge.innerText = 'SAFE / ปลอดภัย';
         riskBadge.className = 'px-5 py-2 bg-emerald-700 text-white text-xs font-black rounded-lg uppercase tracking-wider shadow-md';
     }
-
     document.getElementById('scan-timestamp').innerText = `TIMESTAMP: ${new Date().toLocaleTimeString('th-TH')}`;
-
     // Hide progress & show terminal result container
-    document.getElementById('processing-state').style.display = 'none';
     document.getElementById('processing-state').classList.add('hidden');
-    document.getElementById('ocr-result-container').style.display = 'block';
     document.getElementById('ocr-result-container').classList.remove('hidden');
 }
-
 // Parse Bank Transfer Slip Text (e.g. SCB, KBank, PromptPay Slips)
 function parseBankTextFromOCR(text) {
     if (!text) return;
@@ -998,21 +777,17 @@ function parseBankTextFromOCR(text) {
     
     let isBankSlip = tLower.includes('scb') || tLower.includes('kbank') || tLower.includes('promptpay') || tLower.includes('พร้อมเพย์') || tLower.includes('โอนเงินสำเร็จ') || tLower.includes('โอนเงิน');
     if (!isBankSlip) return;
-
     let bankName = "พร้อมเพย์ / Thai QR Payment";
     if (tLower.includes('scb') || tLower.includes('ไทยพาณิชย์')) bankName = "SCB (ธนาคารไทยพาณิชย์)";
     else if (tLower.includes('kbank') || tLower.includes('กสิกร')) bankName = "KBank (ธนาคารกสิกรไทย)";
     else if (tLower.includes('krungthai') || tLower.includes('กรุงไทย')) bankName = "KTB (ธนาคารกรุงไทย)";
     else if (tLower.includes('bangkok') || tLower.includes('กรุงเทพ')) bankName = "BBL (ธนาคารกรุงเทพ)";
-
     // Match recipient
     let targetId = "ตรวจพบสลิปการโอนเงิน/QR";
     let accMatch = text.match(/(xxx-xxx-\d{4}|\d{3}-\d{3}-\d{4}|\d{10,13})/);
     if (accMatch) targetId = accMatch[1];
-
     let nameMatch = text.match(/(นาย|นาง|นางสาว|บริษัท|บจก\.|ร้าน)\s+([^\n\r]+)/);
     if (nameMatch) targetId += ` (${nameMatch[1]} ${nameMatch[2].trim()})`;
-
     renderBankQRCard({
         bank: bankName,
         target_id: targetId,
@@ -1021,7 +796,6 @@ function parseBankTextFromOCR(text) {
         raw_payload: "สกัดข้อมูลจากข้อความบนสลิปธนาคาร"
     });
 }
-
 function copyExtractedText() {
     if (!currentExtractedText) return;
     navigator.clipboard.writeText(currentExtractedText).then(() => {
@@ -1032,7 +806,6 @@ function copyExtractedText() {
         }, 2000);
     });
 }
-
 function scanDetectedUrl(encodedUrl) {
     const url = decodeURIComponent(encodedUrl);
     window.location.href = `/?url=${encodeURIComponent(url)}`;

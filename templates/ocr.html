@@ -115,8 +115,8 @@
     <!-- Hidden Canvas for Image Processing & QR Decoding -->
     <canvas id="hidden-ocr-canvas" class="hidden"></canvas>
 
-    <!-- Result Terminal: Forensic Intelligence Interface -->
-    <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container" style="display: none;">
+    <!-- Result Terminal: Forensic Intelligence Interface (Hidden until upload & processing complete) -->
+    <div class="mt-12 max-w-4xl mx-auto hidden" id="ocr-result-container" style="display: none !important;">
         <div class="cyber-card overflow-hidden border-2 border-slate-950 bg-white shadow-2xl rounded-2xl">
             <!-- Terminal Header -->
             <div class="bg-slate-100 px-8 py-4 border-b-2 border-slate-950 flex items-center justify-between text-slate-950">
@@ -355,18 +355,29 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
 
-    // 1. Instantly Display Preview Card & Hide Result Terminal
-    document.getElementById('active-preview-card').style.display = 'block';
-    document.getElementById('active-preview-card').classList.remove('hidden');
-    document.getElementById('processing-state').style.display = 'block';
-    document.getElementById('processing-state').classList.remove('hidden');
-    document.getElementById('tech-intel-section').style.display = 'grid';
-    document.getElementById('tech-intel-section').classList.remove('hidden');
-    document.getElementById('ocr-result-container').style.display = 'none';
-    document.getElementById('ocr-result-container').classList.add('hidden');
-    document.getElementById('bank-qr-card').style.display = 'none';
+    // 1. Instantly Display Preview Card & Progress Bar (Keep Results & Intel HIDDEN until completed)
+    const prevCard = document.getElementById('active-preview-card');
+    prevCard.style.setProperty('display', 'block', 'important');
+    prevCard.classList.remove('hidden');
+
+    const procState = document.getElementById('processing-state');
+    procState.style.setProperty('display', 'block', 'important');
+    procState.classList.remove('hidden');
+
+    const resContainer = document.getElementById('ocr-result-container');
+    resContainer.style.setProperty('display', 'none', 'important');
+    resContainer.classList.add('hidden');
+    resContainer.classList.remove('animate__animated', 'animate__fadeInUp');
+
+    const techIntel = document.getElementById('tech-intel-section');
+    techIntel.style.setProperty('display', 'none', 'important');
+    techIntel.classList.add('hidden');
+    techIntel.classList.remove('animate__animated', 'animate__fadeIn');
+
+    document.getElementById('bank-qr-card').style.setProperty('display', 'none', 'important');
     document.getElementById('bank-qr-card').classList.add('hidden');
-    document.getElementById('gps-location-card').style.display = 'none';
+
+    document.getElementById('gps-location-card').style.setProperty('display', 'none', 'important');
     document.getElementById('gps-location-card').classList.add('hidden');
 
     document.getElementById('ocr-progress-bar').style.width = '15%';
@@ -984,11 +995,20 @@ function finalizeOCRResult(text, file) {
 
     document.getElementById('scan-timestamp').innerText = `TIMESTAMP: ${new Date().toLocaleTimeString('th-TH')}`;
 
-    // Hide progress & show terminal result container
-    document.getElementById('processing-state').style.display = 'none';
-    document.getElementById('processing-state').classList.add('hidden');
-    document.getElementById('ocr-result-container').style.display = 'block';
-    document.getElementById('ocr-result-container').classList.remove('hidden');
+    // Hide progress bar & UNHIDE result terminal & tech intel ONLY WHEN PROCESSING COMPLETES!
+    const procState = document.getElementById('processing-state');
+    procState.style.setProperty('display', 'none', 'important');
+    procState.classList.add('hidden');
+
+    const resContainer = document.getElementById('ocr-result-container');
+    resContainer.style.setProperty('display', 'block', 'important');
+    resContainer.classList.remove('hidden');
+    resContainer.classList.add('animate__animated', 'animate__fadeInUp');
+
+    const techIntel = document.getElementById('tech-intel-section');
+    techIntel.style.setProperty('display', 'grid', 'important');
+    techIntel.classList.remove('hidden');
+    techIntel.classList.add('animate__animated', 'animate__fadeIn');
 }
 
 // Parse Bank Transfer Slip Text (e.g. SCB, KBank, PromptPay Slips)

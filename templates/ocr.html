@@ -709,11 +709,21 @@ function performDualOCRRecognition(file) {
         if (!hasResponded) {
             if (data.success) {
                 // If Vision AI detected AI generation markers, update AI status card immediately
+                // Clean and format concise AI reason text (remove bullet points & long paragraphs)
+                let cleanAiReason = "";
+                if (data.ai_reason) {
+                    cleanAiReason = data.ai_reason.replace(/\*\*/g, '').replace(/[-•*]\s*/g, ' ').replace(/\s+/g, ' ').trim();
+                    if (cleanAiReason.length > 120) {
+                        cleanAiReason = cleanAiReason.substring(0, 117) + "...";
+                    }
+                }
+
                 if (data.is_ai) {
                     document.getElementById('meta-ai-status').innerText = "🚨 ตรวจพบสัญญาณภาพสังเคราะห์จาก AI";
-                    document.getElementById('meta-ai-sub').innerText = data.ai_reason || "Gemini Vision พบลักษณะเฉพาะของการสร้างภาพด้วยโมเดล AI";
-                } else if (data.ai_reason && data.ai_reason.trim().length > 0) {
-                    document.getElementById('meta-ai-sub').innerText = data.ai_reason;
+                    document.getElementById('meta-ai-sub').innerText = cleanAiReason || "Gemini Vision พบลักษณะเฉพาะของการสร้างภาพด้วยโมเดล AI";
+                } else if (cleanAiReason.length > 0) {
+                    document.getElementById('meta-ai-status').innerText = "✅ ภาพถ่ายจริงจากกล้องถ่าย";
+                    document.getElementById('meta-ai-sub').innerText = cleanAiReason;
                 }
 
                 if (data.text && data.text.trim().length > 0) {

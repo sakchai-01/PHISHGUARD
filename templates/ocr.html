@@ -50,7 +50,7 @@
     </div>
 
     <!-- Active Upload Preview Card (Displays IMMEDIATELY Upon File Selection) -->
-    <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
+    <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto" style="display: none;">
         <div class="cyber-card p-6 md:p-8 bg-white text-slate-950 rounded-2xl shadow-xl border-2 border-slate-950">
             <div class="flex items-center justify-between border-b-2 border-slate-950 pb-4 mb-6">
                 <div class="flex items-center gap-3">
@@ -94,7 +94,7 @@
     </div>
 
     <!-- Processing State Progress Bar -->
-    <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
+    <div id="processing-state" class="mt-8 hidden animate__animated animate__fadeIn max-w-4xl mx-auto" style="display: none;">
         <div class="cyber-card p-6 bg-white border-2 border-cyan-600 shadow-xl rounded-xl">
             <div class="flex items-center gap-6">
                 <div class="w-12 h-12 rounded-full border-4 border-cyan-200 border-t-cyan-700 animate-spin flex-shrink-0"></div>
@@ -116,7 +116,7 @@
     <canvas id="hidden-ocr-canvas" class="hidden"></canvas>
 
     <!-- Result Terminal: Forensic Intelligence Interface -->
-    <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
+    <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container" style="display: none;">
         <div class="cyber-card overflow-hidden border-2 border-slate-950 bg-white shadow-2xl rounded-2xl">
             <!-- Terminal Header -->
             <div class="bg-slate-100 px-8 py-4 border-b-2 border-slate-950 flex items-center justify-between text-slate-950">
@@ -139,7 +139,7 @@
                 </div>
 
                 <!-- SECTION 1: DYNAMIC MULTI-TYPE QR CODE FORENSICS (สแกน QR Code ทุกประเภท: ธนาคาร / URL / Wi-Fi / vCard / ข้อความ) -->
-                <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
+                <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6" style="display: none;">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
                             <i id="qr-type-icon" class="fa-solid fa-qrcode text-xl text-green-600"></i> <span id="qr-card-title-text">ผลการวิเคราะห์ QR CODE (QR_CODE_ANALYSIS)</span>
@@ -229,7 +229,7 @@
                 </div>
 
                 <!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
-                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
+                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6" style="display: none;">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
                             <i class="fa-solid fa-location-dot text-xl text-green-600 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
@@ -306,7 +306,7 @@
     </div>
 
     <!-- Tech Intel: UX Clarification (Hidden until image uploaded) -->
-    <div id="tech-intel-section" class="mt-32 hidden animate__animated animate__fadeIn grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div id="tech-intel-section" class="mt-32 hidden animate__animated animate__fadeIn grid grid-cols-1 md:grid-cols-2 gap-12" style="display: none;">
         <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-xl rounded-r-2xl border-2 border-slate-950 border-l-cyan-600">
             <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-950 text-base">
                 <i class="fa-solid fa-circle-info text-cyan-600 text-lg"></i> หลักการทำงานของเอ็นจิ้น
@@ -356,11 +356,17 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     if (!file) return;
 
     // 1. Instantly Display Preview Card & Hide Result Terminal
+    document.getElementById('active-preview-card').style.display = 'block';
     document.getElementById('active-preview-card').classList.remove('hidden');
+    document.getElementById('processing-state').style.display = 'block';
     document.getElementById('processing-state').classList.remove('hidden');
+    document.getElementById('tech-intel-section').style.display = 'grid';
     document.getElementById('tech-intel-section').classList.remove('hidden');
+    document.getElementById('ocr-result-container').style.display = 'none';
     document.getElementById('ocr-result-container').classList.add('hidden');
+    document.getElementById('bank-qr-card').style.display = 'none';
     document.getElementById('bank-qr-card').classList.add('hidden');
+    document.getElementById('gps-location-card').style.display = 'none';
     document.getElementById('gps-location-card').classList.add('hidden');
 
     document.getElementById('ocr-progress-bar').style.width = '15%';
@@ -597,6 +603,7 @@ function renderQRCodeCard(q) {
     document.getElementById('bank-raw-payload').innerText = q.raw_payload;
     document.getElementById('bank-raw-payload').title = q.raw_payload;
 
+    document.getElementById('bank-qr-card').style.display = 'block';
     document.getElementById('bank-qr-card').classList.remove('hidden');
 }
 
@@ -757,6 +764,7 @@ function renderGPSMap(lat, lng, alt) {
     const gpsCard = document.getElementById('gps-location-card');
     if (!gpsCard) return;
 
+    gpsCard.style.display = 'block';
     gpsCard.classList.remove('hidden');
 
     document.getElementById('gps-lat-val').innerText = lat.toFixed(6);
@@ -977,7 +985,9 @@ function finalizeOCRResult(text, file) {
     document.getElementById('scan-timestamp').innerText = `TIMESTAMP: ${new Date().toLocaleTimeString('th-TH')}`;
 
     // Hide progress & show terminal result container
+    document.getElementById('processing-state').style.display = 'none';
     document.getElementById('processing-state').classList.add('hidden');
+    document.getElementById('ocr-result-container').style.display = 'block';
     document.getElementById('ocr-result-container').classList.remove('hidden');
 }
 

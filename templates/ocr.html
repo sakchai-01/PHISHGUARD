@@ -3,10 +3,12 @@
 {% block title %}Vision | Omni-Channel OCR & Bank QR Forensic Intelligence{% endblock %}
 
 {% block content %}
-<!-- Essential Forensic Libraries: ExifReader, jsQR & Tesseract.js -->
+<!-- Essential Forensic Libraries: ExifReader, jsQR, Tesseract.js & Leaflet.js Map -->
 <script src="https://cdn.jsdelivr.net/npm/exifreader@4/dist/exif-reader.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <div class="max-w-5xl mx-auto pt-32 pb-32 px-4 relative font-['Kanit'] text-slate-900">
     <!-- Header Section -->
@@ -216,6 +218,34 @@
                     </div>
                 </div>
 
+                <!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
+                <div id="gps-location-card" class="hidden bg-slate-950 text-white rounded-2xl p-6 md:p-8 border-2 border-emerald-500 shadow-2xl space-y-6">
+                    <div class="flex justify-between items-center border-b-2 border-slate-800 pb-4 flex-wrap gap-3">
+                        <h4 class="text-emerald-400 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
+                            <i class="fa-solid fa-location-dot text-xl text-emerald-400 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
+                        </h4>
+                        <div class="flex items-center gap-3">
+                            <span class="px-4 py-1.5 bg-emerald-500/20 text-emerald-300 border-2 border-emerald-500 text-xs font-black rounded-lg font-mono">
+                                GPS: <span id="gps-lat-lng-text">0.000, 0.000</span>
+                            </span>
+                            <a id="gmaps-link-btn" href="#" target="_blank" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-black border-2 border-cyan-400 rounded-lg text-xs font-mono transition-all flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-map-location-dot"></i> เปิดใน Google Maps
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Leaflet Map Container -->
+                    <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-700 shadow-inner z-10">
+                        <div id="leaflet-map" class="w-full h-full"></div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-xs font-mono text-slate-300 flex-wrap gap-2">
+                        <span>ละติจูด (Latitude): <strong id="gps-lat-val" class="text-emerald-400 font-black">0.000000</strong></span>
+                        <span>ลองจิจูด (Longitude): <strong id="gps-lng-val" class="text-emerald-400 font-black">0.000000</strong></span>
+                        <span id="gps-altitude-val" class="text-slate-400">ความสูง: -</span>
+                    </div>
+                </div>
+
                 <!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-200 pb-2">
@@ -320,6 +350,7 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     document.getElementById('processing-state').classList.remove('hidden');
     document.getElementById('ocr-result-container').classList.add('hidden');
     document.getElementById('bank-qr-card').classList.add('hidden');
+    document.getElementById('gps-location-card').classList.add('hidden');
 
     document.getElementById('ocr-progress-bar').style.width = '15%';
     document.getElementById('ocr-progress-pct').innerText = '15%';
@@ -539,6 +570,14 @@ function analyzeImageForensics(file) {
         document.getElementById('meta-ai-status').innerText = aiStatusText;
         document.getElementById('meta-ai-sub').innerText = aiSubText;
 
+        // GPS Geolocation Extractor & Interactive Leaflet Map
+        let gpsCoords = extractGPSFromTags(tags);
+        if (gpsCoords) {
+            renderGPSMap(gpsCoords.lat, gpsCoords.lng, gpsCoords.alt);
+        } else {
+            document.getElementById('gps-location-card').classList.add('hidden');
+        }
+
     }).catch(err => {
         console.log("EXIF Load Info:", err);
         document.getElementById('meta-device').innerText = "ภาพไม่มี EXIF Metadata";
@@ -547,7 +586,104 @@ function analyzeImageForensics(file) {
         document.getElementById('meta-software-sub').innerText = "-";
         document.getElementById('meta-ai-status').innerText = "ไม่พบหลักฐาน AI";
         document.getElementById('meta-ai-sub').innerText = "-";
+        document.getElementById('gps-location-card').classList.add('hidden');
     });
+}
+
+// GPS Extraction Helper Function
+function extractGPSFromTags(tags) {
+    if (!tags) return null;
+    
+    // Expanded tags from ExifReader
+    if (tags.gps && typeof tags.gps.Latitude === 'number' && typeof tags.gps.Longitude === 'number') {
+        return {
+            lat: tags.gps.Latitude,
+            lng: tags.gps.Longitude,
+            alt: tags.gps.Altitude || null
+        };
+    }
+
+    // Direct tags fallback
+    if (tags['GPSLatitude'] && tags['GPSLongitude']) {
+        try {
+            let latVal = tags['GPSLatitude'].description || tags['GPSLatitude'].value;
+            let lngVal = tags['GPSLongitude'].description || tags['GPSLongitude'].value;
+
+            let parseDMS = (val, ref) => {
+                if (typeof val === 'number') return ref === 'S' || ref === 'W' ? -val : val;
+                if (Array.isArray(val) && val.length >= 3) {
+                    let d = val[0][0] / val[0][1];
+                    let m = val[1][0] / val[1][1];
+                    let s = val[2][0] / val[2][1];
+                    let dd = d + (m / 60) + (s / 3600);
+                    return (ref === 'S' || ref === 'W') ? -dd : dd;
+                }
+                return parseFloat(val);
+            };
+
+            let latRef = tags['GPSLatitudeRef'] ? tags['GPSLatitudeRef'].description || 'N' : 'N';
+            let lngRef = tags['GPSLongitudeRef'] ? tags['GPSLongitudeRef'].description || 'E' : 'E';
+
+            let lat = parseDMS(latVal, latRef);
+            let lng = parseDMS(lngVal, lngRef);
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+                let alt = tags['GPSAltitude'] ? parseFloat(tags['GPSAltitude'].description || tags['GPSAltitude'].value) : null;
+                return { lat, lng, alt };
+            }
+        } catch (e) {
+            console.log("GPS parse fallback err:", e);
+        }
+    }
+
+    return null;
+}
+
+let leafletMapInstance = null;
+
+function renderGPSMap(lat, lng, alt) {
+    const gpsCard = document.getElementById('gps-location-card');
+    if (!gpsCard) return;
+
+    gpsCard.classList.remove('hidden');
+
+    document.getElementById('gps-lat-val').innerText = lat.toFixed(6);
+    document.getElementById('gps-lng-val').innerText = lng.toFixed(6);
+    document.getElementById('gps-lat-lng-text').innerText = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    document.getElementById('gps-altitude-val').innerText = (alt !== null && alt !== undefined) ? `ความสูง: ${alt.toFixed(1)} เมตร` : "ความสูง: ไม่ระบุ";
+    
+    // Google Maps direct link button
+    const gmapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+    document.getElementById('gmaps-link-btn').href = gmapsUrl;
+
+    // Render Leaflet Map
+    setTimeout(() => {
+        const mapContainer = document.getElementById('leaflet-map');
+        if (!mapContainer || typeof L === 'undefined') return;
+
+        if (leafletMapInstance) {
+            leafletMapInstance.remove();
+            leafletMapInstance = null;
+        }
+
+        leafletMapInstance = L.map('leaflet-map').setView([lat, lng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(leafletMapInstance);
+
+        const marker = L.marker([lat, lng]).addTo(leafletMapInstance);
+        marker.bindPopup(`
+            <div style="font-family: 'Kanit', sans-serif; text-align: center; padding: 4px;">
+                <b style="color: #047857; font-size: 14px;">📍 ตำแหน่งพิกัดสถานที่ถ่ายภาพ</b><br/>
+                <span style="font-size: 12px; color: #334155;">Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}</span><br/>
+                <a href="${gmapsUrl}" target="_blank" style="color: #0284c7; font-weight: bold; font-size: 12px; text-decoration: underline; display: inline-block; margin-top: 4px;">เปิดใน Google Maps 🗺️</a>
+            </div>
+        `).openPopup();
+
+        leafletMapInstance.invalidateSize();
+    }, 250);
 }
 
 // Dual-Engine OCR Recognition (API Backend + Client-side Tesseract Fallback)

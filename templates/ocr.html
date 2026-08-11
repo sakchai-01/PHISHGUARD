@@ -131,7 +131,14 @@
             <div class="p-8 md:p-12 space-y-10">
                 <!-- Status Banner -->
                 <div class="flex items-center justify-between border-b-2 border-slate-200 pb-6 flex-wrap gap-4">
-                    <div class="flex items-cen                <!-- SECTION 1: DYNAMIC MULTI-TYPE QR CODE FORENSICS (สแกน QR Code ทุกประเภท: ธนาคาร / URL / Wi-Fi / vCard / ข้อความ) -->
+                    <div class="flex items-center gap-4">
+                        <span class="text-slate-700 font-mono text-xs font-black">[SYSTEM]</span>
+                        <span class="text-emerald-700 font-mono text-xs font-black uppercase tracking-wider">ANALYSIS_COMPLETE // การวิเคราะห์ภาพเสร็จสมบูรณ์</span>
+                    </div>
+                    <span id="scan-timestamp" class="text-slate-800 font-mono text-xs font-black"></span>
+                </div>
+
+                <!-- SECTION 1: DYNAMIC MULTI-TYPE QR CODE FORENSICS (สแกน QR Code ทุกประเภท: ธนาคาร / URL / Wi-Fi / vCard / ข้อความ) -->
                 <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
@@ -298,9 +305,9 @@
         </div>
     </div>
 
-    <!-- Tech Intel: UX Clarification -->
-    <div class="mt-32 grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-xl rounded-r-2xl">
+    <!-- Tech Intel: UX Clarification (Hidden until image uploaded) -->
+    <div id="tech-intel-section" class="mt-32 hidden animate__animated animate__fadeIn grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="p-10 border-l-4 border-cyan-600 bg-white shadow-xl rounded-r-2xl border-2 border-slate-950 border-l-cyan-600">
             <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-950 text-base">
                 <i class="fa-solid fa-circle-info text-cyan-600 text-lg"></i> หลักการทำงานของเอ็นจิ้น
             </h4>
@@ -308,7 +315,7 @@
                 ระบบสกัดข้อความ Vision Neural Core ทำงานร่วมกับ jsQR Decoder เพื่ออ่าน QR Code ธนาคาร/พร้อมเพย์ ถอดรหัสชื่อผู้รับเงิน/สถาบันการเงิน พร้อมตรวจสอบ EXIF Hardware Data จากเซนเซอร์กล้องและสัญญาณภาพสังเคราะห์ AI
             </p>
         </div>
-        <div class="p-10 border-l-4 border-amber-500 bg-white shadow-xl rounded-r-2xl">
+        <div class="p-10 border-l-4 border-amber-500 bg-white shadow-xl rounded-r-2xl border-2 border-slate-950 border-l-amber-500">
             <h4 class="font-black uppercase tracking-widest mb-4 flex items-center gap-3 text-slate-950 text-base">
                 <i class="fa-solid fa-bolt text-amber-600 text-lg"></i> การตอบสนองภัยคุกคาม
             </h4>
@@ -351,6 +358,7 @@ document.getElementById('file-upload').addEventListener('change', function(e) {
     // 1. Instantly Display Preview Card & Hide Result Terminal
     document.getElementById('active-preview-card').classList.remove('hidden');
     document.getElementById('processing-state').classList.remove('hidden');
+    document.getElementById('tech-intel-section').classList.remove('hidden');
     document.getElementById('ocr-result-container').classList.add('hidden');
     document.getElementById('bank-qr-card').classList.add('hidden');
     document.getElementById('gps-location-card').classList.add('hidden');

@@ -131,46 +131,49 @@
             <div class="p-8 md:p-12 space-y-10">
                 <!-- Status Banner -->
                 <div class="flex items-center justify-between border-b-2 border-slate-200 pb-6 flex-wrap gap-4">
-                    <div class="flex items-center gap-4">
-                        <span class="text-slate-700 font-mono text-xs font-black">[SYSTEM]</span>
-                        <span class="text-emerald-700 font-mono text-xs font-black uppercase tracking-wider">ANALYSIS_COMPLETE // การวิเคราะห์ภาพเสร็จสมบูรณ์</span>
-                    </div>
-                    <span id="scan-timestamp" class="text-slate-800 font-mono text-xs font-black"></span>
-                </div>
-
-                <!-- SECTION 1: BANK QR CODE & PROMPTPAY FORENSICS (ถ้าเป็นภาพสลิป/QR โอนเงิน) -->
+                    <div class="flex items-cen                <!-- SECTION 1: DYNAMIC MULTI-TYPE QR CODE FORENSICS (สแกน QR Code ทุกประเภท: ธนาคาร / URL / Wi-Fi / vCard / ข้อความ) -->
                 <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
                     <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
-                            <i class="fa-solid fa-qrcode text-xl text-green-600"></i> ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_QR_ANALYSIS)
+                            <i id="qr-type-icon" class="fa-solid fa-qrcode text-xl text-green-600"></i> <span id="qr-card-title-text">ผลการวิเคราะห์ QR CODE (QR_CODE_ANALYSIS)</span>
                         </h4>
                         <span id="bank-qr-status-badge" class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
-                            VERIFIED_PAYMENT_QR
+                            QR_CODE_DETECTED
                         </span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
                         <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
-                            <div class="flex justify-between border-b border-slate-300 pb-3">
-                                <span class="text-slate-700 font-bold">🏦 สถาบันการเงิน / ธนาคาร:</span>
-                                <span id="bank-name-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
+                                <span id="qr-field1-label" class="text-slate-700 font-bold">🏦 สถาบันการเงิน / ประเภท:</span>
+                                <span id="bank-name-val" class="text-slate-950 font-black text-sm md:text-base text-right truncate max-w-[220px]">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-300 pb-3">
-                                <span class="text-slate-700 font-bold">👤 บัญชีผู้รับเงิน / พร้อมเพย์:</span>
-                                <span id="bank-target-val" class="text-green-700 font-black text-sm md:text-base truncate max-w-[200px]">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
+                                <span id="qr-field2-label" class="text-slate-700 font-bold">👤 บัญชีผู้รับเงิน / เป้าหมาย:</span>
+                                <span id="bank-target-val" class="text-green-700 font-black text-sm md:text-base truncate max-w-[200px] text-right">-</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-700 font-bold">ประเภทบัญชี/ID:</span>
-                                <span id="bank-target-type-val" class="text-slate-950 font-black text-xs">-</span>
+                            <div class="flex justify-between items-center">
+                                <span id="qr-field3-label" class="text-slate-700 font-bold">ประเภทบัญชี/ID:</span>
+                                <span id="bank-target-type-val" class="text-slate-950 font-black text-xs text-right">-</span>
                             </div>
                         </div>
 
                         <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
-                            <div class="flex justify-between border-b border-slate-300 pb-3">
-                                <span class="text-slate-700 font-bold">💰 จำนวนเงิน (Amount):</span>
-                                <span id="bank-amount-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
+                                <span id="qr-field4-label" class="text-slate-700 font-bold">💰 จำนวนเงิน (Amount):</span>
+                                <span id="bank-amount-val" class="text-slate-950 font-black text-sm md:text-base text-right">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                            <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
+                                <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
+                                <span id="bank-verify-status" class="text-green-700 font-black">ถอดรหัสโครงสร้าง QR Code สำเร็จ</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-700 font-bold">ข้อมูล Raw Payload:</span>
+                                <span id="bank-raw-payload" class="text-slate-600 font-mono truncate max-w-[180px]" title="">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>-between border-b border-slate-300 pb-3">
                                 <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
                                 <span id="bank-verify-status" class="text-green-700 font-black">QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT</span>
                             </div>
@@ -405,9 +408,9 @@ function scanCanvasForQRCode(imgElement) {
 
         if (code && code.data) {
             console.log("QR Code Payload detected:", code.data);
-            const bankData = parsePromptPayPayload(code.data);
-            if (bankData) {
-                renderBankQRCard(bankData);
+            const qrData = parseQRCodePayload(code.data);
+            if (qrData) {
+                renderQRCodeCard(qrData);
             }
         }
     } catch (err) {
@@ -415,75 +418,176 @@ function scanCanvasForQRCode(imgElement) {
     }
 }
 
-// Parse Thai PromptPay EMVCo Standard Payload
-function parsePromptPayPayload(payload) {
+// Universal Multi-Type QR Code Forensic Parser (Bank, Website URL, Wi-Fi, vCard, General Text)
+function parseQRCodePayload(payload) {
     if (!payload) return null;
     
-    let bankInfo = {
-        is_qr: true,
-        bank: "Thai QR Payment / พร้อมเพย์",
-        target_id: "ผู้รับเงินตามระบบพร้อมเพย์",
-        target_type: "พร้อมเพย์ (PromptPay)",
-        amount: "ผู้จ่ายระบุจำนวนเงิน",
-        raw_payload: payload
+    let pTrim = payload.trim();
+    let pLower = pTrim.toLowerCase();
+
+    let qrInfo = {
+        type: "TEXT_GENERAL",
+        type_title: "ผลการวิเคราะห์ QR CODE ข้อความทั่วไป (GENERAL_TEXT_QR)",
+        type_badge: "TEXT_QR_CODE",
+        icon_class: "fa-solid fa-font text-xl text-green-600",
+        field1_label: "ประเภทข้อมูล:",
+        field1_val: "ข้อความทั่วไป / รหัสซีเรียล",
+        field2_label: "ความยาวข้อความ:",
+        field2_val: `${pTrim.length} ตัวอักษร`,
+        field3_label: "รูปแบบ Encoding:",
+        field3_val: "UTF-8 Plaintext",
+        field4_label: "เนื้อหาใน QR:",
+        field4_val: pTrim.length > 25 ? pTrim.substring(0, 25) + "..." : pTrim,
+        field5_val: "ถอดรหัสข้อความใน QR Code สำเร็จ",
+        raw_payload: pTrim
     };
 
-    let pLower = payload.toLowerCase();
-    
-    // Check specific Thai Banks
-    if (payload.includes("A000000677010111") || payload.includes("A000000677010112")) {
-        bankInfo.bank = "พร้อมเพย์ / Thai QR Payment (ทุกธนาคาร)";
-    }
-    
-    if (pLower.includes("scb") || payload.includes("000414")) {
-        bankInfo.bank = "SCB (ธนาคารไทยพาณิชย์)";
-    } else if (pLower.includes("kbank") || payload.includes("000004")) {
-        bankInfo.bank = "KBank (ธนาคารกสิกรไทย)";
-    } else if (pLower.includes("ktb") || payload.includes("000006")) {
-        bankInfo.bank = "KTB (ธนาคารกรุงไทย)";
-    } else if (pLower.includes("bbl") || payload.includes("000002")) {
-        bankInfo.bank = "BBL (ธนาคารกรุงเทพ)";
-    } else if (pLower.includes("bay") || payload.includes("000025")) {
-        bankInfo.bank = "BAY (ธนาคารกรุงศรีอยุธยา)";
-    } else if (pLower.includes("ttb") || payload.includes("000011")) {
-        bankInfo.bank = "TTB (ธนาคารทหารไทยธนชาต)";
-    } else if (pLower.includes("gsb") || payload.includes("000030")) {
-        bankInfo.bank = "GSB (ธนาคารออมสิน)";
+    // 1. BANK / PROMPTPAY PAYMENT QR
+    if (pTrim.includes("A000000677010111") || pTrim.includes("A000000677010112") || pTrim.startsWith("000201")) {
+        qrInfo.type = "BANK_PAYMENT";
+        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_PAYMENT_QR)";
+        qrInfo.type_badge = "PAYMENT_QR_VERIFIED";
+        qrInfo.icon_class = "fa-solid fa-money-bill-transfer text-xl text-green-600";
+        qrInfo.field1_label = "🏦 สถาบันการเงิน / ธนาคาร:";
+        qrInfo.field1_val = "พร้อมเพย์ / Thai QR Payment";
+        qrInfo.field2_label = "👤 บัญชีผู้รับเงิน / พร้อมเพย์:";
+        qrInfo.field2_val = "ผู้รับเงินตามระบบพร้อมเพย์";
+        qrInfo.field3_label = "ประเภทบัญชี/ID:";
+        qrInfo.field3_val = "พร้อมเพย์ (PromptPay)";
+        qrInfo.field4_label = "💰 จำนวนเงิน (Amount):";
+        qrInfo.field4_val = "ผู้จ่ายระบุจำนวนเงิน";
+        qrInfo.field5_val = "QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT (EMVCo)";
+
+        // Check specific Thai Banks
+        if (pLower.includes("scb") || pTrim.includes("000414")) qrInfo.field1_val = "SCB (ธนาคารไทยพาณิชย์)";
+        else if (pLower.includes("kbank") || pTrim.includes("000004")) qrInfo.field1_val = "KBank (ธนาคารกสิกรไทย)";
+        else if (pLower.includes("ktb") || pTrim.includes("000006")) qrInfo.field1_val = "KTB (ธนาคารกรุงไทย)";
+        else if (pLower.includes("bbl") || pTrim.includes("000002")) qrInfo.field1_val = "BBL (ธนาคารกรุงเทพ)";
+        else if (pLower.includes("bay") || pTrim.includes("000025")) qrInfo.field1_val = "BAY (ธนาคารกรุงศรีอยุธยา)";
+        else if (pLower.includes("ttb") || pTrim.includes("000011")) qrInfo.field1_val = "TTB (ธนาคารทหารไทยธนชาต)";
+        else if (pLower.includes("gsb") || pTrim.includes("000030")) qrInfo.field1_val = "GSB (ธนาคารออมสิน)";
+
+        // Mobile PromptPay
+        let mobileMatch = pTrim.match(/01130066(\d{9})/);
+        if (mobileMatch) {
+            let rawNum = "0" + mobileMatch[1];
+            qrInfo.field2_val = rawNum.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+            qrInfo.field3_val = "หมายเลขโทรศัพท์พร้อมเพย์";
+        }
+
+        // Tax ID PromptPay
+        let taxMatch = pTrim.match(/0213(\d{13})/);
+        if (taxMatch) {
+            qrInfo.field2_val = taxMatch[1].replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
+            qrInfo.field3_val = "เลขประจำตัวผู้เสียภาษี/บัตรประชาชน";
+        }
+
+        // Amount Tag 54
+        let amountMatch = pTrim.match(/54(\d{2})(\d+\.\d{2}|\d+)/);
+        if (amountMatch) {
+            let len = parseInt(amountMatch[1]);
+            let amtStr = amountMatch[2].substring(0, len);
+            qrInfo.field4_val = parseFloat(amtStr).toLocaleString('th-TH', { minimumFractionDigits: 2 }) + " บาท";
+        }
+
+        return qrInfo;
     }
 
-    // Parse Mobile Number (Tag 01130066...)
-    let mobileMatch = payload.match(/01130066(\d{9})/);
-    if (mobileMatch) {
-        let rawNum = "0" + mobileMatch[1];
-        bankInfo.target_id = rawNum.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-        bankInfo.target_type = "หมายเลขโทรศัพท์พร้อมเพย์ (Mobile PromptPay)";
+    // 2. URL / WEBSITE / SOCIAL MEDIA QR CODE
+    if (pLower.startsWith("http://") || pLower.startsWith("https://") || pLower.startsWith("line://") || pLower.startsWith("wa.me/")) {
+        qrInfo.type = "URL_WEBSITE";
+        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ลิงก์เว็บไซต์ / โซเชียล (WEBSITE_URL_QR)";
+        qrInfo.type_badge = "URL_QR_DETECTED";
+        qrInfo.icon_class = "fa-solid fa-link text-xl text-green-600";
+        qrInfo.field1_label = "🌐 ประเภท QR Code:";
+        qrInfo.field1_val = "เว็บไซต์ / ลิงก์ URL";
+        qrInfo.field2_label = "🔗 ที่อยู่ปลายทาง (Target URL):";
+        qrInfo.field2_val = pTrim;
+        
+        try {
+            let urlObj = new URL(pTrim.startsWith("http") ? pTrim : "https://" + pTrim);
+            qrInfo.field3_label = "🔒 โดเมนหลัก (Domain):";
+            qrInfo.field3_val = urlObj.hostname;
+        } catch (e) {
+            qrInfo.field3_label = "ชนิดลิงก์:";
+            qrInfo.field3_val = "Web Application Link";
+        }
+
+        qrInfo.field4_label = "🚀 ทางลัดเปิดลิงก์:";
+        qrInfo.field4_val = `<a href="${pTrim}" target="_blank" rel="noopener noreferrer" class="cyber-btn px-4 py-1.5 text-xs font-mono inline-block shadow-sm">เปิดลิงก์ในแท็บใหม่ 🔗</a>`;
+        qrInfo.field5_val = "ตรวจพบลิงก์ URL ใน QR Code";
+        return qrInfo;
     }
 
-    // Parse National ID / Tax ID (Tag 0213...)
-    let taxMatch = payload.match(/0213(\d{13})/);
-    if (taxMatch) {
-        bankInfo.target_id = taxMatch[1].replace(/(\d{1})(\d{4})(\d{5})(\d{2})(\d{1})/, "$1-$2-$3-$4-$5");
-        bankInfo.target_type = "เลขประจำตัวผู้เสียภาษี/บัตรประชาชน (National ID / Tax ID)";
+    // 3. WIFI NETWORK CONNECT QR CODE
+    if (pLower.startsWith("wifi:")) {
+        qrInfo.type = "WIFI_NETWORK";
+        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE เชื่อมต่อ Wi-Fi (WIFI_NETWORK_QR)";
+        qrInfo.type_badge = "WIFI_QR_DETECTED";
+        qrInfo.icon_class = "fa-solid fa-wifi text-xl text-green-600";
+        
+        let ssidMatch = pTrim.match(/S:([^;]+)/i);
+        let passMatch = pTrim.match(/P:([^;]+)/i);
+        let typeMatch = pTrim.match(/T:([^;]+)/i);
+
+        qrInfo.field1_label = "📶 ชื่อเครือข่าย Wi-Fi (SSID):";
+        qrInfo.field1_val = ssidMatch ? ssidMatch[1] : "ไม่ระบุชื่อ";
+        qrInfo.field2_label = "🔑 รหัสผ่าน (Password):";
+        qrInfo.field2_val = passMatch ? passMatch[1] : "ไม่มีรหัสผ่าน (Open Network)";
+        qrInfo.field3_label = "🛡️ ระบบเข้ารหัส:";
+        qrInfo.field3_val = typeMatch ? typeMatch[1].toUpperCase() : "WPA/WPA2";
+        qrInfo.field4_label = "สถานะการเชื่อมต่อ:";
+        qrInfo.field4_val = "พร้อมสแกนเชื่อมต่อ Wi-Fi";
+        qrInfo.field5_val = "โครงสร้าง Wi-Fi QR Code ถูกต้อง";
+        return qrInfo;
     }
 
-    // Parse Tag 54 (Amount)
-    let amountMatch = payload.match(/54(\d{2})(\d+\.\d{2}|\d+)/);
-    if (amountMatch) {
-        let len = parseInt(amountMatch[1]);
-        let amtStr = amountMatch[2].substring(0, len);
-        bankInfo.amount = parseFloat(amtStr).toLocaleString('th-TH', { minimumFractionDigits: 2 }) + " บาท";
+    // 4. VCARD / CONTACT QR CODE
+    if (pLower.includes("begin:vcard") || pLower.startsWith("mecard:")) {
+        qrInfo.type = "VCARD_CONTACT";
+        qrInfo.type_title = "ผลการวิเคราะห์ QR CODE ข้อมูลติดต่อบุคคล (CONTACT_VCARD_QR)";
+        qrInfo.type_badge = "VCARD_QR_DETECTED";
+        qrInfo.icon_class = "fa-solid fa-address-card text-xl text-green-600";
+        
+        let fnMatch = pTrim.match(/(?:FN|N):([^\r\n;]+)/i);
+        let telMatch = pTrim.match(/TEL[^\:]*:([^\r\n;]+)/i);
+        let emailMatch = pTrim.match(/EMAIL[^\:]*:([^\r\n;]+)/i);
+
+        qrInfo.field1_label = "👤 ชื่อผู้ติดต่อ:";
+        qrInfo.field1_val = fnMatch ? fnMatch[1].trim() : "ไม่ระบุชื่อ";
+        qrInfo.field2_label = "📞 หมายเลขโทรศัพท์:";
+        qrInfo.field2_val = telMatch ? telMatch[1].trim() : "-";
+        qrInfo.field3_label = "✉️ อีเมล:";
+        qrInfo.field3_val = emailMatch ? emailMatch[1].trim() : "-";
+        qrInfo.field4_label = "ประเภทการ์ด:";
+        qrInfo.field4_val = "vCard Contact Profile";
+        qrInfo.field5_val = "ข้อมูลผู้ติดต่อ vCard ครบถ้วน";
+        return qrInfo;
     }
 
-    return bankInfo;
+    return qrInfo;
 }
 
-function renderBankQRCard(b) {
-    document.getElementById('bank-name-val').innerText = b.bank;
-    document.getElementById('bank-target-val').innerText = b.target_id || "ผู้จ่ายระบุตัวตน";
-    document.getElementById('bank-target-type-val').innerText = b.target_type;
-    document.getElementById('bank-amount-val').innerText = b.amount || "ผู้จ่ายระบุจำนวนเงิน";
-    document.getElementById('bank-raw-payload').innerText = b.raw_payload;
-    document.getElementById('bank-raw-payload').title = b.raw_payload;
+function renderQRCodeCard(q) {
+    document.getElementById('qr-type-icon').className = q.icon_class;
+    document.getElementById('qr-card-title-text').innerText = q.type_title;
+    document.getElementById('bank-qr-status-badge').innerText = q.type_badge;
+
+    document.getElementById('qr-field1-label').innerText = q.field1_label;
+    document.getElementById('bank-name-val').innerHTML = q.field1_val;
+
+    document.getElementById('qr-field2-label').innerText = q.field2_label;
+    document.getElementById('bank-target-val').innerHTML = q.field2_val;
+
+    document.getElementById('qr-field3-label').innerText = q.field3_label;
+    document.getElementById('bank-target-type-val').innerHTML = q.field3_val;
+
+    document.getElementById('qr-field4-label').innerText = q.field4_label;
+    document.getElementById('bank-amount-val').innerHTML = q.field4_val;
+
+    document.getElementById('bank-verify-status').innerText = q.field5_val;
+    document.getElementById('bank-raw-payload').innerText = q.raw_payload;
+    document.getElementById('bank-raw-payload').title = q.raw_payload;
 
     document.getElementById('bank-qr-card').classList.remove('hidden');
 }

@@ -51,42 +51,42 @@
 
     <!-- Active Upload Preview Card (Displays IMMEDIATELY Upon File Selection) -->
     <div id="active-preview-card" class="mt-12 hidden animate__animated animate__fadeIn max-w-4xl mx-auto">
-        <div class="cyber-card p-6 md:p-8 bg-slate-950 text-white rounded-2xl shadow-2xl border-2 border-slate-800">
-            <div class="flex items-center justify-between border-b-2 border-slate-800 pb-4 mb-6">
+        <div class="cyber-card p-6 md:p-8 bg-white text-slate-950 rounded-2xl shadow-xl border-2 border-slate-950">
+            <div class="flex items-center justify-between border-b-2 border-slate-950 pb-4 mb-6">
                 <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-image text-cyan-400 text-xl"></i>
-                    <span class="text-xs font-mono font-black uppercase tracking-wider text-cyan-300">IMAGE_PREVIEW // รูปภาพที่อัปโหลด</span>
+                    <i class="fa-solid fa-image text-slate-950 text-xl"></i>
+                    <span class="text-xs font-mono font-black uppercase tracking-wider text-slate-950">IMAGE_PREVIEW // รูปภาพที่อัปโหลด</span>
                 </div>
-                <span id="preview-file-size" class="text-xs font-mono font-black text-amber-400">0 KB</span>
+                <span id="preview-file-size" class="text-xs font-mono font-black text-slate-950">0 KB</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                <div class="md:col-span-6 flex justify-center bg-slate-900 p-4 rounded-xl border-2 border-slate-800 shadow-inner">
-                    <img id="instant-image-preview" src="" alt="Uploaded Evidence" class="max-h-[360px] w-auto object-contain rounded-lg shadow-xl border-2 border-slate-700">
+                <div class="md:col-span-6 flex justify-center bg-slate-50 p-4 rounded-xl border-2 border-slate-950 shadow-sm">
+                    <img id="instant-image-preview" src="" alt="Uploaded Evidence" class="max-h-[360px] w-auto object-contain rounded-lg shadow-md border-2 border-slate-950">
                 </div>
                 <div class="md:col-span-6 space-y-4 font-mono text-xs">
-                    <div class="bg-slate-900 p-5 rounded-xl border-2 border-slate-800 space-y-3">
-                        <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-300 font-bold">ชื่อไฟล์:</span>
-                            <span id="preview-filename" class="text-cyan-300 font-black truncate max-w-[200px]" title="">-</span>
+                    <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-3">
+                        <div class="flex justify-between border-b border-slate-300 pb-2">
+                            <span class="text-slate-700 font-bold">ชื่อไฟล์:</span>
+                            <span id="preview-filename" class="text-slate-950 font-black truncate max-w-[200px]" title="">-</span>
                         </div>
-                        <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-300 font-bold">ขนาดพิกเซล:</span>
-                            <span id="preview-dimensions" class="text-emerald-400 font-black">-</span>
+                        <div class="flex justify-between border-b border-slate-300 pb-2">
+                            <span class="text-slate-700 font-bold">ขนาดพิกเซล:</span>
+                            <span id="preview-dimensions" class="text-slate-950 font-black">-</span>
                         </div>
-                        <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span class="text-slate-300 font-bold">ประเภทไฟล์:</span>
-                            <span id="preview-filetype" class="text-white font-black">-</span>
+                        <div class="flex justify-between border-b border-slate-300 pb-2">
+                            <span class="text-slate-700 font-bold">ประเภทไฟล์:</span>
+                            <span id="preview-filetype" class="text-slate-950 font-black">-</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-300 font-bold">วันที่แก้ไขล่าสุด:</span>
-                            <span id="preview-filedate" class="text-slate-100 font-black">-</span>
+                            <span class="text-slate-700 font-bold">วันที่แก้ไขล่าสุด:</span>
+                            <span id="preview-filedate" class="text-slate-950 font-black">-</span>
                         </div>
                     </div>
 
-                    <div id="quick-ocr-status" class="bg-slate-900 border-2 border-cyan-500/50 p-4 rounded-xl flex items-center gap-4 shadow-md">
-                        <div class="w-6 h-6 border-3 border-cyan-400 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
-                        <span id="quick-status-text" class="text-cyan-300 text-xs font-black font-mono">กำลังประมวลผลข้อความ, QR Code และวิเคราะห์ข้อมูล...</span>
+                    <div id="quick-ocr-status" class="bg-white border-2 border-slate-950 p-4 rounded-xl flex items-center gap-4 shadow-sm">
+                        <div class="w-6 h-6 border-3 border-green-600 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+                        <span id="quick-status-text" class="text-slate-950 text-xs font-black font-mono">กำลังประมวลผลข้อความ, QR Code และวิเคราะห์ข้อมูล...</span>
                     </div>
                 </div>
             </div>
@@ -117,15 +117,15 @@
 
     <!-- Result Terminal: Forensic Intelligence Interface -->
     <div class="mt-12 hidden animate__animated animate__fadeInUp max-w-4xl mx-auto" id="ocr-result-container">
-        <div class="cyber-card overflow-hidden border-2 border-slate-400 bg-white shadow-2xl rounded-2xl">
+        <div class="cyber-card overflow-hidden border-2 border-slate-950 bg-white shadow-2xl rounded-2xl">
             <!-- Terminal Header -->
-            <div class="bg-slate-950 px-8 py-4 border-b-2 border-slate-800 flex items-center justify-between">
+            <div class="bg-slate-100 px-8 py-4 border-b-2 border-slate-950 flex items-center justify-between text-slate-950">
                 <div class="flex items-center gap-3">
-                    <div class="w-3.5 h-3.5 rounded-full bg-rose-500"></div>
-                    <div class="w-3.5 h-3.5 rounded-full bg-amber-500"></div>
-                    <div class="w-3.5 h-3.5 rounded-full bg-emerald-500"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-rose-500 border border-slate-950"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-amber-500 border border-slate-950"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-slate-950"></div>
                 </div>
-                <span class="text-xs font-black text-cyan-300 uppercase tracking-[0.3em] italic font-mono">IMAGE_FORENSIC_INTELLIGENCE</span>
+                <span class="text-xs font-black text-slate-950 uppercase tracking-[0.3em] italic font-mono">IMAGE_FORENSIC_INTELLIGENCE</span>
             </div>
 
             <div class="p-8 md:p-12 space-y-10">
@@ -139,44 +139,44 @@
                 </div>
 
                 <!-- SECTION 1: BANK QR CODE & PROMPTPAY FORENSICS (ถ้าเป็นภาพสลิป/QR โอนเงิน) -->
-                <div id="bank-qr-card" class="hidden bg-slate-950 text-white rounded-2xl p-6 md:p-8 border-2 border-cyan-500 shadow-2xl space-y-6">
-                    <div class="flex justify-between items-center border-b-2 border-slate-800 pb-4 flex-wrap gap-3">
-                        <h4 class="text-cyan-300 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
-                            <i class="fa-solid fa-qrcode text-xl text-cyan-400"></i> ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_QR_ANALYSIS)
+                <div id="bank-qr-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
+                    <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
+                        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
+                            <i class="fa-solid fa-qrcode text-xl text-green-600"></i> ผลการวิเคราะห์ QR CODE ธนาคาร / พร้อมเพย์ (BANK_QR_ANALYSIS)
                         </h4>
-                        <span id="bank-qr-status-badge" class="px-4 py-1.5 bg-emerald-500/20 text-emerald-300 border-2 border-emerald-500 text-xs font-black rounded-lg font-mono">
+                        <span id="bank-qr-status-badge" class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
                             VERIFIED_PAYMENT_QR
                         </span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
-                        <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4">
-                            <div class="flex justify-between border-b border-slate-800 pb-3">
-                                <span class="text-slate-300 font-bold">🏦 สถาบันการเงิน / ธนาคาร:</span>
-                                <span id="bank-name-val" class="text-cyan-300 font-black text-sm md:text-base">-</span>
+                        <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">🏦 สถาบันการเงิน / ธนาคาร:</span>
+                                <span id="bank-name-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-800 pb-3">
-                                <span class="text-slate-300 font-bold">👤 บัญชีผู้รับเงิน / พร้อมเพย์:</span>
-                                <span id="bank-target-val" class="text-emerald-400 font-black text-sm md:text-base truncate max-w-[200px]">-</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">👤 บัญชีผู้รับเงิน / พร้อมเพย์:</span>
+                                <span id="bank-target-val" class="text-green-700 font-black text-sm md:text-base truncate max-w-[200px]">-</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-300 font-bold">ประเภทบัญชี/ID:</span>
-                                <span id="bank-target-type-val" class="text-white font-black text-xs">-</span>
+                                <span class="text-slate-700 font-bold">ประเภทบัญชี/ID:</span>
+                                <span id="bank-target-type-val" class="text-slate-950 font-black text-xs">-</span>
                             </div>
                         </div>
 
-                        <div class="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4">
-                            <div class="flex justify-between border-b border-slate-800 pb-3">
-                                <span class="text-slate-300 font-bold">💰 จำนวนเงิน (Amount):</span>
-                                <span id="bank-amount-val" class="text-amber-300 font-black text-sm md:text-base">-</span>
+                        <div class="bg-slate-50 p-5 rounded-xl border-2 border-slate-950 space-y-4">
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">💰 จำนวนเงิน (Amount):</span>
+                                <span id="bank-amount-val" class="text-slate-950 font-black text-sm md:text-base">-</span>
                             </div>
-                            <div class="flex justify-between border-b border-slate-800 pb-3">
-                                <span class="text-slate-300 font-bold">สถานะการตรวจสอบ:</span>
-                                <span id="bank-verify-status" class="text-emerald-400 font-black">QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT</span>
+                            <div class="flex justify-between border-b border-slate-300 pb-3">
+                                <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
+                                <span id="bank-verify-status" class="text-green-700 font-black">QR มีโครงสร้างถูกต้องตามมาตรฐาน BOT</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-slate-300 font-bold">ข้อมูล Raw Payload:</span>
-                                <span id="bank-raw-payload" class="text-slate-400 font-mono truncate max-w-[180px]" title="">-</span>
+                                <span class="text-slate-700 font-bold">ข้อมูล Raw Payload:</span>
+                                <span id="bank-raw-payload" class="text-slate-600 font-mono truncate max-w-[180px]" title="">-</span>
                             </div>
                         </div>
                     </div>
@@ -184,85 +184,85 @@
 
                 <!-- SECTION 2: Forensic Image Analysis (กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
                 <div class="space-y-4">
-                    <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-200 pb-2">
-                        <i class="fa-solid fa-microscope text-cyan-700 text-base"></i> ผลการวิเคราะห์ที่มาของภาพ (FORENSIC_ORIGIN_ANALYSIS)
+                    <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
+                        <i class="fa-solid fa-microscope text-green-600 text-base"></i> ผลการวิเคราะห์ที่มาของภาพ (FORENSIC_ORIGIN_ANALYSIS)
                     </h4>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Card 1: Camera Device / Phone Model -->
-                        <div class="bg-slate-950 text-white rounded-xl p-6 border-2 border-slate-800 space-y-2 shadow-lg">
-                            <div class="flex items-center gap-2 text-cyan-400 text-xs font-mono font-black uppercase">
+                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
                                 <i class="fa-solid fa-mobile-screen-button"></i> โทรศัพท์ / รุ่นกล้อง
                             </div>
-                            <p id="meta-device" class="text-sm font-black text-white font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-device-sub" class="text-xs text-slate-300 font-bold font-mono">-</p>
+                            <p id="meta-device" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
+                            <p id="meta-device-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
                         </div>
 
                         <!-- Card 2: Software / Editing App -->
-                        <div class="bg-slate-950 text-white rounded-xl p-6 border-2 border-slate-800 space-y-2 shadow-lg">
-                            <div class="flex items-center gap-2 text-amber-400 text-xs font-mono font-black uppercase">
+                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i> ซอฟต์แวร์ / แอปตัดต่อ
                             </div>
-                            <p id="meta-software" class="text-sm font-black text-white font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-software-sub" class="text-xs text-slate-300 font-bold font-mono">-</p>
+                            <p id="meta-software" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
+                            <p id="meta-software-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
                         </div>
 
                         <!-- Card 3: AI Image Generator Detection -->
-                        <div class="bg-slate-950 text-white rounded-xl p-6 border-2 border-slate-800 space-y-2 shadow-lg">
-                            <div class="flex items-center gap-2 text-rose-400 text-xs font-mono font-black uppercase">
+                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
                                 <i class="fa-solid fa-robot"></i> ตรวจสอบการสร้างจาก AI
                             </div>
-                            <p id="meta-ai-status" class="text-sm font-black text-white font-mono leading-snug">กำลังตรวจสอบ...</p>
-                            <p id="meta-ai-sub" class="text-xs text-slate-300 font-bold font-mono">-</p>
+                            <p id="meta-ai-status" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
+                            <p id="meta-ai-sub" class="text-xs text-slate-600 font-bold font-mono leading-relaxed">-</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
-                <div id="gps-location-card" class="hidden bg-slate-950 text-white rounded-2xl p-6 md:p-8 border-2 border-emerald-500 shadow-2xl space-y-6">
-                    <div class="flex justify-between items-center border-b-2 border-slate-800 pb-4 flex-wrap gap-3">
-                        <h4 class="text-emerald-400 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
-                            <i class="fa-solid fa-location-dot text-xl text-emerald-400 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
+                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6">
+                    <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
+                        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
+                            <i class="fa-solid fa-location-dot text-xl text-green-600 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
                         </h4>
                         <div class="flex items-center gap-3">
-                            <span class="px-4 py-1.5 bg-emerald-500/20 text-emerald-300 border-2 border-emerald-500 text-xs font-black rounded-lg font-mono">
+                            <span class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
                                 GPS: <span id="gps-lat-lng-text">0.000, 0.000</span>
                             </span>
-                            <a id="gmaps-link-btn" href="#" target="_blank" class="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-black border-2 border-cyan-400 rounded-lg text-xs font-mono transition-all flex items-center gap-2 shadow-md">
+                            <a id="gmaps-link-btn" href="#" target="_blank" class="cyber-btn px-4 py-1.5 text-xs font-mono inline-block shadow-md">
                                 <i class="fa-solid fa-map-location-dot"></i> เปิดใน Google Maps
                             </a>
                         </div>
                     </div>
 
                     <!-- Leaflet Map Container -->
-                    <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-700 shadow-inner z-10">
+                    <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-950 shadow-inner z-10">
                         <div id="leaflet-map" class="w-full h-full"></div>
                     </div>
                     
-                    <div class="flex justify-between items-center text-xs font-mono text-slate-300 flex-wrap gap-2">
-                        <span>ละติจูด (Latitude): <strong id="gps-lat-val" class="text-emerald-400 font-black">0.000000</strong></span>
-                        <span>ลองจิจูด (Longitude): <strong id="gps-lng-val" class="text-emerald-400 font-black">0.000000</strong></span>
-                        <span id="gps-altitude-val" class="text-slate-400">ความสูง: -</span>
+                    <div class="flex justify-between items-center text-xs font-mono text-slate-950 flex-wrap gap-2">
+                        <span>ละติจูด (Latitude): <strong id="gps-lat-val" class="text-green-700 font-black">0.000000</strong></span>
+                        <span>ลองจิจูด (Longitude): <strong id="gps-lng-val" class="text-green-700 font-black">0.000000</strong></span>
+                        <span id="gps-altitude-val" class="text-slate-600">ความสูง: -</span>
                     </div>
                 </div>
 
                 <!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-200 pb-2">
+                    <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-950 pb-2">
                         <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono">
-                            <i class="fa-solid fa-file-lines text-cyan-700 text-base"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
+                            <i class="fa-solid fa-file-lines text-green-600 text-base"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
                         </h4>
                         <div class="flex items-center gap-3">
-                            <span id="meta-textstats" class="text-xs font-mono text-slate-900 font-black">0 คำ / 0 ตัวอักษร</span>
-                            <button onclick="copyExtractedText()" class="px-5 py-2.5 bg-cyan-700 hover:bg-cyan-800 text-white font-black border-2 border-cyan-900 rounded-xl text-xs font-mono transition-all flex items-center gap-2 shadow-md">
+                            <span id="meta-textstats" class="text-xs font-mono text-slate-950 font-black">0 คำ / 0 ตัวอักษร</span>
+                            <button onclick="copyExtractedText()" class="cyber-btn px-5 py-2.5 text-xs font-mono inline-block shadow-md">
                                 <i class="fa-solid fa-copy"></i>
                                 <span id="copy-btn-text">คัดลอกข้อความ</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="relative bg-slate-950 rounded-2xl p-6 border-2 border-slate-800 font-mono shadow-2xl">
-                        <textarea id="extracted-text-box" readonly class="w-full h-52 bg-slate-950 text-emerald-400 p-4 rounded-xl font-mono text-sm md:text-base resize-y outline-none leading-relaxed border-2 border-slate-800 focus:ring-2 focus:ring-cyan-500 font-black tracking-wide" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
+                    <div class="relative bg-white rounded-2xl p-6 border-2 border-slate-950 font-mono shadow-md">
+                        <textarea id="extracted-text-box" readonly class="w-full h-52 bg-slate-50 text-slate-950 p-4 rounded-xl font-mono text-sm md:text-base resize-y outline-none leading-relaxed border-2 border-slate-950 focus:border-green-600 font-black tracking-wide" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
                     </div>
                 </div>
 

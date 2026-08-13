@@ -112,23 +112,28 @@ async def check_url(request: Request):
 
 @router.post("/api/ocr")
 async def api_ocr(file: UploadFile = File(...)):
+    """OCR + AI-image analysis. Failed analysis is never reported as verified-real."""
     try:
-        content = await file.read()
-        mime_type = file.content_type or "image/png"
-        res_data = await asyncio.to_thread(analyze_image_vision, content, mime_type)
+        content=await file.read()
+        if not content:
+            return JSONResponse({"success":False,"error":"Empty image file","text":"","is_ai":False,"ai_score":0,"ai_reason":"","ai_confidence":"Unknown","ai_signals":[],"ai_status":"failed"},status_code=400)
+        mime_type=file.content_type or "image/png"
+        res_data=await asyncio.to_thread(analyze_image_vision,content,mime_type)
         return JSONResponse({
-            "success": True,
-            "text": res_data.get("text", ""),
-            "is_ai": res_data.get("is_ai", False),
-            "ai_reason": res_data.get("ai_reason", ""),
-            "ai_confidence": res_data.get("ai_confidence", "Low"),
-            "device_hint": res_data.get("device_hint", "Unknown"),
-            "source_app": res_data.get("source_app", "Unknown"),
-            "filename": file.filename
+            "success":True,
+            "text":res_data.get("text",""),
+            "is_ai":bool(res_data.get("is_ai",False)),
+            "ai_score":int(res_data.get("ai_score",0) or 0),
+            "ai_reason":res_data.get("ai_reason",""),
+            "ai_confidence":res_data.get("ai_confidence","Unknown"),
+            "ai_signals":res_data.get("ai_signals",[]),
+            "ai_status":res_data.get("ai_status","failed"),
+            "filename":file.filename,
+            "mime_type":mime_type,
         })
     except Exception as e:
         print(f"OCR Endpoint error: {e}")
-        return JSONResponse({"success": False, "error": str(e), "text": "", "is_ai": False})
+        return JSONResponse({"success":False,"error":str(e),"text":"","is_ai":False,"ai_score":0,"ai_reason":"ระบบไม่สามารถวิเคราะห์ภาพได้","ai_confidence":"Unknown","ai_signals":[],"ai_status":"failed","filename":file.filename if file else None},status_code=500)
 
 @router.post("/scan")
 async def scan_url(request: Request):

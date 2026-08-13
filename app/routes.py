@@ -122,6 +122,8 @@ async def api_ocr(file: UploadFile = File(...)):
             "is_ai": res_data.get("is_ai", False),
             "ai_reason": res_data.get("ai_reason", ""),
             "ai_confidence": res_data.get("ai_confidence", "Low"),
+            "device_hint": res_data.get("device_hint", "Unknown"),
+            "source_app": res_data.get("source_app", "Unknown"),
             "filename": file.filename
         })
     except Exception as e:

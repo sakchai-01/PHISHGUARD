@@ -470,9 +470,23 @@
     }
 
     function applyVisionAIResult(data) {
-        let reason = String(data?.ai_reason || '').replace(/\*\*/g,'').replace(/[-•*]\s*/g,' ').replace(/\s+/g,' ').trim(); if (reason.length > 120) reason = `${reason.slice(0,117)}...`;
-        if (data?.is_ai) { setText('meta-ai-status','🚨 ตรวจพบสัญญาณภาพสังเคราะห์จาก AI'); setText('meta-ai-sub',reason || 'Vision AI ตรวจพบลักษณะที่อาจเกี่ยวข้องกับภาพสังเคราะห์'); }
-        else if (reason) { setText('meta-ai-status','✅ ไม่พบสัญญาณ AI ที่ชัดเจน'); setText('meta-ai-sub',reason); }
+        let reason = String(data?.ai_reason || '')
+            .replace(/\*\*/g, '')
+            .replace(/[-•*]\s*/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        // แสดงเหตุผลเต็ม ไม่ตัดเหลือ 120 ตัวอักษร
+        if (data?.ai_status === 'failed' || data?.ai_status === 'unavailable') {
+            setText('meta-ai-status', '⚠️ ไม่สามารถวิเคราะห์ AI ได้');
+            setText('meta-ai-sub', reason || 'ระบบไม่สามารถประเมินภาพนี้ได้ในขณะนี้');
+        } else if (data?.is_ai) {
+            setText('meta-ai-status', '🚨 ตรวจพบสัญญาณภาพสังเคราะห์จาก AI');
+            setText('meta-ai-sub', reason || 'Vision AI ตรวจพบลักษณะที่อาจเกี่ยวข้องกับภาพสังเคราะห์');
+        } else {
+            setText('meta-ai-status', '✅ ไม่พบหลักฐาน AI ที่ชัดเจน');
+            setText('meta-ai-sub', reason || 'จากการวิเคราะห์ ไม่พบหลักฐานเด่นชัดที่บ่งชี้ว่าภาพสร้างด้วย AI');
+        }
         setText('meta-vision-device', data?.device_hint && data.device_hint !== 'Unknown' ? data.device_hint : 'ไม่สามารถระบุได้จากลักษณะภาพ');
         setText('meta-source-app', data?.source_app && data.source_app !== 'Unknown' ? data.source_app : 'ไม่พบสัญลักษณ์แอพที่ชัดเจน');
     }
@@ -566,3 +580,13 @@ end=s.rindex('</script>')
 print(s[start:end])
 PY
 )
+
+<style>
+#meta-ai-sub {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+</style>

@@ -216,137 +216,204 @@
                                     class="text-slate-950 font-black text-sm md:text-base text-right">-</span>
                             </div>
                             <div class="flex justify-between border-b border-slate-300 pb-3 items-center">
-                                <span c                </div>
-
-                <!-- SECTION 2: Forensic Image Analysis (EXIF: กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
-                <div class="space-y-4">
-                    <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
-                        <i class="fa-solid fa-microscope text-green-600 text-base"></i> ผลการวิเคราะห์ที่มาของภาพ EXIF (FORENSIC_ORIGIN_ANALYSIS)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Card 1: Camera Device / Phone Model -->
-                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
-                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
-                                <i class="fa-solid fa-mobile-screen-button"></i> โทรศัพท์ / รุ่นกล้อง
+                                <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
+                                <span id="bank-verify-status" class="text-green-700 font-black">ถอดรหัสโครงสร้าง QR Code
+                                    สำเร็จ</span>
                             </div>
-                            <p id="meta-device" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
-                            <p id="meta-device-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
-                        </div>
-                        <!-- Card 2: Software / Editing App -->
-                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
-                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> ซอฟต์แวร์ / แอปตัดต่อ
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-700 font-bold">ข้อมูล Raw Payload:</span>
+                                <span id="bank-raw-payload" class="text-slate-600 font-mono truncate max-w-[180px]"
+                                    title="">-</span>
                             </div>
-                            <p id="meta-software" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
-                            <p id="meta-software-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
-                        </div>
-                        <!-- Card 3: AI Image Generator Detection -->
-                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
-                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
-                                <i class="fa-solid fa-robot"></i> ตรวจสอบการสร้างจาก AI
-                            </div>
-                            <p id="meta-ai-status" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังตรวจสอบ...</p>
-                            <p id="meta-ai-sub" class="text-xs text-slate-600 font-bold font-mono leading-relaxed">-</p>
                         </div>
                     </div>
-                </div>
+                </div>-between border-b border-slate-300 pb-3">
+                <span class="text-slate-700 font-bold">สถานะการตรวจสอบ:</span>
+                <span id="bank-verify-status" class="text-green-700 font-black">QR มีโครงสร้างถูกต้องตามมาตรฐาน
+                    BOT</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-slate-700 font-bold">ข้อมูล Raw Payload:</span>
+                <span id="bank-raw-payload" class="text-slate-600 font-mono truncate max-w-[180px]" title="">-</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- SECTION 2.25: VISION AI DEVICE & SOURCE APP DETECTION -->
-                <div class="space-y-4">
-                    <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
-                        <i class="fa-solid fa-brain text-green-600 text-base"></i> วิเคราะห์อุปกรณ์และแหล่งที่มาด้วย AI Vision (DEVICE_SOURCE_DETECTION)
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Device Hint from Vision AI -->
-                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
-                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
-                                <i class="fa-solid fa-mobile-screen-button"></i> รุ่นโทรศัพท์/อุปกรณ์ (Vision AI)
-                            </div>
-                            <p id="meta-vision-device" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังวิเคราะห์ด้วย AI...</p>
-                            <p class="text-xs text-slate-600 font-bold font-mono">วิเคราะห์จากลักษณะภาพ / UI / Watermark</p>
-                        </div>
-                        <!-- Source App from Vision AI -->
-                        <div class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
-                            <div class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
-                                <i class="fa-solid fa-grid-2"></i> แอพ / แหล่งที่มาของภาพ (Vision AI)
-                            </div>
-                            <p id="meta-source-app" class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">กำลังวิเคราะห์ด้วย AI...</p>
-                            <p class="text-xs text-slate-600 font-bold font-mono">เช่น LINE / Instagram / Screenshot / Camera Roll</p>
-                        </div>
-                    </div>
-                </div>
+<!-- SECTION 2: Forensic Image Analysis (กล้อง/รุ่นโทรศัพท์, ซอฟต์แวร์ตัดต่อ, สัญญาณภาพ AI) -->
+<div class="space-y-4">
+    <h4
+        class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
+        <i class="fa-solid fa-microscope text-green-600 text-base"></i> ผลการวิเคราะห์ที่มาของภาพ
+        (FORENSIC_ORIGIN_ANALYSIS)
+    </h4>
 
-                <!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
-                <div id="gps-location-card" class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6" style="display: none;">
-                    <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
-                        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
-                            <i class="fa-solid fa-location-dot text-xl text-green-600 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ (EXIF_GPS_LOCATION)
-                        </h4>
-                        <div class="flex items-center gap-3">
-                            <span class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
-                                GPS: <span id="gps-lat-lng-text">0.000, 0.000</span>
-                            </span>
-                            <a id="gmaps-link-btn" href="#" target="_blank" class="cyber-btn px-4 py-1.5 text-xs font-mono inline-block shadow-md">
-                                <i class="fa-solid fa-map-location-dot"></i> เปิดใน Google Maps
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Leaflet Map Container -->
-                    <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-950 shadow-inner z-10">
-                        <div id="leaflet-map" class="w-full h-full"></div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs font-mono text-slate-950 flex-wrap gap-2">
-                        <span>ละติจูด (Latitude): <strong id="gps-lat-val" class="text-green-700 font-black">0.000000</strong></span>
-                        <span>ลองจิจูด (Longitude): <strong id="gps-lng-val" class="text-green-700 font-black">0.000000</strong></span>
-                        <span id="gps-altitude-val" class="text-slate-600">ความสูง: -</span>
-                    </div>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card 1: Camera Device / Phone Model -->
+        <div
+            class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+            <div
+                class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
+                <i class="fa-solid fa-mobile-screen-button"></i> โทรศัพท์ / รุ่นกล้อง
+            </div>
+            <p id="meta-device"
+                class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">
+                กำลังตรวจสอบ...</p>
+            <p id="meta-device-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
+        </div>
 
-                <!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-950 pb-2">
-                        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono">
-                            <i class="fa-solid fa-file-lines text-green-600 text-base"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ (EXTRACTED_OCR_TEXT)
-                        </h4>
-                        <div class="flex items-center gap-3">
-                            <span id="meta-textstats" class="text-xs font-mono text-slate-950 font-black">0 คำ / 0 ตัวอักษร</span>
-                            <button onclick="copyExtractedText()" class="cyber-btn px-5 py-2.5 text-xs font-mono inline-block shadow-md">
-                                <i class="fa-solid fa-copy"></i>
-                                <span id="copy-btn-text">คัดลอกข้อความ</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="relative bg-white rounded-2xl p-6 border-2 border-slate-950 font-mono shadow-md">
-                        <textarea id="extracted-text-box" readonly class="w-full h-52 bg-slate-50 text-slate-950 p-4 rounded-xl font-mono text-sm md:text-base resize-y outline-none leading-relaxed border-2 border-slate-950 focus:border-green-600 font-black tracking-wide" placeholder="กำลังถอดรหัสข้อความ..."></textarea>
-                    </div>
-                </div>
+        <!-- Card 2: Software / Editing App -->
+        <div
+            class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+            <div
+                class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> ซอฟต์แวร์ / แอปตัดต่อ
+            </div>
+            <p id="meta-software"
+                class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">
+                กำลังตรวจสอบ...</p>
+            <p id="meta-software-sub" class="text-xs text-slate-600 font-bold font-mono">-</p>
+        </div>
 
-                <!-- SECTION 4: Extracted URLs & Threat Intel -->
-                <div id="threat-section" class="bg-rose-100 border-2 border-rose-400 rounded-2xl p-6 space-y-4 font-mono text-xs shadow-md">
-                    <div class="flex justify-between items-center flex-wrap gap-3">
-                        <h4 class="text-rose-950 font-black uppercase tracking-wider flex items-center gap-2 text-sm">
-                            <i class="fa-solid fa-triangle-exclamation text-rose-700 text-base"></i> ผลการตรวจพบลิงก์ & ภัยคุกคามในภาพ (THREAT_ANALYSIS)
-                        </h4>
-                        <div id="risk-badge" class="px-5 py-2 bg-rose-700 text-white text-xs font-black rounded-lg uppercase tracking-wider shadow-md">
-                            ANALYZING
-                        </div>
-                    </div>
-                    <div id="detected-urls-list" class="space-y-3">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
+        <!-- Card 3: AI Image Generator Detection -->
+        <div
+            class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+            <div
+                class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
+                <i class="fa-solid fa-robot"></i> ตรวจสอบการสร้างจาก AI
+            </div>
+            <p id="meta-ai-status"
+                class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">
+                กำลังตรวจสอบ...</p>
+            <p id="meta-ai-sub" class="text-xs text-slate-600 font-bold font-mono leading-relaxed">-</p>
+        </div>
+    </div>
+</div>
 
-                <!-- Footer Actions -->
-                <div class="pt-6 border-t-2 border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <button onclick="document.getElementById('file-upload').click()" class="text-slate-900 hover:text-cyan-800 text-xs font-mono font-black flex items-center gap-2 transition-all">
-                        <i class="fa-solid fa-arrows-rotate"></i> อัปโหลดภาพใหม่ (UPLOAD_ANOTHER_IMAGE)
-                    </button>
-                    <a href="/report" class="cyber-btn px-8 py-3.5 text-xs font-black tracking-widest inline-block shadow-lg">
-                        แจ้งเบาะแสภาพนี้ (REPORT_EVIDENCE)
-                    </a>
-                </div>
-            </div><!-- end space-y-10 -->
-        </div><!-- end cyber-card -->
+<!-- SECTION 2.25: VISION AI DEVICE & SOURCE APP DETECTION -->
+<div class="space-y-4">
+    <h4
+        class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono border-b-2 border-slate-950 pb-2">
+        <i class="fa-solid fa-brain text-green-600 text-base"></i> วิเคราะห์อุปกรณ์และแหล่งที่มาด้วย AI Vision
+        (DEVICE_SOURCE_DETECTION)
+    </h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Device Hint from Vision AI -->
+        <div
+            class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+            <div
+                class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
+                <i class="fa-solid fa-mobile-screen-button"></i> รุ่นโทรศัพท์/อุปกรณ์ (Vision AI)
+            </div>
+            <p id="meta-vision-device"
+                class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">
+                กำลังวิเคราะห์ด้วย AI...</p>
+            <p class="text-xs text-slate-600 font-bold font-mono">วิเคราะห์จากลักษณะภาพ / UI / Watermark</p>
+        </div>
+        <!-- Source App from Vision AI -->
+        <div
+            class="cyber-card p-6 rounded-xl border-2 border-slate-950 bg-white text-slate-950 space-y-2 shadow-md hover:border-green-600 transition-all group">
+            <div
+                class="flex items-center gap-2 text-slate-950 group-hover:text-green-600 text-xs font-mono font-black uppercase transition-colors">
+                <i class="fa-solid fa-grid-2"></i> แอพ / แหล่งที่มาของภาพ (Vision AI)
+            </div>
+            <p id="meta-source-app"
+                class="text-sm font-black text-slate-950 group-hover:text-green-600 font-mono leading-snug transition-colors">
+                กำลังวิเคราะห์ด้วย AI...</p>
+            <p class="text-xs text-slate-600 font-bold font-mono">เช่น LINE / Instagram / Screenshot / Camera Roll</p>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 2.5: EXIF GPS LOCATION & MAP (พิกัดแผนที่สถานที่ถ่ายภาพ) -->
+<div id="gps-location-card"
+    class="hidden cyber-card bg-white text-slate-950 rounded-2xl p-6 md:p-8 border-2 border-slate-950 shadow-xl space-y-6"
+    style="display: none;">
+    <div class="flex justify-between items-center border-b-2 border-slate-950 pb-4 flex-wrap gap-3">
+        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-3 text-base font-mono">
+            <i class="fa-solid fa-location-dot text-xl text-green-600 animate-bounce"></i> พิกัดสถานที่ถ่ายภาพ
+            (EXIF_GPS_LOCATION)
+        </h4>
+        <div class="flex items-center gap-3">
+            <span
+                class="px-4 py-1.5 bg-green-50 text-green-700 border-2 border-green-600 text-xs font-black rounded-lg font-mono">
+                GPS: <span id="gps-lat-lng-text">0.000, 0.000</span>
+            </span>
+            <a id="gmaps-link-btn" href="#" target="_blank"
+                class="cyber-btn px-4 py-1.5 text-xs font-mono inline-block shadow-md">
+                <i class="fa-solid fa-map-location-dot"></i> เปิดใน Google Maps
+            </a>
+        </div>
+    </div>
+
+    <!-- Leaflet Map Container -->
+    <div class="relative w-full h-80 rounded-xl overflow-hidden border-2 border-slate-950 shadow-inner z-10">
+        <div id="leaflet-map" class="w-full h-full"></div>
+    </div>
+
+    <div class="flex justify-between items-center text-xs font-mono text-slate-950 flex-wrap gap-2">
+        <span>ละติจูด (Latitude): <strong id="gps-lat-val" class="text-green-700 font-black">0.000000</strong></span>
+        <span>ลองจิจูด (Longitude): <strong id="gps-lng-val" class="text-green-700 font-black">0.000000</strong></span>
+        <span id="gps-altitude-val" class="text-slate-600">ความสูง: -</span>
+    </div>
+</div>
+
+<!-- SECTION 3: Extracted OCR Text Display (ข้อความที่อ่านได้จากภาพ) -->
+<div class="space-y-4">
+    <div class="flex justify-between items-center flex-wrap gap-3 border-b-2 border-slate-950 pb-2">
+        <h4 class="text-slate-950 font-black tracking-wider uppercase flex items-center gap-2 text-sm font-mono">
+            <i class="fa-solid fa-file-lines text-green-600 text-base"></i> ข้อความที่ถอดรหัสอ่านได้จากภาพ
+            (EXTRACTED_OCR_TEXT)
+        </h4>
+        <div class="flex items-center gap-3">
+            <span id="meta-textstats" class="text-xs font-mono text-slate-950 font-black">0 คำ / 0 ตัวอักษร</span>
+            <button onclick="copyExtractedText()"
+                class="cyber-btn px-5 py-2.5 text-xs font-mono inline-block shadow-md">
+                <i class="fa-solid fa-copy"></i>
+                <span id="copy-btn-text">คัดลอกข้อความ</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="relative bg-white rounded-2xl p-6 border-2 border-slate-950 font-mono shadow-md">
+        <textarea id="extracted-text-box" readonly
+            class="w-full h-52 bg-slate-50 text-slate-950 p-4 rounded-xl font-mono text-sm md:text-base resize-y outline-none leading-relaxed border-2 border-slate-950 focus:border-green-600 font-black tracking-wide"
+            placeholder="กำลังถอดรหัสข้อความ..."></textarea>
+    </div>
+</div>
+
+<!-- SECTION 4: Extracted URLs & Threat Intel -->
+<div id="threat-section"
+    class="bg-rose-100 border-2 border-rose-400 rounded-2xl p-6 space-y-4 font-mono text-xs shadow-md">
+    <div class="flex justify-between items-center flex-wrap gap-3">
+        <h4 class="text-rose-950 font-black uppercase tracking-wider flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-triangle-exclamation text-rose-700 text-base"></i> ผลการตรวจพบลิงก์ & ภัยคุกคามในภาพ
+            (THREAT_ANALYSIS)
+        </h4>
+        <div id="risk-badge"
+            class="px-5 py-2 bg-rose-700 text-white text-xs font-black rounded-lg uppercase tracking-wider shadow-md">
+            ANALYZING
+        </div>
+    </div>
+
+    <div id="detected-urls-list" class="space-y-3">
+        <!-- Populated by JS -->
+    </div>
+</div>
+
+<!-- Footer Actions -->
+<div class="pt-6 border-t-2 border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+    <button onclick="document.getElementById('file-upload').click()"
+        class="text-slate-900 hover:text-cyan-800 text-xs font-mono font-black flex items-center gap-2 transition-all">
+        <i class="fa-solid fa-arrows-rotate"></i> อัปโหลดภาพใหม่ (UPLOAD_ANOTHER_IMAGE)
+    </button>
+    <a href="/report" class="cyber-btn px-8 py-3.5 text-xs font-black tracking-widest inline-block shadow-lg">
+        แจ้งเบาะแสภาพนี้ (REPORT_EVIDENCE)
+    </a>
+</div>
+</div>
+</div>
+</div>
 
 <!-- Tech Intel: UX Clarification (Hidden until image uploaded) -->
 <div id="tech-intel-section"
